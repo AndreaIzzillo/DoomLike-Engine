@@ -8,7 +8,7 @@
 namespace Game
 {
     Scene::Scene(std::unique_ptr<Player> player)
-        : player_(std::move(player))
+        : player(std::move(player))
     {}
 
     Scene::Scene(const std::string &path)
@@ -55,7 +55,7 @@ namespace Game
                 float fov, focal;
                 unsigned res;
                 iss >> posS >> lookS >> fov >> focal >> res;
-                player_ = std::make_unique<Player>(
+                player = std::make_unique<Player>(
                     parsePoint(posS), parsePoint(lookS), fov, focal, res);
                 playerSet = true;
             }
@@ -64,15 +64,15 @@ namespace Game
                 std::string startS, endS, tex;
                 iss >> startS >> endS;
                 std::getline(iss, tex);
-                objects_.push_back(std::make_unique<Segment>(parsePoint(startS),
-                                                             parsePoint(endS)));
+                objects.push_back(std::make_unique<Segment>(parsePoint(startS),
+                                                            parsePoint(endS)));
             }
             else if (type == 'E')
             {
                 std::string posS, sprite;
                 iss >> posS;
                 std::getline(iss, sprite);
-                objects_.push_back(std::make_unique<Enemy>(parsePoint(posS)));
+                objects.push_back(std::make_unique<Enemy>(parsePoint(posS)));
             }
         }
 
@@ -83,23 +83,23 @@ namespace Game
 
     const Player &Scene::get_player() const
     {
-        return *player_;
+        return *player;
     }
 
     const std::vector<std::unique_ptr<IObject>> &Scene::get_objects() const
     {
-        return objects_;
+        return objects;
     }
 
     void Scene::update(float dt)
     {
-        player_->update(dt);
-        for (const auto &object : objects_)
+        player->update(dt);
+        for (const auto &object : objects)
             object->update(dt);
     }
 
     void Scene::add_object(std::unique_ptr<IObject> object)
     {
-        objects_.push_back(std::move(object));
+        objects.push_back(std::move(object));
     }
 } // namespace Game
