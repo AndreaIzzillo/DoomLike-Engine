@@ -33,6 +33,11 @@ namespace Math
             return Vector2(x - other.x, y - other.y);
         }
 
+        Point2 operator-(const Vector2 &other) const
+        {
+            return Point2(x - other.x, y - other.y);
+        }
+
         Point2 operator*(float scalar) const
         {
             return Point2(x * scalar, y * scalar);
