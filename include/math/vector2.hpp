@@ -42,6 +42,30 @@ namespace Math
             return x * other.x + y * other.y;
         }
 
+        void operator+=(const Vector2 &other)
+        {
+            x += other.x;
+            y += other.y;
+        }
+
+        void operator-=(const Vector2 &other)
+        {
+            x -= other.x;
+            y -= other.y;
+        }
+
+        void operator*=(float scalar)
+        {
+            x *= scalar;
+            y *= scalar;
+        }
+
+        void operator/=(float scalar)
+        {
+            x /= scalar;
+            y /= scalar;
+        }
+
         float norm() const
         {
             return sqrt(x * x + y * y);

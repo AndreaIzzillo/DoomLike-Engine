@@ -16,5 +16,10 @@ namespace Math
             : origin(origin)
             , direction(direction.normalized())
         {}
+
+        Point2 at(double t) const
+        {
+            return origin + direction * t;
+        }
     };
 } // namespace Math

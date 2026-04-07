@@ -22,26 +22,19 @@ namespace Game
 
     public:
         Camera(const Math::Point2 &position, const Math::Point2 &look_at,
-               double fov, double focal_distance, unsigned resolution)
-            : position(position)
-            , forward((look_at - position).normalized())
-            , fov(fov)
-            , focal_distance(focal_distance)
-            , resolution(resolution)
-        {
-            right = Math::Vector2(forward.y, -forward.x).normalized();
-            viewport_width = 2.0 * focal_distance * tan(fov / 2.0);
-            viewport_position = position + forward * focal_distance
-                - right * (viewport_width / 2.0);
-        };
+               double fov, double focal_distance, unsigned resolution);
         ~Camera() = default;
 
-        Math::Ray get_ray(unsigned x) const
-        {
-            float pixel_size = viewport_width / resolution;
-            Math::Point2 pixel_position =
-                viewport_position + right * (pixel_size / 2.0 + x * pixel_size);
-            return Math::Ray(position, pixel_position - position);
-        }
+        const Math::Point2 &get_position() const;
+        const Math::Vector2 &get_forward() const;
+        const Math::Vector2 &get_right() const;
+        float get_fov() const;
+        float get_focal_distance() const;
+        unsigned get_resolution() const;
+
+        void move(const Math::Vector2 &delta);
+        void rotate(double angle);
+
+        Math::Ray get_ray(unsigned x) const;
     };
 } // namespace Game

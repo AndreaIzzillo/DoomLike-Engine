@@ -48,6 +48,42 @@ namespace Math
             return Point2(x / scalar, y / scalar);
         }
 
+        void operator+=(const Point2 &other)
+        {
+            x += other.x;
+            y += other.y;
+        }
+
+        void operator+=(const Vector2 &other)
+        {
+            x += other.x;
+            y += other.y;
+        }
+
+        void operator-=(const Point2 &other)
+        {
+            x -= other.x;
+            y -= other.y;
+        }
+
+        void operator-=(const Vector2 &other)
+        {
+            x -= other.x;
+            y -= other.y;
+        }
+
+        void operator*=(float scalar)
+        {
+            x *= scalar;
+            y *= scalar;
+        }
+
+        void operator/=(float scalar)
+        {
+            x /= scalar;
+            y /= scalar;
+        }
+
         friend std::ostream &operator<<(std::ostream &out, Point2 &point)
         {
             return out << "(" << point.x << ", " << point.y << ")";

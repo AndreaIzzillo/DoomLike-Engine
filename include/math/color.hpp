@@ -52,6 +52,34 @@ namespace Math
             return !(*this == v);
         }
 
+        void operator+=(const Color &other)
+        {
+            r += other.r;
+            g += other.g;
+            b += other.b;
+        }
+
+        void operator-=(const Color &other)
+        {
+            r -= other.r;
+            g -= other.g;
+            b -= other.b;
+        }
+
+        void operator*=(float scalar)
+        {
+            r *= scalar;
+            g *= scalar;
+            b *= scalar;
+        }
+
+        void operator/=(float scalar)
+        {
+            r /= scalar;
+            g /= scalar;
+            b /= scalar;
+        }
+
         Color clamp() const
         {
             return Color(std::clamp(r, 0.0f, 1.0f), std::clamp(g, 0.0f, 1.0f),

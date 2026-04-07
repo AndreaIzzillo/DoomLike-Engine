@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <optional>
 
-#include "game/camera.hpp"
+#include "game/game.hpp"
 
 int main()
 {

@@ -66,6 +66,43 @@ namespace Math
             return Vector2(a * vec.x + b * vec.y, c * vec.x + d * vec.y);
         }
 
+        void operator+=(const Matrix2x2 &other)
+        {
+            a += other.a;
+            b += other.b;
+            c += other.c;
+            d += other.d;
+        }
+
+        void operator-=(const Matrix2x2 &other)
+        {
+            a -= other.a;
+            b -= other.b;
+            c -= other.c;
+            d -= other.d;
+        }
+
+        void operator*=(float scalar)
+        {
+            a *= scalar;
+            b *= scalar;
+            c *= scalar;
+            d *= scalar;
+        }
+
+        void operator/=(float scalar)
+        {
+            a /= scalar;
+            b /= scalar;
+            c /= scalar;
+            d /= scalar;
+        }
+
+        void operator*=(const Matrix2x2 &other)
+        {
+            *this = *this * other;
+        }
+
         Matrix2x2 transposed() const
         {
             return Matrix2x2(a, c, b, d);
