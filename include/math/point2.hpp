@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "math/vector2.hpp"
+#include "vector2.hpp"
 
 namespace Math
 {
@@ -12,82 +12,24 @@ namespace Math
         float x;
         float y;
 
-        Point2() = default;
-        Point2(float x, float y)
-            : x(x)
-            , y(y)
-        {}
+        Point2();
+        Point2(float x, float y);
 
-        Point2 operator+(const Point2 &other) const
-        {
-            return Point2(x + other.x, y + other.y);
-        }
+        Point2 operator+(const Point2 &other) const;
+        Point2 operator+(const Vector2 &other) const;
+        Vector2 operator-(const Point2 &other) const;
+        Point2 operator-(const Vector2 &other) const;
+        Point2 operator*(float scalar) const;
+        Point2 operator/(float scalar) const;
 
-        Point2 operator+(const Vector2 &other) const
-        {
-            return Point2(x + other.x, y + other.y);
-        }
+        void operator+=(const Point2 &other);
+        void operator+=(const Vector2 &other);
+        void operator-=(const Point2 &other);
+        void operator-=(const Vector2 &other);
+        void operator*=(float scalar);
+        void operator/=(float scalar);
 
-        Vector2 operator-(const Point2 &other) const
-        {
-            return Vector2(x - other.x, y - other.y);
-        }
-
-        Point2 operator-(const Vector2 &other) const
-        {
-            return Point2(x - other.x, y - other.y);
-        }
-
-        Point2 operator*(float scalar) const
-        {
-            return Point2(x * scalar, y * scalar);
-        }
-
-        Point2 operator/(float scalar) const
-        {
-            return Point2(x / scalar, y / scalar);
-        }
-
-        void operator+=(const Point2 &other)
-        {
-            x += other.x;
-            y += other.y;
-        }
-
-        void operator+=(const Vector2 &other)
-        {
-            x += other.x;
-            y += other.y;
-        }
-
-        void operator-=(const Point2 &other)
-        {
-            x -= other.x;
-            y -= other.y;
-        }
-
-        void operator-=(const Vector2 &other)
-        {
-            x -= other.x;
-            y -= other.y;
-        }
-
-        void operator*=(float scalar)
-        {
-            x *= scalar;
-            y *= scalar;
-        }
-
-        void operator/=(float scalar)
-        {
-            x /= scalar;
-            y /= scalar;
-        }
-
-        friend std::ostream &operator<<(std::ostream &out, Point2 &point)
-        {
-            return out << "(" << point.x << ", " << point.y << ")";
-        }
+        friend std::ostream &operator<<(std::ostream &out, Point2 &point);
     };
 
 } // namespace Math

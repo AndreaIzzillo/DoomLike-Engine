@@ -1,7 +1,7 @@
 #pragma once
 
-#include "math/point2.hpp"
-#include "math/vector2.hpp"
+#include "point2.hpp"
+#include "vector2.hpp"
 
 namespace Math
 {
@@ -11,15 +11,9 @@ namespace Math
         Point2 origin;
         Vector2 direction;
 
-        Ray() = default;
-        Ray(const Point2 &origin, const Vector2 &direction)
-            : origin(origin)
-            , direction(direction.normalized())
-        {}
+        Ray();
+        Ray(const Point2 &origin, const Vector2 &direction);
 
-        Point2 at(double t) const
-        {
-            return origin + direction * t;
-        }
+        Point2 at(double t) const;
     };
 } // namespace Math

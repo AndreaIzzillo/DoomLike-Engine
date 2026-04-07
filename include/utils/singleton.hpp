@@ -6,15 +6,11 @@ namespace Utils
     class Singleton
     {
     public:
-        static T &instance()
-        {
-            static T instance;
-            return instance;
-        }
+        static T &instance();
 
     protected:
-        Singleton() = default;
-        ~Singleton() = default;
+        Singleton();
+        ~Singleton();
 
     public:
         Singleton(const Singleton &) = delete;
