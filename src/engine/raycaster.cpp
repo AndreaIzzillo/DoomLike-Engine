@@ -61,7 +61,14 @@ namespace Engine
                     {
                         float de = player.getCamera().getFocalDistance();
                         float hm = wall->getHeight();
-                        float dm = (record.point - player.getPosition()).norm();
+
+                        // equivalent :
+                        //float dm = (record.point - player.getPosition()).norm();
+                        //float dm = record.t;
+
+                        // corrects fish-eye effect
+                        float dm = record.t * (ray.direction * player.getCamera().getForward());
+
                         float he = (de * hm) / dm;
                         float hr = static_cast<float>(image.getHeight()) / 2.0f;
 

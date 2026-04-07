@@ -10,11 +10,11 @@ namespace Game
 
     struct HitRecord
     {
-        bool isHit;
-        float t;
-        Math::Point2 point;
-        Math::Vector2 normal;
-        const IObject *object;
+        bool isHit = false;
+        float t = 0.f;
+        Math::Point2 point = { 0.f, 0.f };
+        Math::Vector2 normal = { 0.f, 0.f };
+        const IObject *object = nullptr;
     };
 
     class IObject
