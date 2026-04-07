@@ -1,7 +1,6 @@
 #pragma once
 
 #include "game/camera.hpp"
-#include "math/math.hpp"
 
 namespace Game
 {
@@ -11,8 +10,7 @@ namespace Game
         Game::Camera camera;
 
     public:
-        Player(const Math::Point2 &position, const Math::Point2 &lookAt,
-               float fov, float focalDistance, unsigned resolution);
+        Player(const Math::Point2 &position, const Math::Point2 &lookAt);
         ~Player() = default;
 
         const Math::Point2 &getPosition() const;

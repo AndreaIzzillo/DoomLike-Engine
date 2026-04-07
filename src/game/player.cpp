@@ -1,10 +1,13 @@
 #include "game/player.hpp"
 
+#include "game/settings.hpp"
+
 namespace Game
 {
-    Player::Player(const Math::Point2 &position, const Math::Point2 &lookAt,
-                   float fov, float focalDistance, unsigned resolution)
-        : camera(position, lookAt, fov, focalDistance, resolution)
+    Player::Player(const Math::Point2 &position, const Math::Point2 &lookAt)
+        : camera(position, lookAt, Settings::get().cameraFov,
+                 Settings::get().cameraFocalDistance,
+                 Settings::get().cameraResolution)
     {}
 
     const Math::Point2 &Player::getPosition() const

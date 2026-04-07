@@ -1,6 +1,8 @@
 #pragma once
 
-#include "math/math.hpp"
+#include "math/point2.hpp"
+#include "math/ray.hpp"
+#include "math/vector2.hpp"
 
 namespace Game
 {

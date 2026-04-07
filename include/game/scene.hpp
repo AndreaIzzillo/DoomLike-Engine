@@ -3,10 +3,8 @@
 #include <memory>
 #include <vector>
 
-#include "game/camera.hpp"
-#include "math/math.hpp"
-#include "object.hpp"
-#include "player.hpp"
+#include "game/object.hpp"
+#include "game/player.hpp"
 
 namespace Game
 {

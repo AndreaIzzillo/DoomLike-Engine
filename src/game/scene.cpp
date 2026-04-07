@@ -1,6 +1,8 @@
 #include "game/scene.hpp"
 
 #include <fstream>
+#include <iostream>
+#include <sstream>
 
 #include "game/enemy.hpp"
 #include "game/segment.hpp"
@@ -55,8 +57,8 @@ namespace Game
                 float fov, focal;
                 unsigned res;
                 iss >> posS >> lookS >> fov >> focal >> res;
-                player_ = std::make_unique<Player>(
-                    parsePoint(posS), parsePoint(lookS), fov, focal, res);
+                player_ = std::make_unique<Player>(parsePoint(posS),
+                                                   parsePoint(lookS));
                 playerSet = true;
             }
             else if (type == 'W')

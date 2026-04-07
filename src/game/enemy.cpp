@@ -11,7 +11,7 @@ namespace Game
     void Enemy::update(float dt)
     {}
 
-    HitRecord Enemy::hit(const Math::Ray &ray, float t_min, float t_max) const
+    HitRecord Enemy::hit(const Math::Ray &ray, float tMin, float tMax) const
     {
         return HitRecord{};
     }

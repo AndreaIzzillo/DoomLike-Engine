@@ -1,7 +1,7 @@
 #pragma once
 
-#include "point2.hpp"
-#include "vector2.hpp"
+#include "math/point2.hpp"
+#include "math/vector2.hpp"
 
 namespace Math
 {
