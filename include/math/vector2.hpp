@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <math.h>
 
 namespace Math
@@ -50,6 +51,11 @@ namespace Math
         {
             float n = norm();
             return Vector2(x / n, y / n);
+        }
+
+        friend std::ostream &operator<<(std::ostream &out, Vector2 &vec)
+        {
+            return out << "(" << vec.x << ", " << vec.y << ")";
         }
     };
 

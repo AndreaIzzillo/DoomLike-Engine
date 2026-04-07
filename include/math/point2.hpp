@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "vector2.hpp"
 
 namespace Math
@@ -39,6 +41,11 @@ namespace Math
         Point2 operator/(float scalar) const
         {
             return Point2(x / scalar, y / scalar);
+        }
+
+        friend std::ostream &operator<<(std::ostream &out, Point2 &point)
+        {
+            return out << "(" << point.x << ", " << point.y << ")";
         }
     };
 

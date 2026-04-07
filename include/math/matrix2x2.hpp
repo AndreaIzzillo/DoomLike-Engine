@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iomanip>
 #include <math.h>
 
 #include "vector2.hpp"
@@ -79,6 +80,20 @@ namespace Math
         {
             float det = determinant();
             return Matrix2x2(d / det, -b / det, -c / det, a / det);
+        }
+
+        friend std::ostream &operator<<(std::ostream &out, const Matrix2x2 &m)
+        {
+            out << std::fixed << std::setprecision(2);
+
+            out << "┌             ┐\n";
+            out << "│ " << std::setw(8) << m.a << " " << std::setw(8) << m.b
+                << " │\n";
+            out << "│ " << std::setw(8) << m.c << " " << std::setw(8) << m.d
+                << " │\n";
+            out << "└             ┘";
+
+            return out;
         }
     };
 
