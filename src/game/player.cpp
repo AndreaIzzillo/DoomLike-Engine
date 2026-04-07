@@ -2,17 +2,17 @@
 
 namespace Game
 {
-    Player::Player(const Math::Point2 &position, const Math::Point2 &look_at,
-                   double fov, double focal_distance, unsigned resolution)
-        : camera(position, look_at, fov, focal_distance, resolution)
+    Player::Player(const Math::Point2 &position, const Math::Point2 &lookAt,
+                   double fov, double focalDistance, unsigned resolution)
+        : camera(position, lookAt, fov, focalDistance, resolution)
     {}
 
-    const Math::Point2 &Player::get_position() const
+    const Math::Point2 &Player::getPosition() const
     {
-        return camera.get_position();
+        return camera.getPosition();
     }
 
-    const Game::Camera &Player::get_camera() const
+    const Game::Camera &Player::getCamera() const
     {
         return camera;
     }

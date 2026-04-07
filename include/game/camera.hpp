@@ -6,6 +6,23 @@ namespace Game
 {
     class Camera
     {
+    public:
+        Camera(const Math::Point2 &position, const Math::Point2 &lookAt,
+               double fov, double focalDistance, unsigned resolution);
+        ~Camera() = default;
+
+        const Math::Point2 &getPosition() const;
+        const Math::Vector2 &getForward() const;
+        const Math::Vector2 &getRight() const;
+        float getFov() const;
+        float getFocalDistance() const;
+        unsigned getResolution() const;
+
+        void move(const Math::Vector2 &delta);
+        void rotate(double angle);
+
+        Math::Ray getRay(unsigned x) const;
+
     private:
         Math::Point2 position;
 
@@ -13,28 +30,11 @@ namespace Game
         Math::Vector2 right;
 
         float fov;
-        float focal_distance;
+        float focalDistance;
 
         unsigned resolution;
 
-        Math::Point2 viewport_position;
-        double viewport_width;
-
-    public:
-        Camera(const Math::Point2 &position, const Math::Point2 &look_at,
-               double fov, double focal_distance, unsigned resolution);
-        ~Camera() = default;
-
-        const Math::Point2 &get_position() const;
-        const Math::Vector2 &get_forward() const;
-        const Math::Vector2 &get_right() const;
-        float get_fov() const;
-        float get_focal_distance() const;
-        unsigned get_resolution() const;
-
-        void move(const Math::Vector2 &delta);
-        void rotate(double angle);
-
-        Math::Ray get_ray(unsigned x) const;
+        Math::Point2 viewportPosition;
+        double viewportWidth;
     };
 } // namespace Game

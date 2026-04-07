@@ -16,8 +16,10 @@ namespace Game
     {
     public:
         virtual ~IObject() = default;
+
         virtual void update(float dt) = 0;
-        virtual hitRecord hit(const Math::Ray &ray, float t_min,
-                              float t_max) const = 0;
+
+        virtual hitRecord hit(const Math::Ray &ray, float tMin,
+                              float tMax) const = 0;
     };
 } // namespace Game

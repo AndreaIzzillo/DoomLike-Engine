@@ -1,8 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <optional>
 
-#include "game/game.hpp"
-
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 600)),

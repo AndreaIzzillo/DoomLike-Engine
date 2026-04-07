@@ -4,46 +4,46 @@
 
 namespace Game
 {
-    Camera::Camera(const Math::Point2 &position, const Math::Point2 &look_at,
-                   double fov, double focal_distance, unsigned resolution)
+    Camera::Camera(const Math::Point2 &position, const Math::Point2 &lookAt,
+                   double fov, double focalDistance, unsigned resolution)
         : position(position)
-        , forward((look_at - position).normalized())
+        , forward((lookAt - position).normalized())
         , fov(fov)
-        , focal_distance(focal_distance)
+        , focalDistance(focalDistance)
         , resolution(resolution)
     {
         right = Math::Vector2(forward.y, -forward.x).normalized();
-        viewport_width = 2.0 * focal_distance * tan(fov / 2.0);
-        viewport_position = position + forward * focal_distance
-            - right * (viewport_width / 2.0);
+        viewportWidth = 2.0 * focalDistance * tan(fov / 2.0);
+        viewportPosition =
+            position + forward * focalDistance - right * (viewportWidth / 2.0);
     };
 
-    const Math::Point2 &Camera::get_position() const
+    const Math::Point2 &Camera::getPosition() const
     {
         return position;
     }
 
-    const Math::Vector2 &Camera::get_forward() const
+    const Math::Vector2 &Camera::getForward() const
     {
         return forward;
     }
 
-    const Math::Vector2 &Camera::get_right() const
+    const Math::Vector2 &Camera::getRight() const
     {
         return right;
     }
 
-    float Camera::get_fov() const
+    float Camera::getFov() const
     {
         return fov;
     }
 
-    float Camera::get_focal_distance() const
+    float Camera::getFocalDistance() const
     {
-        return focal_distance;
+        return focalDistance;
     }
 
-    unsigned Camera::get_resolution() const
+    unsigned Camera::getResolution() const
     {
         return resolution;
     }
@@ -51,7 +51,7 @@ namespace Game
     void Camera::move(const Math::Vector2 &delta)
     {
         position += delta;
-        viewport_position += delta;
+        viewportPosition += delta;
     };
 
     void Camera::rotate(double angle)
@@ -61,15 +61,15 @@ namespace Game
         forward = rotation_matrix * forward;
         right = rotation_matrix * right;
 
-        viewport_position = position + forward * focal_distance
-            - right * (viewport_width / 2.0);
+        viewportPosition =
+            position + forward * focalDistance - right * (viewportWidth / 2.0);
     }
 
-    Math::Ray Camera::get_ray(unsigned x) const
+    Math::Ray Camera::getRay(unsigned x) const
     {
-        float pixel_size = viewport_width / resolution;
+        float pixel_size = viewportWidth / resolution;
         Math::Point2 pixel_position =
-            viewport_position + right * (pixel_size / 2.0 + x * pixel_size);
+            viewportPosition + right * (pixel_size / 2.0 + x * pixel_size);
         return Math::Ray(position, pixel_position - position);
     }
 } // namespace Game

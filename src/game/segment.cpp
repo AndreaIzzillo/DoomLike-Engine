@@ -3,19 +3,18 @@
 namespace Game
 {
     Segment::Segment(const Math::Point2 &start, const Math::Point2 &end)
-    {
-        start_ = start;
-        end_ = end;
-    }
+        : start(start)
+        , end(end)
+    {}
 
     void Segment::update(float dt)
     {}
 
-    hitRecord Segment::hit(const Math::Ray &ray, float t_min, float t_max) const
+    hitRecord Segment::hit(const Math::Ray &ray, float tMin, float tMax) const
     {
         Math::Vector2 r = ray.direction;
-        Math::Vector2 s = end_ - start_;
-        Math::Vector2 diff = start_ - ray.origin;
+        Math::Vector2 s = end - start;
+        Math::Vector2 diff = start - ray.origin;
 
         float denom = r ^ s;
 
@@ -25,7 +24,7 @@ namespace Game
         float t = diff ^ s / denom;
         float u = r ^ diff / denom;
 
-        if (t < t_min || t > t_max || u < 0.f || u > 1.f)
+        if (t < tMin || t > tMax || u < 0.f || u > 1.f)
             return hitRecord{};
 
         hitRecord rec;
