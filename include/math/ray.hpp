@@ -14,6 +14,6 @@ namespace Math
         Ray();
         Ray(const Point2 &origin, const Vector2 &direction);
 
-        Point2 at(double t) const;
+        Point2 at(float t) const;
     };
 } // namespace Math

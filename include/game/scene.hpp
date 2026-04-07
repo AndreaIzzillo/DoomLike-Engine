@@ -18,7 +18,6 @@ namespace Game
     public:
         Scene(const Player &player);
         Scene(IO::MapFile &mapFile);
-        Scene() = default;
 
         ~Scene() = default;
 

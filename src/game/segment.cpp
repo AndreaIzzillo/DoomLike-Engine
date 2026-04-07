@@ -20,14 +20,13 @@ namespace Game
         Math::Vector2 r = ray.direction;
         Math::Vector2 s = end - start;
         Math::Vector2 diff = start - ray.origin;
-
         float denom = r ^ s;
 
         if (std::fabs(denom) < FLT_EPSILON)
             return HitRecord{};
 
-        float t = diff ^ s / denom;
-        float u = r ^ diff / denom;
+        float t = (diff ^ s) / denom;
+        float u = (diff ^ r) / denom;
 
         if (t < tMin || t > tMax || u < 0.f || u > 1.f)
             return HitRecord{};

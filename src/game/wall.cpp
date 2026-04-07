@@ -25,6 +25,10 @@ namespace Game
 
     HitRecord Wall::hit(const Math::Ray &ray, float tMin, float tMax) const
     {
-        return {};
+        auto record = segment.hit(ray, tMin, tMax);
+        if (record.isHit)
+            record.object = this;
+
+        return record;
     }
 } // namespace Game

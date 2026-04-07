@@ -1,11 +1,5 @@
 #include "game/scene.hpp"
 
-#include <fstream>
-#include <iostream>
-#include <sstream>
-
-#include "game/enemy.hpp"
-#include "game/segment.hpp"
 #include "io/mapfile.hpp"
 
 namespace Game
@@ -38,7 +32,7 @@ namespace Game
 
     void Scene::fixedUpdate(float dt)
     {
-        player->fixedUpdate(dt);
+        player.fixedUpdate(dt);
         for (const auto &object : objects)
             object->fixedUpdate(dt);
     }

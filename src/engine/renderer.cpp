@@ -1,7 +1,6 @@
 #include "engine/renderer.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
-
 #include <stdexcept>
 
 #include "game/settings.hpp"
@@ -23,9 +22,8 @@ namespace Engine
             "Projet ISIM", sf::Style::Default, sf::State::Windowed, settings);
 
         view.setSize(sf::Vector2f(windowWidth, windowHeight));
-        view.setCenter(sf::Vector2f(
-            static_cast<float>(windowWidth) / 2.0f,
-            static_cast<float>(windowHeight) / 2.0f));
+        view.setCenter(sf::Vector2f(static_cast<float>(windowWidth) / 2.0f,
+                                    static_cast<float>(windowHeight) / 2.0f));
         window.setView(view);
 
         window.setFramerateLimit(Game::Settings::get().targetFramerate);
@@ -57,9 +55,9 @@ namespace Engine
         const auto width = image.getWidth();
         const auto height = image.getHeight();
 
-        for (unsigned y = 0; y < height; ++y)
+        for (unsigned y = 0; y < height; y++)
         {
-            for (unsigned x = 0; x < width; ++x)
+            for (unsigned x = 0; x < width; x++)
             {
                 const Utils::Color color = image(x, y).clamp();
 
@@ -78,7 +76,7 @@ namespace Engine
 
         texture.update(pixelBuffer.data());
 
-        window.clear();
+        window.clear(sf::Color::Black);
         window.draw(sprite);
         window.display();
     }

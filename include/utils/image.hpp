@@ -42,8 +42,8 @@ namespace Utils
         unsigned getWidth() const;
         unsigned getHeight() const;
 
-        void operator()(unsigned x, unsigned y, const Color &color);
         Color operator()(unsigned x, unsigned y) const;
+        Color &operator()(unsigned x, unsigned y);
 
     private:
         unsigned width;

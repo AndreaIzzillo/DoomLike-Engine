@@ -9,7 +9,7 @@ namespace Math
         , direction(direction.normalized())
     {}
 
-    Point2 Ray::at(double t) const
+    Point2 Ray::at(float t) const
     {
         return origin + direction * t;
     }

@@ -61,9 +61,7 @@ namespace Engine
                     {
                         float de = player.getCamera().getFocalDistance();
                         float hm = wall->getHeight();
-                        float dm =
-                            (record.point - player.getCamera().getPosition())
-                                .norm();
+                        float dm = (record.point - player.getPosition()).norm();
                         float he = (de * hm) / dm;
                         float hr = static_cast<float>(image.getHeight()) / 2.0f;
 

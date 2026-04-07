@@ -9,7 +9,6 @@ namespace Engine
     class Runner
     {
     public:
-        Runner();
         Runner(std::unique_ptr<::Game::Scene> scene);
         ~Runner() = default;
 

@@ -1,14 +1,11 @@
 #include "engine/runner.hpp"
 
+#include <optional>
+
 #include "game/settings.hpp"
 
 namespace Engine
 {
-    Runner::Runner()
-        : renderer()
-        , scene(std::make_unique<::Game::Scene>())
-    {}
-
     Runner::Runner(std::unique_ptr<::Game::Scene> scene)
         : renderer()
         , scene(std::move(scene))
@@ -44,7 +41,21 @@ namespace Engine
 
     void Runner::handleEvents()
     {
-        // TODO: Input handling
+        while (const std::optional event = renderer.getWindow().pollEvent())
+        {
+            if (event->is<sf::Event::Closed>())
+            {
+                renderer.getWindow().close();
+            }
+
+            if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>())
+            {
+                if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+                {
+                    renderer.getWindow().close();
+                }
+            }
+        }
     }
 
     void Runner::update(sf::Time dt)

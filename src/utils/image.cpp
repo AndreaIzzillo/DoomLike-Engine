@@ -108,17 +108,17 @@ namespace Utils
         return height;
     }
 
-    void Image::operator()(unsigned x, unsigned y, const Color &color)
+    Color Image::operator()(unsigned x, unsigned y) const
     {
         if (x >= width || y >= height)
         {
             throw std::out_of_range("Pixel coordinates are out of bounds");
         }
 
-        pixels[y * width + x] = color;
+        return pixels[y * width + x];
     }
 
-    Color Image::operator()(unsigned x, unsigned y) const
+    Color &Image::operator()(unsigned x, unsigned y)
     {
         if (x >= width || y >= height)
         {

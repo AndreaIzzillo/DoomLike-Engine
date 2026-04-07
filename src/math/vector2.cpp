@@ -63,7 +63,7 @@ namespace Math
 
     float Vector2::operator^(const Vector2 &other) const
     {
-        return x * other.y + y * other.x;
+        return x * other.y - y * other.x;
     }
 
     float Vector2::norm() const
