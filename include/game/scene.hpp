@@ -5,18 +5,19 @@
 
 #include "game/object.hpp"
 #include "game/player.hpp"
+#include "io/mapfile.hpp"
 
 namespace Game
 {
     class Scene
     {
     private:
-        std::unique_ptr<Player> player;
+        Player player;
         std::vector<std::unique_ptr<IObject>> objects;
 
     public:
-        Scene(std::unique_ptr<Player> player);
-        Scene(const std::string &path);
+        Scene(const Player &player);
+        Scene(IO::MapFile &mapFile);
         Scene() = default;
 
         ~Scene() = default;
