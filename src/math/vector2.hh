@@ -1,0 +1,55 @@
+#pragma once
+#include <math.h>
+
+namespace Math
+{
+    class Vector2
+    {
+    public:
+        float x;
+        float y;
+
+        Vector2() = default;
+        Vector2(float x, float y)
+            : x(x)
+            , y(y)
+        {}
+
+        Vector2 operator+(const Vector2 &other) const
+        {
+            return Vector2(x + other.x, y + other.y);
+        }
+
+        Vector2 operator-(const Vector2 &other) const
+        {
+            return Vector2(x - other.x, y - other.y);
+        }
+
+        Vector2 operator*(float scalar) const
+        {
+            return Vector2(x * scalar, y * scalar);
+        }
+
+        Vector2 operator/(float scalar) const
+        {
+            return Vector2(x / scalar, y / scalar);
+        }
+
+        float operator*(const Vector2 &other) const
+        {
+            return x * other.x + y * other.y;
+        }
+
+        float norm() const
+        {
+            return sqrt(x * x + y * y);
+        }
+
+        Vector2 normalized() const
+        {
+            float n = norm();
+            return Vector2(x / n, y / n);
+        }
+    };
+
+} // namespace Math
