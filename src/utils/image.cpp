@@ -9,11 +9,15 @@
 namespace Utils
 {
     Color::Color() = default;
-
     Color::Color(float r, float g, float b)
         : r(r)
         , g(g)
         , b(b)
+    {}
+    Color::Color(int r, int g, int b)
+        : r(r / 255.0f)
+        , g(g / 255.0f)
+        , b(b / 255.0f)
     {}
 
     Color Color::operator+(const Color &other) const
@@ -94,18 +98,32 @@ namespace Utils
         , pixels(width * height)
     {}
 
-    void Image::set(unsigned x, unsigned y, const Color &color)
+    unsigned Image::getWidth() const
+    {
+        return width;
+    }
+
+    unsigned Image::getHeight() const
+    {
+        return height;
+    }
+
+    void Image::operator()(unsigned x, unsigned y, const Color &color)
     {
         if (x >= width || y >= height)
-            throw std::out_of_range("Pixel coordinates out of bounds");
+        {
+            throw std::out_of_range("Pixel coordinates are out of bounds");
+        }
 
         pixels[y * width + x] = color;
     }
 
-    const Color &Image::get(unsigned x, unsigned y) const
+    Color Image::operator()(unsigned x, unsigned y) const
     {
         if (x >= width || y >= height)
-            throw std::out_of_range("Pixel coordinates out of bounds");
+        {
+            throw std::out_of_range("Pixel coordinates are out of bounds");
+        }
 
         return pixels[y * width + x];
     }

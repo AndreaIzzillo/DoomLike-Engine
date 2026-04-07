@@ -12,6 +12,9 @@ namespace Game
     void Segment::update(float dt)
     {}
 
+    void Segment::fixedUpdate(float dt)
+    {}
+
     HitRecord Segment::hit(const Math::Ray &ray, float tMin, float tMax) const
     {
         Math::Vector2 r = ray.direction;
@@ -30,8 +33,10 @@ namespace Game
             return HitRecord{};
 
         HitRecord rec;
+        rec.isHit = true;
         rec.t = t;
         rec.point = ray.at(t);
+        rec.object = this;
 
         Math::Vector2 segDir = s.normalized();
         rec.normal = Math::Vector2(-segDir.y, segDir.x);

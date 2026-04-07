@@ -23,6 +23,9 @@ namespace Game
     void Player::update(float dt)
     {}
 
+    void Player::fixedUpdate(float dt)
+    {}
+
     void Player::move(const Math::Vector2 &delta)
     {
         camera.move(delta);

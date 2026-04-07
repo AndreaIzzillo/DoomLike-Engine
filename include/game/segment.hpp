@@ -11,6 +11,7 @@ namespace Game
         Segment(const Math::Point2 &start, const Math::Point2 &end);
 
         void update(float dt) override;
+        void fixedUpdate(float dt) override;
 
         HitRecord hit(const Math::Ray &ray, float tMin,
                       float tMax) const override;

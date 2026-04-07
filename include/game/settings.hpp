@@ -11,11 +11,20 @@ namespace Game
         friend class Utils::Singleton<Settings>;
 
     public:
-        /* Camera Settings */
-        float cameraFov = M_PI_2;
-        float cameraFocalDistance = 1.0;
+        /*
+         * Renderer settings
+         */
+        unsigned windowWidth = 800;
+        unsigned windowHeight = 600;
+        int targetFramerate = 60;
 
-        unsigned cameraResolution = 800;
+        /*
+         * Camera settings
+         */
+        float cameraFov = M_PI_2;
+        float cameraFocalDistance = 1.0f;
+
+        unsigned cameraResolution = windowWidth;
 
     public:
         static Settings &get()
