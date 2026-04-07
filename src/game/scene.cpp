@@ -58,8 +58,8 @@ namespace Game
                 unsigned res;
                 iss >> posS >> lookS >> fov >> focal >> res;
 
-                player = std::make_unique<Player>(
-                    parsePoint(posS), parsePoint(lookS));
+                player = std::make_unique<Player>(parsePoint(posS),
+                                                  parsePoint(lookS));
 
                 playerSet = true;
             }
