@@ -10,7 +10,7 @@ namespace Game
     void Segment::update(float dt)
     {}
 
-    hitRecord Segment::hit(const Math::Ray &ray, float tMin, float tMax) const
+    HitRecord Segment::hit(const Math::Ray &ray, float tMin, float tMax) const
     {
         Math::Vector2 r = ray.direction;
         Math::Vector2 s = end - start;
@@ -25,7 +25,7 @@ namespace Game
         float u = r ^ diff / denom;
 
         if (t < tMin || t > tMax || u < 0.f || u > 1.f)
-            return hitRecord{};
+            return HitRecord{};
 
         HitRecord rec;
         rec.t = t;

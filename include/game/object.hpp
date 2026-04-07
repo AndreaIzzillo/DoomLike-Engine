@@ -19,7 +19,7 @@ namespace Game
 
         virtual void update(float dt) = 0;
 
-        virtual hitRecord hit(const Math::Ray &ray, float tMin,
+        virtual HitRecord hit(const Math::Ray &ray, float tMin,
                               float tMax) const = 0;
     };
 } // namespace Game

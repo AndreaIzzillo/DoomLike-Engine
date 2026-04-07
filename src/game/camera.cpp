@@ -5,7 +5,7 @@
 namespace Game
 {
     Camera::Camera(const Math::Point2 &position, const Math::Point2 &lookAt,
-                   double fov, double focalDistance, unsigned resolution)
+                   float fov, float focalDistance, unsigned resolution)
         : position(position)
         , forward((lookAt - position).normalized())
         , fov(fov)
@@ -54,7 +54,7 @@ namespace Game
         viewportPosition += delta;
     };
 
-    void Camera::rotate(double angle)
+    void Camera::rotate(float angle)
     {
         auto rotation_matrix = Math::Matrix2x2(angle);
 

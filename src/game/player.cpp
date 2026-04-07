@@ -3,7 +3,7 @@
 namespace Game
 {
     Player::Player(const Math::Point2 &position, const Math::Point2 &lookAt,
-                   double fov, double focalDistance, unsigned resolution)
+                   float fov, float focalDistance, unsigned resolution)
         : camera(position, lookAt, fov, focalDistance, resolution)
     {}
 
@@ -17,7 +17,7 @@ namespace Game
         return camera;
     }
 
-    void Player::update(double dt)
+    void Player::update(float dt)
     {}
 
     void Player::move(const Math::Vector2 &delta)
@@ -25,7 +25,7 @@ namespace Game
         camera.move(delta);
     }
 
-    void Player::rotate(double angle)
+    void Player::rotate(float angle)
     {
         camera.rotate(angle);
     }

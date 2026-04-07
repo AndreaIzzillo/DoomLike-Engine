@@ -8,7 +8,7 @@ namespace Game
     {
     public:
         Camera(const Math::Point2 &position, const Math::Point2 &lookAt,
-               double fov, double focalDistance, unsigned resolution);
+               float fov, float focalDistance, unsigned resolution);
         ~Camera() = default;
 
         const Math::Point2 &getPosition() const;
@@ -19,7 +19,7 @@ namespace Game
         unsigned getResolution() const;
 
         void move(const Math::Vector2 &delta);
-        void rotate(double angle);
+        void rotate(float angle);
 
         Math::Ray getRay(unsigned x) const;
 
@@ -35,6 +35,6 @@ namespace Game
         unsigned resolution;
 
         Math::Point2 viewportPosition;
-        double viewportWidth;
+        float viewportWidth;
     };
 } // namespace Game

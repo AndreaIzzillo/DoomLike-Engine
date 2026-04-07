@@ -12,7 +12,7 @@ namespace Game
 
         void update(float dt) override;
 
-        hitRecord hit(const Math::Ray &ray, float tMin,
+        HitRecord hit(const Math::Ray &ray, float tMin,
                       float tMax) const override;
 
     private:
