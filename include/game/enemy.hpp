@@ -15,6 +15,6 @@ namespace Game
                       float t_max) const override;
 
     private:
-        Math::Point2 position_;
+        Math::Point2 position;
     };
 } // namespace Game

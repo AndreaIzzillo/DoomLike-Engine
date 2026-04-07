@@ -13,12 +13,12 @@ namespace Game
     class Scene
     {
     private:
-        std::unique_ptr<Player> player_;
-        std::vector<std::unique_ptr<IObject>> objects_;
+        std::unique_ptr<Player> player;
+        std::vector<std::unique_ptr<IObject>> objects;
 
     public:
         Scene(std::unique_ptr<Player> player);
-        Scene(std::string path);
+        Scene(const std::string &path);
         Scene() = default;
 
         ~Scene() = default;

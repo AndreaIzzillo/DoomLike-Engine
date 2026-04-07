@@ -5,7 +5,7 @@
 namespace Game
 {
     Enemy::Enemy(const Math::Point2 &position)
-        : position_(position)
+        : position(position)
     {}
 
     void Enemy::update(float dt)

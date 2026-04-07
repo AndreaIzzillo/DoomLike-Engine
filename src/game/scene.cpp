@@ -11,7 +11,7 @@ namespace Game
         : player_(std::move(player))
     {}
 
-    Scene::Scene(std::string path)
+    Scene::Scene(const std::string &path)
     {
         std::ifstream file(path);
         if (!file)
