@@ -21,11 +21,12 @@ namespace Game
 
         ~Scene() = default;
 
-        const Player &get_player() const;
-        const std::vector<std::unique_ptr<IObject>> &get_objects() const;
+        const Player &getPlayer() const;
+        const std::vector<std::unique_ptr<IObject>> &getObjects() const;
 
         void update(float dt);
+        void fixedUpdate(float dt);
 
-        void add_object(std::unique_ptr<IObject> object);
+        void addObject(std::unique_ptr<IObject> object);
     };
 } // namespace Game

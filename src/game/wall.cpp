@@ -12,7 +12,15 @@ namespace Game
         , height(height)
     {}
 
+    float Wall::getHeight() const
+    {
+        return height;
+    }
+
     void Wall::update(float dt)
+    {}
+
+    void Wall::fixedUpdate(float dt)
     {}
 
     HitRecord Wall::hit(const Math::Ray &ray, float tMin, float tMax) const

@@ -85,12 +85,12 @@ namespace Game
                 "Scene file missing player definition (P)");
     }
 
-    const Player &Scene::get_player() const
+    const Player &Scene::getPlayer() const
     {
         return *player;
     }
 
-    const std::vector<std::unique_ptr<IObject>> &Scene::get_objects() const
+    const std::vector<std::unique_ptr<IObject>> &Scene::getObjects() const
     {
         return objects;
     }
@@ -102,7 +102,14 @@ namespace Game
             object->update(dt);
     }
 
-    void Scene::add_object(std::unique_ptr<IObject> object)
+    void Scene::fixedUpdate(float dt)
+    {
+        player->fixedUpdate(dt);
+        for (const auto &object : objects)
+            object->fixedUpdate(dt);
+    }
+
+    void Scene::addObject(std::unique_ptr<IObject> object)
     {
         objects.push_back(std::move(object));
     }

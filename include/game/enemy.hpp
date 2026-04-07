@@ -11,6 +11,8 @@ namespace Game
         Enemy(const Math::Point2 &position);
 
         void update(float dt) override;
+        void fixedUpdate(float dt) override;
+
         HitRecord hit(const Math::Ray &ray, float tMin,
                       float tMax) const override;
 

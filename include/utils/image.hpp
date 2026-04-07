@@ -14,6 +14,7 @@ namespace Utils
 
         Color();
         Color(float r, float g, float b);
+        Color(int r, int g, int b);
 
         Color operator+(const Color &other) const;
         Color operator-(const Color &other) const;
@@ -38,8 +39,11 @@ namespace Utils
     public:
         Image(unsigned width, unsigned height);
 
-        void set(unsigned x, unsigned y, const Color &color);
-        const Color &get(unsigned x, unsigned y) const;
+        unsigned getWidth() const;
+        unsigned getHeight() const;
+
+        void operator()(unsigned x, unsigned y, const Color &color);
+        Color operator()(unsigned x, unsigned y) const;
 
     private:
         unsigned width;

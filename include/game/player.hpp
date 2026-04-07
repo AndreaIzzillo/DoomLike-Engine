@@ -17,6 +17,7 @@ namespace Game
         const Game::Camera &getCamera() const;
 
         void update(float dt);
+        void fixedUpdate(float dt);
 
         void move(const Math::Vector2 &delta);
         void rotate(float angle);
