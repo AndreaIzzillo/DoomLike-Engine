@@ -1,5 +1,7 @@
 #include "game/segment.hpp"
 
+#include <cfloat>
+
 namespace Game
 {
     Segment::Segment(const Math::Point2 &start, const Math::Point2 &end)

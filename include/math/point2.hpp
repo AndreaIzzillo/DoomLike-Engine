@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "vector2.hpp"
+#include "math/vector2.hpp"
 
 namespace Math
 {
