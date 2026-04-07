@@ -4,7 +4,7 @@
 
 namespace Game
 {
-    struct hitRecord
+    struct HitRecord
     {
         Math::Point2 point;
         Math::Vector2 normal;

@@ -19,7 +19,7 @@ namespace Game
         float denom = r ^ s;
 
         if (std::fabs(denom) < FLT_EPSILON)
-            return hitRecord{};
+            return HitRecord{};
 
         float t = diff ^ s / denom;
         float u = r ^ diff / denom;
@@ -27,9 +27,9 @@ namespace Game
         if (t < tMin || t > tMax || u < 0.f || u > 1.f)
             return hitRecord{};
 
-        hitRecord rec;
+        HitRecord rec;
         rec.t = t;
-        rec.point = ray.origin + ray.direction * t;
+        rec.point = ray.at(t);
 
         Math::Vector2 segDir = s.normalized();
         rec.normal = Math::Vector2(-segDir.y, segDir.x);

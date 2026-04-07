@@ -1,0 +1,8 @@
+P (0,0) (1,0)
+
+W (10,10) (10,20) "path_to_tex.png"
+E (8,15) "path_to_sprite.png"
+.
+.
+.
+W (10,10) (5,10) "path_to_tex.png"
