@@ -1,6 +1,6 @@
 #include "game/camera.hpp"
 
-#include "math/matrix2x2.hpp"
+#include "math/math.hpp"
 
 namespace Game
 {

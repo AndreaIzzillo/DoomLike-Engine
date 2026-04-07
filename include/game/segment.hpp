@@ -1,6 +1,6 @@
 #pragma once
 
-#include "object.hpp"
+#include "game/object.hpp"
 
 namespace Game
 {

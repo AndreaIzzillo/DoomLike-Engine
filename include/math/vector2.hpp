@@ -65,7 +65,7 @@ namespace Math
             x /= scalar;
             y /= scalar;
         }
-        
+
         float operator^(const Vector2 &other) const
         {
             return x * other.y + y * other.x;

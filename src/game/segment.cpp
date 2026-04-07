@@ -1,8 +1,4 @@
-#pragma once
-
-#include "segment.hpp"
-
-#include "object.hpp"
+#include "game/segment.hpp"
 
 namespace Game
 {
