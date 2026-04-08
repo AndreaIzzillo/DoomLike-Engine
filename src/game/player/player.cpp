@@ -43,6 +43,23 @@ namespace Game
 
         camera.move(velocity * dt);
         camera.rotate(angularVelocity * rotationSpeed * dt);
+
+        const float speed = velocity.norm();
+
+        if (speed > FLT_EPSILON)
+        {
+            cameraShakingTime += dt * speed * cameraShakingFrequency;
+            const float raw = std::sin(cameraShakingTime);
+            const float step =
+                -std::pow(std::abs(raw), 0.6f) * std::copysign(1.0f, raw);
+            const float shaking = step * speed * cameraShakingAmplitude;
+            camera.setOffsetHeight(shaking);
+        }
+        else
+        {
+            cameraShakingTime = 0.0f;
+            camera.setOffsetHeight(camera.getOffsetHeight() * 0.85f);
+        }
     }
 
     void Player::setAcceleration(const Math::Vector2 &acceleration)

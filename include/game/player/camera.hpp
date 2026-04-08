@@ -29,6 +29,10 @@ namespace Game
         float getFocalDistance() const;
         unsigned getResolution() const;
         float getViewportWidth() const;
+        float getOffsetHeight() const;
+
+        /* Setters */
+        void setOffsetHeight(float offsetHeight);
 
         /* Camera physics */
         void move(const Math::Vector2 &delta);
@@ -41,6 +45,7 @@ namespace Game
         /* Camera / Player position */
         Math::Point2 position;
         float cameraHeight;
+        float offsetHeight;
 
         /* Camera orientation / plane */
         Math::Vector2 forward;

@@ -59,6 +59,16 @@ namespace Game
         return viewportWidth;
     }
 
+    float Camera::getOffsetHeight() const
+    {
+        return offsetHeight;
+    }
+
+    void Camera::setOffsetHeight(float offsetHeight)
+    {
+        this->offsetHeight = offsetHeight;
+    }
+
     void Camera::move(const Math::Vector2 &delta)
     {
         Math::Vector2 movement = right * delta.x + forward * delta.y;

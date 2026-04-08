@@ -73,7 +73,8 @@ namespace Engine
                 unsigned screenHeight = image.getHeight();
                 unsigned screenWidth = image.getWidth();
                 unsigned horizon = screenHeight / 2;
-                float cameraHeight = player.getCamera().getCameraHeight();
+                float cameraHeight = player.getCamera().getCameraHeight()
+                    + player.getCamera().getOffsetHeight();
                 // Both vectors already normalized
                 auto rayDirection = ray.direction;
                 auto forward = player.getCamera().getForward();
