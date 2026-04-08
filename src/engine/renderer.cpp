@@ -27,6 +27,7 @@ namespace Engine
         window.setView(view);
 
         window.setFramerateLimit(Game::Settings::get().targetFramerate);
+        window.setVerticalSyncEnabled(false);
 
         if (!texture.resize(sf::Vector2u(windowWidth, windowHeight)))
         {

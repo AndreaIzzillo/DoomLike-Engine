@@ -36,6 +36,10 @@ namespace Engine
 
             update(dt);
             renderer.render(*scene);
+
+            const auto fps = 1.0f / dt.asSeconds();
+            renderer.getWindow().setTitle(
+                "Projet ISIM - FPS: " + std::to_string(static_cast<int>(fps)));
         }
     }
 

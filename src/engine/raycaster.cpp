@@ -48,36 +48,37 @@ namespace Engine
                     image(x, y) = Utils::Color(0.5f, 0.5f, 0.5f);
                 }
             }
+        }
 
-            for (unsigned x = 0; x < image.getWidth(); x++)
+        for (unsigned x = 0; x < image.getWidth(); x++)
+        {
+            auto ray = player.getCamera().getRay(x);
+            auto record = castRay(ray, scene, T_MIN, T_MAX);
+
+            if (record.isHit)
             {
-                auto ray = player.getCamera().getRay(x);
-                auto record = castRay(ray, scene, T_MIN, T_MAX);
-
-                if (record.isHit)
+                auto wall = dynamic_cast<const Game::Wall *>(record.object);
+                if (wall)
                 {
-                    auto wall = dynamic_cast<const Game::Wall *>(record.object);
-                    if (wall)
+                    float de = player.getCamera().getFocalDistance();
+                    float hm = wall->getHeight();
+
+                    // equivalent :
+                    // float dm = (record.point -
+                    // player.getPosition()).norm(); float dm = record.t;
+
+                    // corrects fish-eye effect
+                    float dm = record.t
+                        * (ray.direction * player.getCamera().getForward());
+
+                    float he = (de * hm) / dm;
+                    float hr = static_cast<float>(image.getHeight()) / 2.0f;
+
+                    for (unsigned y = 0; y < image.getHeight(); y++)
                     {
-                        float de = player.getCamera().getFocalDistance();
-                        float hm = wall->getHeight();
-
-                        // equivalent :
-                        //float dm = (record.point - player.getPosition()).norm();
-                        //float dm = record.t;
-
-                        // corrects fish-eye effect
-                        float dm = record.t * (ray.direction * player.getCamera().getForward());
-
-                        float he = (de * hm) / dm;
-                        float hr = static_cast<float>(image.getHeight()) / 2.0f;
-
-                        for (unsigned y = 0; y < image.getHeight(); y++)
+                        if (y > hr - he / 2 && y < hr + he / 2)
                         {
-                            if (y > hr - he / 2 && y < hr + he / 2)
-                            {
-                                image(x, y) = Utils::Color(1.0f, 0.3f, 0.3f);
-                            }
+                            image(x, y) = Utils::Color(1.0f, 0.3f, 0.3f);
                         }
                     }
                 }
