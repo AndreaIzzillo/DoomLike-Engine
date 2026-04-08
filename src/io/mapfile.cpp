@@ -78,7 +78,7 @@ namespace IO
             }
             else if (type == 'W')
             {
-                std::string startS, endS,  mat;
+                std::string startS, endS, mat;
                 iss >> startS >> endS;
 
                 std::getline(iss, mat);
@@ -86,8 +86,8 @@ namespace IO
                 if (materials.find(mat) == materials.end())
                     throw std::runtime_error("Undefined material: " + mat);
 
-                auto wall = std::make_unique<Wall>(
-                    parsePoint(startS), parsePoint(endS));
+                auto wall = std::make_unique<Wall>(parsePoint(startS),
+                                                   parsePoint(endS));
                 wall->setMaterial(materials[mat]);
 
                 objects.push_back(std::move(wall));

@@ -23,6 +23,7 @@ namespace Game
         /* Player physics */
         void setVelocity(const Math::Vector2 &velocity);
         void setAngularVelocity(float angularVelocity);
+        void setAcceleration(const Math::Vector2 &acceleration);
 
     private:
         /* Player camera */
@@ -30,10 +31,17 @@ namespace Game
 
         /* Player physics */
         Math::Vector2 velocity;
+        Math::Vector2 acceleration;
         float angularVelocity;
 
         /* Player properties */
-        const float movementSpeed = 2.0f;
-        const float rotationSpeed = 2.0f;
+
+        /* Spatial properties */
+        static constexpr float maxSpeed = 1.0f;
+        static constexpr float accelerationRate = 2.f;
+        static constexpr float friction = 0.9f;
+
+        /* angular properties */
+        static constexpr float rotationSpeed = 1.0f;
     };
 } // namespace Game

@@ -47,7 +47,7 @@ namespace Engine
             velocity.x += 1.0f;
         }
 
-        player.setVelocity(velocity.normalized());
+        player.setAcceleration(velocity.normalized());
     }
 
     void InputManager::playerRotation()

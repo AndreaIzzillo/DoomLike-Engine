@@ -1,5 +1,8 @@
 #include "game/player/player.hpp"
 
+#include <cfloat>
+#include <cstdlib>
+
 #include "game/settings.hpp"
 
 namespace Game
@@ -27,18 +30,33 @@ namespace Game
 
     void Player::fixedUpdate(float dt)
     {
-        camera.move(velocity * movementSpeed * dt);
+        if (acceleration.norm() > FLT_EPSILON)
+            velocity += acceleration * accelerationRate * dt;
+        else
+            velocity *= friction;
+
+        if (velocity.norm() >= maxSpeed)
+            velocity = velocity.normalized() * maxSpeed;
+
+        if (velocity.norm() < 0.01f)
+            velocity = Math::Vector2(0.0f, 0.0f);
+
+        camera.move(velocity * dt);
         camera.rotate(angularVelocity * rotationSpeed * dt);
     }
 
-    void Player::setVelocity(
-        const Math::Vector2 &velocity = Math::Vector2(0.0f, 0.0f))
+    void Player::setAcceleration(const Math::Vector2 &acceleration)
     {
-        this->velocity = velocity;
+        this->acceleration = acceleration;
     }
 
-    void Player::setAngularVelocity(float angularVelocity = 0.0f)
+    void Player::setAngularVelocity(float angularVelocity)
     {
         this->angularVelocity = angularVelocity;
+    }
+
+    void Player::setVelocity(const Math::Vector2 &velocity)
+    {
+        this->velocity = velocity;
     }
 } // namespace Game
