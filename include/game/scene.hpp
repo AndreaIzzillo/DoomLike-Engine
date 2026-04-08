@@ -22,6 +22,7 @@ namespace Game
         ~Scene() = default;
 
         const Player &getPlayer() const;
+        Player &getPlayer();
         const std::vector<std::unique_ptr<IObject>> &getObjects() const;
 
         void update(float dt);

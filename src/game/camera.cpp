@@ -50,8 +50,9 @@ namespace Game
 
     void Camera::move(const Math::Vector2 &delta)
     {
-        position += delta;
-        viewportPosition += delta;
+        Math::Vector2 movement = right * delta.x + forward * delta.y;
+        position += movement;
+        viewportPosition += movement;
     };
 
     void Camera::rotate(float angle)

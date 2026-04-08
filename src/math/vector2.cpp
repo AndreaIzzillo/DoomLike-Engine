@@ -1,5 +1,6 @@
 #include "math/vector2.hpp"
 
+#include <cfloat>
 #include <math.h>
 #include <ostream>
 
@@ -74,7 +75,7 @@ namespace Math
     Vector2 Vector2::normalized() const
     {
         float n = norm();
-        return Vector2(x / n, y / n);
+        return std::abs(n) < FLT_EPSILON ? Vector2(0.0f, 0.0f) : Vector2(x / n, y / n);
     }
 
     std::ostream &operator<<(std::ostream &out, Vector2 &vec)

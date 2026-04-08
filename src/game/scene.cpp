@@ -1,5 +1,6 @@
 #include "game/scene.hpp"
 
+#include "game/player.hpp"
 #include "io/mapfile.hpp"
 
 namespace Game
@@ -14,6 +15,11 @@ namespace Game
     {}
 
     const Player &Scene::getPlayer() const
+    {
+        return player;
+    }
+
+    Player &Scene::getPlayer()
     {
         return player;
     }

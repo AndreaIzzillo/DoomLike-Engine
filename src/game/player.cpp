@@ -24,15 +24,19 @@ namespace Game
     {}
 
     void Player::fixedUpdate(float dt)
-    {}
-
-    void Player::move(const Math::Vector2 &delta)
     {
-        camera.move(delta);
+        camera.move(velocity * movementSpeed * dt);
+        camera.rotate(angularVelocity * rotationSpeed * dt);
     }
 
-    void Player::rotate(float angle)
+    void Player::setVelocity(
+        const Math::Vector2 &velocity = Math::Vector2(0.0f, 0.0f))
     {
-        camera.rotate(angle);
+        this->velocity = velocity;
+    }
+
+    void Player::setAngularVelocity(float angularVelocity = 0.0f)
+    {
+        this->angularVelocity = angularVelocity;
     }
 } // namespace Game

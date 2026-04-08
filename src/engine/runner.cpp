@@ -9,7 +9,9 @@ namespace Engine
     Runner::Runner(std::unique_ptr<::Game::Scene> scene)
         : renderer()
         , scene(std::move(scene))
-    {}
+        , inputManager(scene.get())
+    {
+    }
 
     void Runner::addObject(std::unique_ptr<::Game::IObject> object)
     {
@@ -64,6 +66,7 @@ namespace Engine
 
     void Runner::update(sf::Time dt)
     {
+        inputManager.update();
         scene->update(dt.asSeconds());
     }
 

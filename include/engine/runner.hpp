@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/input.hpp"
 #include "engine/renderer.hpp"
 #include "game/object.hpp"
 #include "game/scene.hpp"
@@ -26,6 +27,7 @@ namespace Engine
         sf::Time accumulatedTime;
 
         Renderer renderer;
+        InputManager inputManager;
         std::unique_ptr<::Game::Scene> scene;
     };
 } // namespace Engine
