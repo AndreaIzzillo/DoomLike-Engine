@@ -18,4 +18,11 @@ namespace Game
     {
         return HitRecord{};
     }
+
+    void Enemy::extrude(const Math::Ray &ray, const HitRecord &record,
+                        const Player &player, Utils::Image &image,
+                        unsigned x) const
+    {
+        throw std::runtime_error("Enemy extrusion not implemented yet");
+    }
 } // namespace Game

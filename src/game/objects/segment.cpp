@@ -46,4 +46,11 @@ namespace Game
 
         return rec;
     }
+
+    void Segment::extrude(const Math::Ray &ray, const HitRecord &record,
+                          const Player &player, Utils::Image &image,
+                          unsigned x) const
+    {
+        /* Segments are not rendered */
+    }
 } // namespace Game

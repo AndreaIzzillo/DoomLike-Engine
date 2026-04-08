@@ -34,4 +34,24 @@ namespace Game
 
         return record;
     }
+
+    void Wall::extrude(const Math::Ray &ray, const HitRecord &record,
+                       const Player &player, Utils::Image &image,
+                       unsigned x) const
+    {
+        float de = player.getCamera().getFocalDistance();
+        float hm = getHeight();
+        float dm = record.t * (ray.direction * player.getCamera().getForward());
+        float he = (de * hm) / dm;
+        float hr = static_cast<float>(image.getHeight()) / 2.0f;
+
+        for (unsigned y = 0; y < image.getHeight(); y++)
+        {
+            if (y > hr - he / 2 && y < hr + he / 2)
+            {
+                auto properties = record.material->getProperties(record);
+                image(x, y) = properties.color;
+            }
+        }
+    }
 } // namespace Game

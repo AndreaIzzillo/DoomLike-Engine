@@ -6,8 +6,9 @@ namespace Game
         : color(color)
     {}
 
-    MaterialProperties ColorMaterial::getProperties(
-        const HitRecord &record, const Math::Point2 &texCoord) const
+    MaterialProperties
+    ColorMaterial::getProperties(const HitRecord &record,
+                                 const Math::Point2 &texCoord) const
     {
         MaterialProperties properties;
         properties.color = color;

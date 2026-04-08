@@ -4,7 +4,6 @@
 
 #include "game/materials/material.hpp"
 #include "game/objects/object.hpp"
-#include "game/objects/wall.hpp"
 #include "utils/image.hpp"
 
 #define T_MIN FLT_EPSILON
@@ -60,25 +59,8 @@ namespace Engine
 
             if (record.isHit)
             {
-                auto wall = dynamic_cast<const Game::Wall *>(record.object);
-                if (wall)
-                {
-                    float de = player.getCamera().getFocalDistance();
-                    float hm = wall->getHeight();
-                    float dm = record.t
-                        * (ray.direction * player.getCamera().getForward());
-                    float he = (de * hm) / dm;
-                    float hr = static_cast<float>(image.getHeight()) / 2.0f;
-
-                    for (unsigned y = 0; y < image.getHeight(); y++)
-                    {
-                        if (y > hr - he / 2 && y < hr + he / 2)
-                        {
-                            auto properties = record.material->getProperties(record);
-                            image(x, y) = properties.color;
-                        }
-                    }
-                }
+                auto hitObject = record.object;
+                hitObject->extrude(ray, record, player, image, x);
             }
         }
     }

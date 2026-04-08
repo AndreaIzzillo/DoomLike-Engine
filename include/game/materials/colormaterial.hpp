@@ -18,7 +18,8 @@ namespace Game
 
         virtual MaterialProperties getProperties(
             const HitRecord &record,
-            const Math::Point2 &texCoord = Math::Point2(0.0f, 0.0f)) const override;
+            const Math::Point2 &texCoord = Math::Point2(0.0f,
+                                                        0.0f)) const override;
 
     private:
         Utils::Color color;
