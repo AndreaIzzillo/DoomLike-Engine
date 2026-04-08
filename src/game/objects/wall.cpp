@@ -27,7 +27,10 @@ namespace Game
     {
         auto record = segment.hit(ray, tMin, tMax);
         if (record.isHit)
+        {
             record.object = this;
+            record.material = material.get();
+        }
 
         return record;
     }

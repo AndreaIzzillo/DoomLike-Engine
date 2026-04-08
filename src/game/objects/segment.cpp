@@ -36,6 +36,7 @@ namespace Game
         rec.t = t;
         rec.point = ray.at(t);
         rec.object = this;
+        rec.material = material.get();
 
         Math::Vector2 segDir = s.normalized();
         rec.normal = Math::Vector2(-segDir.y, segDir.x);

@@ -2,8 +2,10 @@
 
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 
-#include "game/enemy/enemy.hpp"
+#include "game/enemies/enemy.hpp"
+#include "game/materials/colormaterial.hpp"
 #include "game/objects/wall.hpp"
 
 namespace IO
@@ -25,6 +27,12 @@ namespace IO
             float x, y;
             sscanf(s.c_str(), "(%f,%f)", &x, &y);
             return { x, y };
+        };
+
+        auto parseColor = [](const std::string &s) -> Utils::Color {
+            float r, g, b;
+            sscanf(s.c_str(), "(%f,%f,%f)", &r, &g, &b);
+            return { r, g, b };
         };
 
         auto parseQuoted = [](const std::string &s) -> std::string {
@@ -56,13 +64,38 @@ namespace IO
                 playerLookAt = parsePoint(lookS);
                 playerSet = true;
             }
+            else if (type == 'M')
+            {
+                std::string type, name;
+                iss >> type >> name;
+                name = parseQuoted(name);
+                if (type == "Color")
+                {
+                    std::string colorS;
+                    iss >> colorS;
+                    materials[name] =
+                        std::make_shared<ColorMaterial>(parseColor(colorS));
+                }
+                else
+                {
+                    std::runtime_error("Unsupported material type: " + type);
+                }
+            }
             else if (type == 'W')
             {
-                std::string startS, endS, height, tex;
+                std::string startS, endS, height, mat;
                 iss >> startS >> endS >> height;
-                std::getline(iss, tex);
-                objects.push_back(std::make_unique<Wall>(
-                    parsePoint(startS), parsePoint(endS), std::stof(height)));
+
+                std::getline(iss, mat);
+                mat = parseQuoted(mat);
+                if (materials.find(mat) == materials.end())
+                    throw std::runtime_error("Undefined material: " + mat);
+
+                auto wall = std::make_unique<Wall>(
+                    parsePoint(startS), parsePoint(endS), std::stof(height));
+                wall->setMaterial(materials[mat]);
+
+                objects.push_back(std::move(wall));
             }
             else if (type == 'E')
             {

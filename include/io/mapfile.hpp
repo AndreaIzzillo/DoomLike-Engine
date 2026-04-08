@@ -1,9 +1,11 @@
 #pragma once
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
+#include "game/materials/material.hpp"
 #include "game/objects/object.hpp"
 #include "game/player/player.hpp"
 #include "math/point2.hpp"
@@ -17,11 +19,8 @@ namespace IO
      * @brief A class representing a map file.
      *
      * This class is responsible for loading a map file and extracting the
-     * player position, lookAt and the objects in the scene. Grammar of the map
-     * file is as follows:
-     * - Player (should be unique): "P (x, y) (lookAtX, lookAtY)"
-     * - Wall: "W (startX, startY) (endX, endY) height"
-     * - Enemy: "E (x, y)"
+     * player position, lookAt and the objects in the scene.
+     * Grammar of the map file defined in resources/maps/GRAMMAR.md
      */
     class MapFile
     {
@@ -37,5 +36,6 @@ namespace IO
         Point2 playerPosition;
         Point2 playerLookAt;
         std::vector<std::unique_ptr<IObject>> objects;
+        std::map<std::string, std::shared_ptr<IMaterial>> materials;
     };
 } // namespace IO
