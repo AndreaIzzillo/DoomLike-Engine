@@ -1,1 +1,1 @@
-cmake --build build -j4
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release -j4

@@ -1,9 +1,12 @@
 #pragma once
 
-#include "game/segment.hpp"
+#include "game/objects/segment.hpp"
 
 namespace Game
 {
+    /**
+     * @brief A class representing a wall in the game world.
+     */
     class Wall : public IObject
     {
     public:

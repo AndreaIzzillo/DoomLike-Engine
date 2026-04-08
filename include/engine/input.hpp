@@ -1,9 +1,23 @@
 #pragma once
 
-#include "game/scene.hpp"
+#include "game/scene/scene.hpp"
 
 namespace Engine
 {
+    /**
+     * @brief Handles user input and translates it into game actions, such as
+     * moving the player or rotating the camera.
+     *
+     * This class is only responsible for changing the state of the scene
+     * components, such as the player, and does not directly interact with the
+     * renderer or the game objects.
+     *
+     * Engine classes execution flow:
+     * - Runner updates its InputManager (updates the scene components fields)
+     * - Runner updates its Scene (calculates physics, logic, etc.)
+     * - RayCaster generates the current frame (based on the updated scene)
+     * - Renderer takes the generated frame and updates the display
+     */
     class InputManager
     {
     public:

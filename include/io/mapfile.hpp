@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "game/object.hpp"
-#include "game/player.hpp"
+#include "game/objects/object.hpp"
+#include "game/player/player.hpp"
 #include "math/point2.hpp"
 
 namespace IO
@@ -13,6 +13,16 @@ namespace IO
     using namespace Game;
     using namespace Math;
 
+    /**
+     * @brief A class representing a map file.
+     *
+     * This class is responsible for loading a map file and extracting the
+     * player position, lookAt and the objects in the scene. Grammar of the map
+     * file is as follows:
+     * - Player (should be unique): "P (x, y) (lookAtX, lookAtY)"
+     * - Wall: "W (startX, startY) (endX, endY) height"
+     * - Enemy: "E (x, y)"
+     */
     class MapFile
     {
     public:

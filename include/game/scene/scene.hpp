@@ -3,12 +3,15 @@
 #include <memory>
 #include <vector>
 
-#include "game/object.hpp"
-#include "game/player.hpp"
+#include "game/objects/object.hpp"
+#include "game/player/player.hpp"
 #include "io/mapfile.hpp"
 
 namespace Game
 {
+    /**
+     * @brief A class representing the game scene.
+     */
     class Scene
     {
     private:
@@ -21,13 +24,16 @@ namespace Game
 
         ~Scene() = default;
 
+        /* Getters */
         const Player &getPlayer() const;
-        Player &getPlayer();
+        Player &getPlayer(); // Non-const version for player movement. (used in
+                             // InputManager.hpp)
         const std::vector<std::unique_ptr<IObject>> &getObjects() const;
 
         void update(float dt);
         void fixedUpdate(float dt);
 
+        /* Object management */
         void addObject(std::unique_ptr<IObject> object);
     };
 } // namespace Game

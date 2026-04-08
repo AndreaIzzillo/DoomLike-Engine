@@ -1,9 +1,12 @@
 #pragma once
 
-#include "game/object.hpp"
+#include "game/objects/object.hpp"
 
 namespace Game
 {
+    /**
+     * @brief TODO
+     */
     class Enemy : public IObject
     {
     public:

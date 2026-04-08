@@ -2,11 +2,24 @@
 
 #include "engine/input.hpp"
 #include "engine/renderer.hpp"
-#include "game/object.hpp"
-#include "game/scene.hpp"
+#include "game/objects/object.hpp"
+#include "game/scene/scene.hpp"
 
 namespace Engine
 {
+    /**
+     * @brief A class for managing the main game loop and coordinating the
+     different engine systems.
+     *
+     * The Runner class is responsible for initializing the game systems,
+     * handling events, updating the game state, and rendering the scene.
+     *
+     * Engine classes execution flow:
+     * - Runner updates its InputManager (updates the scene components fields)
+     * - Runner updates its Scene (calculates physics, logic, etc.)
+     * - RayCaster generates the current frame (based on the updated scene)
+     * - Renderer takes the generated frame and updates the display
+     */
     class Runner
     {
     public:
@@ -23,11 +36,15 @@ namespace Engine
         void fixedUpdate(sf::Time dt);
 
     private:
+        /* Timing management for fixed updates */
         sf::Clock clock;
         sf::Time accumulatedTime;
 
+        /* Internal engine systems with their own update loops (unique) */
         Renderer renderer;
         InputManager inputManager;
+
+        /* Game scene (unique) */
         std::unique_ptr<::Game::Scene> scene;
     };
 } // namespace Engine

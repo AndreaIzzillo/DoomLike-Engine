@@ -1,7 +1,8 @@
 #include "engine/input.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
-#include "game/player.hpp"
+
+#include "game/player/player.hpp"
 #include "math/vector2.hpp"
 
 #define W sf::Keyboard::Scancode::W

@@ -10,8 +10,7 @@ namespace Engine
         : renderer()
         , scene(std::move(scene))
         , inputManager(scene.get())
-    {
-    }
+    {}
 
     void Runner::addObject(std::unique_ptr<::Game::IObject> object)
     {

@@ -1,7 +1,5 @@
 #include "engine/runner.hpp"
-#include "game/player.hpp"
-#include "game/scene.hpp"
-#include "game/wall.hpp"
+#include "game/scene/scene.hpp"
 #include "io/mapfile.hpp"
 
 int main()

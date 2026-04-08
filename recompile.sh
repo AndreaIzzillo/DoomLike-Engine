@@ -1,1 +1,1 @@
-rm -rf build && cmake -S . -B build && cmake --build build -j4
+rm -rf build && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release -j4

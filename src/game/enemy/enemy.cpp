@@ -1,4 +1,4 @@
-#include "game/enemy.hpp"
+#include "game/enemy/enemy.hpp"
 
 #define ENEMY_RADIUS 0.5f
 

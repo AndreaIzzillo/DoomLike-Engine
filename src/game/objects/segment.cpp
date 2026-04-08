@@ -1,4 +1,4 @@
-#include "game/segment.hpp"
+#include "game/objects/segment.hpp"
 
 #include <cfloat>
 

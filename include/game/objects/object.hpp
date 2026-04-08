@@ -8,6 +8,9 @@ namespace Game
 {
     class IObject;
 
+    /**
+     * @brief A struct representing the hit record of a ray-object intersection.
+     */
     struct HitRecord
     {
         bool isHit = false;
@@ -17,6 +20,9 @@ namespace Game
         const IObject *object = nullptr;
     };
 
+    /**
+     * @brief A class representing an object in the game world.
+     */
     class IObject
     {
     public:

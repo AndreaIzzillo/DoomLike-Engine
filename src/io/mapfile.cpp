@@ -3,8 +3,8 @@
 #include <fstream>
 #include <sstream>
 
-#include "game/enemy.hpp"
-#include "game/wall.hpp"
+#include "game/enemy/enemy.hpp"
+#include "game/objects/wall.hpp"
 
 namespace IO
 {

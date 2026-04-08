@@ -1,4 +1,4 @@
-#include "game/player.hpp"
+#include "game/player/player.hpp"
 
 #include "game/settings.hpp"
 

@@ -1,4 +1,4 @@
-#include "game/camera.hpp"
+#include "game/player/camera.hpp"
 
 #include "math/matrix2x2.hpp"
 

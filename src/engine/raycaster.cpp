@@ -1,10 +1,12 @@
 #include "engine/raycaster.hpp"
 
-#include "game/object.hpp"
-#include "game/wall.hpp"
+#include <cfloat>
+
+#include "game/objects/object.hpp"
+#include "game/objects/wall.hpp"
 #include "utils/image.hpp"
 
-#define T_MIN 1e-5f
+#define T_MIN FLT_EPSILON
 #define T_MAX std::numeric_limits<float>::infinity()
 
 namespace Engine

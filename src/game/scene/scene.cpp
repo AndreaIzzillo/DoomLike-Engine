@@ -1,6 +1,6 @@
-#include "game/scene.hpp"
+#include "game/scene/scene.hpp"
 
-#include "game/player.hpp"
+#include "game/player/player.hpp"
 #include "io/mapfile.hpp"
 
 namespace Game

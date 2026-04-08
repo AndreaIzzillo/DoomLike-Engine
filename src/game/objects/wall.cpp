@@ -1,4 +1,4 @@
-#include "game/wall.hpp"
+#include "game/objects/wall.hpp"
 
 namespace Game
 {
