@@ -22,11 +22,13 @@ namespace Game
 
         /* Getters */
         const Math::Point2 &getPosition() const;
+        float getCameraHeight() const;
         const Math::Vector2 &getForward() const;
         const Math::Vector2 &getRight() const;
         float getFov() const;
         float getFocalDistance() const;
         unsigned getResolution() const;
+        float getViewportWidth() const;
 
         /* Camera physics */
         void move(const Math::Vector2 &delta);
@@ -38,6 +40,7 @@ namespace Game
     private:
         /* Camera / Player position */
         Math::Point2 position;
+        float cameraHeight;
 
         /* Camera orientation / plane */
         Math::Vector2 forward;

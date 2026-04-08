@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/objects/segment.hpp"
+#include "game/objects/object.hpp"
 
 namespace Game
 {
@@ -11,10 +11,7 @@ namespace Game
     {
     public:
         Wall() = default;
-        Wall(const Segment &segment, float height);
-        Wall(const Math::Point2 &start, const Math::Point2 &end, float height);
-
-        float getHeight() const;
+        Wall(const Math::Point2 &start, const Math::Point2 &end);
 
         void update(float dt) override;
         void fixedUpdate(float dt) override;
@@ -22,12 +19,8 @@ namespace Game
         HitRecord hit(const Math::Ray &ray, float tMin,
                       float tMax) const override;
 
-        void extrude(const Math::Ray &ray, const HitRecord &record,
-                     const Player &player, Utils::Image &image,
-                     unsigned x) const override;
-
     private:
-        Segment segment;
-        float height;
+        Math::Point2 start;
+        Math::Point2 end;
     };
 } // namespace Game

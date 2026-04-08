@@ -4,6 +4,7 @@
 
 #include "engine/raycaster.hpp"
 #include "game/scene/scene.hpp"
+#include "math/vector2.hpp"
 
 namespace Engine
 {
@@ -16,8 +17,8 @@ namespace Engine
      * Engine classes execution flow:
      * - Runner updates its InputManager (updates the scene components fields)
      * - Runner updates its Scene (calculates physics, logic, etc.)
-     * - RayCaster generates the current frame (based on the updated scene)
-     * - Renderer takes the generated frame and updates the display
+     * - Renderer generates the current frame using RayCaster (based on the
+     * updated scene)
      */
     class Renderer
     {
@@ -43,5 +44,13 @@ namespace Engine
         sf::Texture texture;
         sf::Sprite sprite;
         std::vector<std::uint8_t> pixelBuffer;
+
+    private:
+        /* Helper functions for rendering */
+        float correctDist(float distance, const Math::Vector2 &rayDirection,
+                          const Math::Vector2 &cameraForward) const;
+        float getVerticalFov(float horizontalFov, float aspectRatio) const;
+        unsigned project(float horizon, float cameraHeight, float z,
+                         float scale, float distance) const;
     };
 } // namespace Engine

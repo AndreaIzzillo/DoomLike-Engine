@@ -15,8 +15,8 @@ namespace Engine
      * Engine classes execution flow:
      * - Runner updates its InputManager (updates the scene components fields)
      * - Runner updates its Scene (calculates physics, logic, etc.)
-     * - RayCaster generates the current frame (based on the updated scene)
-     * - Renderer takes the generated frame and updates the display
+     * - Renderer generates the current frame using RayCaster (based on the
+     * updated scene)
      */
     class InputManager
     {

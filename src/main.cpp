@@ -4,7 +4,7 @@
 
 int main()
 {
-    auto mapfile = IO::MapFile("resources/maps/sample.map");
+    auto mapfile = IO::MapFile("resources/maps/test.map");
     auto scene = std::make_unique<Game::Scene>(mapfile);
     auto runner = std::make_unique<Engine::Runner>(std::move(scene));
 

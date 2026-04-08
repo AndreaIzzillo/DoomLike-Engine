@@ -7,6 +7,7 @@ namespace Game
     Camera::Camera(const Math::Point2 &position, const Math::Point2 &lookAt,
                    float fov, float focalDistance, unsigned resolution)
         : position(position)
+        , cameraHeight(0.5f)
         , forward((lookAt - position).normalized())
         , fov(fov)
         , focalDistance(focalDistance)
@@ -21,6 +22,11 @@ namespace Game
     const Math::Point2 &Camera::getPosition() const
     {
         return position;
+    }
+
+    float Camera::getCameraHeight() const
+    {
+        return cameraHeight;
     }
 
     const Math::Vector2 &Camera::getForward() const
@@ -46,6 +52,11 @@ namespace Game
     unsigned Camera::getResolution() const
     {
         return resolution;
+    }
+
+    float Camera::getViewportWidth() const
+    {
+        return viewportWidth;
     }
 
     void Camera::move(const Math::Vector2 &delta)

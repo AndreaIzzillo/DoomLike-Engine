@@ -4,7 +4,6 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "game/enemies/enemy.hpp"
 #include "game/materials/colormaterial.hpp"
 #include "game/objects/wall.hpp"
 
@@ -18,10 +17,6 @@ namespace IO
             std::cerr << "Cannot open file: " << path << std::endl;
             throw std::runtime_error("Failed to open scene file");
         }
-
-        // P x0,y0 x1,y1 fov focal_distance resolution
-        // W x0,y0 x1,y1 "texture"
-        // E x,y "sprite"
 
         auto parsePoint = [](const std::string &s) -> Math::Point2 {
             float x, y;
@@ -83,8 +78,8 @@ namespace IO
             }
             else if (type == 'W')
             {
-                std::string startS, endS, height, mat;
-                iss >> startS >> endS >> height;
+                std::string startS, endS,  mat;
+                iss >> startS >> endS;
 
                 std::getline(iss, mat);
                 mat = parseQuoted(mat);
@@ -92,17 +87,10 @@ namespace IO
                     throw std::runtime_error("Undefined material: " + mat);
 
                 auto wall = std::make_unique<Wall>(
-                    parsePoint(startS), parsePoint(endS), std::stof(height));
+                    parsePoint(startS), parsePoint(endS));
                 wall->setMaterial(materials[mat]);
 
                 objects.push_back(std::move(wall));
-            }
-            else if (type == 'E')
-            {
-                std::string posS, sprite;
-                iss >> posS;
-                std::getline(iss, sprite);
-                objects.push_back(std::make_unique<Enemy>(parsePoint(posS)));
             }
         }
 

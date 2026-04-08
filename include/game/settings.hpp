@@ -26,6 +26,10 @@ namespace Game
         float cameraFov = M_PI_2;
         float cameraFocalDistance = 1.0f;
 
+        /* World settings */
+        float worldFloor = 0.f;
+        float worldCeiling = 1.f;
+
     public:
         static Settings &get()
         {

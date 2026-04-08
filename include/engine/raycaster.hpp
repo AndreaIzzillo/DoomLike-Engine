@@ -15,8 +15,8 @@ namespace Engine
      * Engine classes execution flow:
      * - Runner updates its InputManager (updates the scene components fields)
      * - Runner updates its Scene (calculates physics, logic, etc.)
-     * - RayCaster generates the current frame (based on the updated scene)
-     * - Renderer takes the generated frame and updates the display
+     * - Renderer generates the current frame using RayCaster (based on the
+     * updated scene)
      */
     class RayCaster
     {
@@ -25,7 +25,5 @@ namespace Engine
 
         Game::HitRecord castRay(const Math::Ray &ray, const Game::Scene &scene,
                                 float tMin, float tMax) const;
-
-        void renderFrame(const Game::Scene &scene, Utils::Image &image) const;
     };
 } // namespace Engine

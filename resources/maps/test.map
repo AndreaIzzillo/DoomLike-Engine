@@ -1,0 +1,67 @@
+P (0,0) (1,0)
+
+M Color "wall_main"   (0.95,0.95,0.95)
+M Color "wall_side"   (0.75,0.95,0.75)
+M Color "wall_topbot" (0.75,0.85,1.0)
+M Color "wall_pillar" (1.0,0.8,0.4)
+
+W (-4,4) (-1,4) "wall_main"
+W (1,4) (4,4) "wall_main"
+W (-4,-4) (-1,-4) "wall_main"
+W (1,-4) (4,-4) "wall_main"
+W (-4,-4) (-4,-1) "wall_main"
+W (-4,1) (-4,4) "wall_main"
+W (4,-4) (4,-1) "wall_main"
+W (4,1) (4,4) "wall_main"
+
+W (4,1) (10,1) "wall_side"
+W (4,-1) (10,-1) "wall_side"
+W (10,4) (16,4) "wall_side"
+W (16,-4) (16,4) "wall_side"
+W (10,-4) (16,-4) "wall_side"
+W (10,4) (10,1) "wall_side"
+W (10,-1) (10,-4) "wall_side"
+
+W (-10,1) (-4,1) "wall_side"
+W (-10,-1) (-4,-1) "wall_side"
+W (-16,4) (-10,4) "wall_side"
+W (-16,-4) (-10,-4) "wall_side"
+W (-16,-4) (-16,4) "wall_side"
+W (-10,4) (-10,1) "wall_side"
+W (-10,-1) (-10,-4) "wall_side"
+
+W (-1,4) (-1,10) "wall_topbot"
+W (1,4) (1,10) "wall_topbot"
+W (-4,16) (4,16) "wall_topbot"
+W (-4,10) (-4,16) "wall_topbot"
+W (4,10) (4,16) "wall_topbot"
+W (-4,10) (-1,10) "wall_topbot"
+W (1,10) (4,10) "wall_topbot"
+
+W (-1,-10) (-1,-4) "wall_topbot"
+W (1,-10) (1,-4) "wall_topbot"
+W (-4,-16) (4,-16) "wall_topbot"
+W (-4,-16) (-4,-10) "wall_topbot"
+W (4,-16) (4,-10) "wall_topbot"
+W (-4,-10) (-1,-10) "wall_topbot"
+W (1,-10) (4,-10) "wall_topbot"
+
+W (12,-1) (14,-1) "wall_pillar"
+W (14,-1) (14,1) "wall_pillar"
+W (14,1) (12,1) "wall_pillar"
+W (12,1) (12,-1) "wall_pillar"
+
+W (-12,-1) (-14,-1) "wall_pillar"
+W (-14,-1) (-14,1) "wall_pillar"
+W (-14,1) (-12,1) "wall_pillar"
+W (-12,1) (-12,-1) "wall_pillar"
+
+W (-1,12) (1,12) "wall_pillar"
+W (1,12) (1,14) "wall_pillar"
+W (1,14) (-1,14) "wall_pillar"
+W (-1,14) (-1,12) "wall_pillar"
+
+W (-1,-12) (1,-12) "wall_pillar"
+W (1,-12) (1,-14) "wall_pillar"
+W (1,-14) (-1,-14) "wall_pillar"
+W (-1,-14) (-1,-12) "wall_pillar"

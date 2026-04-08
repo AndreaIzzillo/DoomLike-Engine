@@ -1,21 +1,13 @@
 #include "game/objects/wall.hpp"
 
+#include <cfloat>
+
 namespace Game
 {
-    Wall::Wall(const Segment &segment, float height)
-        : segment(segment)
-        , height(height)
+    Wall::Wall(const Math::Point2 &start, const Math::Point2 &end)
+        : start(start)
+        , end(end)
     {}
-
-    Wall::Wall(const Math::Point2 &start, const Math::Point2 &end, float height)
-        : segment(start, end)
-        , height(height)
-    {}
-
-    float Wall::getHeight() const
-    {
-        return height;
-    }
 
     void Wall::update(float dt)
     {}
@@ -25,33 +17,33 @@ namespace Game
 
     HitRecord Wall::hit(const Math::Ray &ray, float tMin, float tMax) const
     {
-        auto record = segment.hit(ray, tMin, tMax);
-        if (record.isHit)
-        {
-            record.object = this;
-            record.material = material.get();
-        }
+        Math::Vector2 r = ray.direction;
+        Math::Vector2 s = end - start;
+        Math::Vector2 diff = start - ray.origin;
+        float denom = r ^ s;
 
-        return record;
-    }
+        if (std::fabs(denom) < FLT_EPSILON)
+            return HitRecord{};
 
-    void Wall::extrude(const Math::Ray &ray, const HitRecord &record,
-                       const Player &player, Utils::Image &image,
-                       unsigned x) const
-    {
-        float de = player.getCamera().getFocalDistance();
-        float hm = getHeight();
-        float dm = record.t * (ray.direction * player.getCamera().getForward());
-        float he = (de * hm) / dm;
-        float hr = static_cast<float>(image.getHeight()) / 2.0f;
+        float t = (diff ^ s) / denom;
+        float u = (diff ^ r) / denom;
 
-        for (unsigned y = 0; y < image.getHeight(); y++)
-        {
-            if (y > hr - he / 2 && y < hr + he / 2)
-            {
-                auto properties = record.material->getProperties(record);
-                image(x, y) = properties.color;
-            }
-        }
+        if (t < tMin || t > tMax || u < 0.f || u > 1.f)
+            return HitRecord{};
+
+        HitRecord rec;
+        rec.isHit = true;
+        rec.t = t;
+        rec.point = ray.at(t);
+        rec.object = this;
+        rec.material = material.get();
+
+        Math::Vector2 segDir = s.normalized();
+        rec.normal = Math::Vector2(-segDir.y, segDir.x);
+
+        if (rec.normal * ray.direction > 0.f)
+            rec.normal = rec.normal * -1.f;
+
+        return rec;
     }
 } // namespace Game

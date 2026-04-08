@@ -3,11 +3,10 @@
 #include <memory>
 
 #include "game/materials/material.hpp"
-#include "game/player/player.hpp"
+#include "game/settings.hpp"
 #include "math/point2.hpp"
 #include "math/ray.hpp"
 #include "math/vector2.hpp"
-#include "utils/image.hpp"
 
 namespace Game
 {
@@ -22,6 +21,10 @@ namespace Game
         float t = 0.f;
         Math::Point2 point = { 0.f, 0.f };
         Math::Vector2 normal = { 0.f, 0.f };
+
+        float floor = Settings::get().worldFloor;
+        float ceiling = Settings::get().worldCeiling;
+
         const IObject *object = nullptr;
         const IMaterial *material = nullptr;
     };
@@ -49,11 +52,6 @@ namespace Game
         /* Ray-Object Intersection */
         virtual HitRecord hit(const Math::Ray &ray, float tMin,
                               float tMax) const = 0;
-
-        /* Z-axis extrusion */
-        virtual void extrude(const Math::Ray &ray, const HitRecord &record,
-                             const Player &player, Utils::Image &image,
-                             unsigned x) const = 0;
 
     protected:
         std::shared_ptr<IMaterial> material;
