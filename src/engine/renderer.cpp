@@ -56,6 +56,7 @@ namespace Engine
         const auto width = image.getWidth();
         const auto height = image.getHeight();
 
+#pragma omp parallel for collapse(2)
         for (unsigned y = 0; y < height; y++)
         {
             for (unsigned x = 0; x < width; x++)

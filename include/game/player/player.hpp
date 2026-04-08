@@ -29,11 +29,11 @@ namespace Game
         Game::Camera camera;
 
         /* Player physics */
-        // Position is stored in the camera
-        Math::Vector2 velocity = Math::Vector2(0.0f, 0.0f);
-        float movementSpeed = 2.0f;
+        Math::Vector2 velocity;
+        float angularVelocity;
 
-        float angularVelocity = 0.0f;
-        float rotationSpeed = 2.0f;
+        /* Player properties */
+        const float movementSpeed = 2.0f;
+        const float rotationSpeed = 2.0f;
     };
 } // namespace Game

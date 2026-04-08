@@ -14,6 +14,12 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
+if(APPLE AND NOT OpenMP_ROOT AND EXISTS "/opt/homebrew/opt/libomp")
+    set(OpenMP_ROOT "/opt/homebrew/opt/libomp")
+endif()
+
+find_package(OpenMP REQUIRED)
+
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
 
 add_executable(isim ${SRC_FILES})
@@ -25,6 +31,7 @@ target_link_libraries(isim
     sfml-window
     sfml-system
     sfml-audio
+    OpenMP::OpenMP_CXX
 )
 
 target_compile_options(isim PRIVATE

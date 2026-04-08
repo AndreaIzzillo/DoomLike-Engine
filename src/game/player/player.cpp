@@ -7,7 +7,9 @@ namespace Game
     Player::Player(const Math::Point2 &position, const Math::Point2 &lookAt)
         : camera(position, lookAt, Settings::get().cameraFov,
                  Settings::get().cameraFocalDistance,
-                 Settings::get().cameraResolution)
+                 Settings::get().windowWidth)
+        , velocity(Math::Vector2(0.0f, 0.0f))
+        , angularVelocity(0.0f)
     {}
 
     const Math::Point2 &Player::getPosition() const

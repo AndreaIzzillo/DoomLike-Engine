@@ -25,7 +25,6 @@ namespace Game
         /* Camera settings */
         float cameraFov = M_PI_2;
         float cameraFocalDistance = 1.0f;
-        unsigned cameraResolution = windowWidth;
 
     public:
         static Settings &get()
