@@ -7,7 +7,7 @@ namespace Game
     /**
      * @brief A class representing a wall in the game world.
      */
-    class Wall : public IObject
+    class Wall : public IWall
     {
     public:
         Wall() = default;

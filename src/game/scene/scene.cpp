@@ -22,7 +22,7 @@ namespace Game
         return player;
     }
 
-    const std::vector<std::unique_ptr<IObject>> &Scene::getObjects() const
+    const std::vector<std::unique_ptr<IWall>> &Scene::getObjects() const
     {
         return objects;
     }
@@ -39,26 +39,34 @@ namespace Game
 
     void Scene::update(float dt)
     {
+        /* Scene update routine: update player and objects based on the current
+         * input state and other logic */
         player.update(dt);
         for (const auto &object : objects)
             object->update(dt);
     }
 
-    void Scene::fixedUpdate(float dt)
+    void Scene::fixedUpdate(const Engine::CollisionManager &collisionManager,
+                            float dt)
     {
+        /* The scene fixed update is responsible for resolving the player's
+         * movement intent with collision detection and updating the player and
+         * objects accordingly */
         Math::Vector2 velocity = player.computeVelocity(inputState, dt);
-        Engine::CollisionManager collisionManager;
         Math::Vector2 resolvedIntent =
-            collisionManager.resolve(velocity * dt, player, *this);
+            collisionManager.resolveVelocity(velocity * dt, player, *this);
 
+        /* Update the player's angular velocity based on the input state */
         player.setAngularVelocity(inputState.rotationDirection);
 
+        /* Scene fixed update routine: update player and objects based on the
+         * resolved intent */
         player.fixedUpdate(resolvedIntent / dt, dt);
         for (const auto &object : objects)
             object->fixedUpdate(dt);
     }
 
-    void Scene::addObject(std::unique_ptr<IObject> object)
+    void Scene::addObject(std::unique_ptr<IWall> object)
     {
         objects.push_back(std::move(object));
     }

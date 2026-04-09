@@ -39,8 +39,7 @@ namespace Game
 
         /* Camera Shaking properties */
         float cameraShakingTime = 0.0f;
-        static constexpr float cameraShakingFrequency =
-            2.25f; // cycles par seconde à pleine vitesse
+        static constexpr float cameraShakingFrequency = 2.25f;
         static constexpr float cameraShakingAmplitude = 0.01f;
 
         /* Spatial properties */

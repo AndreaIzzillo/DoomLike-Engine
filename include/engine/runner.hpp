@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/collision.hpp"
 #include "engine/input.hpp"
 #include "engine/renderer.hpp"
 #include "game/objects/object.hpp"
@@ -23,10 +24,10 @@ namespace Engine
     class Runner
     {
     public:
-        Runner(std::unique_ptr<::Game::Scene> scene);
+        Runner(std::unique_ptr<Game::Scene> scene);
         ~Runner() = default;
 
-        void addObject(std::unique_ptr<::Game::IObject> object);
+        void addObject(std::unique_ptr<Game::IWall> object);
 
         void run();
 
@@ -40,11 +41,12 @@ namespace Engine
         sf::Clock clock;
         sf::Time accumulatedTime;
 
-        /* Internal engine systems with their own update loops (unique) */
+        /* Internal engine systems */
         Renderer renderer;
         InputManager inputManager;
+        CollisionManager collisionManager;
 
         /* Game scene (unique) */
-        std::unique_ptr<::Game::Scene> scene;
+        std::unique_ptr<Game::Scene> scene;
     };
 } // namespace Engine

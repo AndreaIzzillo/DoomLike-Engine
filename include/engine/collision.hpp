@@ -16,8 +16,9 @@ namespace Engine
     public:
         CollisionManager();
 
-        Math::Vector2 resolve(Math::Vector2 intent, const Game::Player &player,
-                              const Game::Scene &scene) const;
+        Math::Vector2 resolveVelocity(Math::Vector2 intent,
+                                      const Game::Player &player,
+                                      const Game::Scene &scene) const;
 
     private:
         /* Hitbox size */

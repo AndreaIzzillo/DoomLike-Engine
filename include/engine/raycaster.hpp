@@ -2,7 +2,6 @@
 
 #include "game/scene/scene.hpp"
 #include "math/ray.hpp"
-#include "utils/image.hpp"
 
 namespace Engine
 {

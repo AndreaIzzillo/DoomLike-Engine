@@ -11,7 +11,7 @@
 namespace Game
 {
 
-    class IObject;
+    class IWall;
 
     /**
      * @brief A struct representing the hit record of a ray-object intersection.
@@ -34,7 +34,7 @@ namespace Game
         float hitDistance = 0.f;
 
         /* Object and material pointers */
-        const IObject *object = nullptr;
+        const IWall *object = nullptr;
         const IMaterial *material = nullptr;
     };
 
@@ -51,10 +51,10 @@ namespace Game
      * Is an interface that defines the necessary methods for an object to be
      * updated and to be hit by a ray.
      */
-    class IObject
+    class IWall
     {
     public:
-        virtual ~IObject() = default;
+        virtual ~IWall() = default;
 
         virtual void update(float dt) = 0;
         virtual void fixedUpdate(float dt) = 0;

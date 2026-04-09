@@ -37,12 +37,15 @@ namespace Game
 
     void Player::fixedUpdate(Math::Vector2 resolvedVelocity, float dt)
     {
+        /* Player fixed update is responsible for updating the player's position
+         * and rotation based on the resolved velocity */
         velocity = resolvedVelocity;
         camera.move(velocity * dt);
         camera.rotate(angularVelocity * rotationSpeed * dt);
 
         const float speed = velocity.norm();
 
+        /* Camera shaking logic */
         if (speed > FLT_EPSILON)
         {
             cameraShakingTime += speed * cameraShakingFrequency * dt;
@@ -66,12 +69,15 @@ namespace Game
         Math::Vector2 intent = inputState.inputDirection;
         Math::Vector2 velocity_tmp = velocity;
         auto accelerationNorm = intent.norm();
+
         if (accelerationNorm > FLT_EPSILON)
         {
             velocity_tmp += intent * accelerationRate * dt;
         }
         else
+        {
             velocity_tmp -= velocity_tmp * friction * dt;
+        }
 
         auto velocityNorm = velocity_tmp.norm();
 

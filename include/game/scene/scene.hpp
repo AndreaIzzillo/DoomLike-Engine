@@ -8,6 +8,12 @@
 #include "game/player/player.hpp"
 #include "io/mapfile.hpp"
 
+/* Forward declaration to avoid circular dependency */
+namespace Engine
+{
+    class CollisionManager;
+}
+
 namespace Game
 {
     /**
@@ -17,7 +23,8 @@ namespace Game
     {
     private:
         Player player;
-        std::vector<std::unique_ptr<IObject>> objects;
+        std::vector<std::unique_ptr<IWall>> objects;
+
         Engine::InputState inputState;
 
     public:
@@ -30,13 +37,14 @@ namespace Game
         const Player &getPlayer() const;
         const Engine::InputState &getInputState() const;
 
-        const std::vector<std::unique_ptr<IObject>> &getObjects() const;
+        const std::vector<std::unique_ptr<IWall>> &getObjects() const;
 
         void update(float dt);
-        void fixedUpdate(float dt);
+        void fixedUpdate(const Engine::CollisionManager &collisionManager,
+                         float dt);
 
         /* Object management */
-        void addObject(std::unique_ptr<IObject> object);
+        void addObject(std::unique_ptr<IWall> object);
 
         /* Input state management */
         void setInputState(Engine::InputState inputState);

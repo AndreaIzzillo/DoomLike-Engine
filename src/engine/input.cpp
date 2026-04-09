@@ -18,9 +18,9 @@ namespace Engine
     InputManager::InputManager()
     {}
 
-    InputState InputManager::update()
+    InputState InputManager::fetchInputState()
     {
-        return { playerMovement(), playerRotation() };
+        return { playerRotation(), playerMovement() };
     }
 
     Math::Vector2 InputManager::playerMovement()

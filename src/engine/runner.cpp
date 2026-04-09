@@ -10,10 +10,9 @@ namespace Engine
     Runner::Runner(std::unique_ptr<::Game::Scene> scene)
         : renderer()
         , scene(std::move(scene))
-        , inputManager()
     {}
 
-    void Runner::addObject(std::unique_ptr<::Game::IObject> object)
+    void Runner::addObject(std::unique_ptr<::Game::IWall> object)
     {
         scene->addObject(std::move(object));
     }
@@ -25,21 +24,28 @@ namespace Engine
 
         while (renderer.getWindow().isOpen())
         {
+            /* First, handle events */
             handleEvents();
 
             sf::Time dt = clock.restart();
 
+            /* Then, update the scene with the current input state and other
+             * logic */
             update(dt);
 
             accumulatedTime += dt;
             while (accumulatedTime >= fixedDt)
             {
+                /* Fixed update for physics and other time-sensitive
+                 * calculations */
                 fixedUpdate(fixedDt);
                 accumulatedTime -= fixedDt;
             }
 
+            /* Finally, render the current state of the scene */
             renderer.render(*scene);
 
+            /* Display the current FPS */
             const auto fps = 1.0f / dt.asSeconds();
             renderer.getWindow().setTitle(
                 "Projet ISIM - FPS: " + std::to_string(static_cast<int>(fps)));
@@ -67,13 +73,17 @@ namespace Engine
 
     void Runner::update(sf::Time dt)
     {
-        InputState inputState = inputManager.update();
+        /* Update the scene with the current input state */
+        InputState inputState = inputManager.fetchInputState();
         scene->setInputState(inputState);
+
+        /* Update the scene (calculates physics, logic, etc.) */
         scene->update(dt.asSeconds());
     }
 
     void Runner::fixedUpdate(sf::Time dt)
     {
-        scene->fixedUpdate(dt.asSeconds());
+        /* Fixed update for physics and other time-sensitive calculations */
+        scene->fixedUpdate(collisionManager, dt.asSeconds());
     }
 } // namespace Engine

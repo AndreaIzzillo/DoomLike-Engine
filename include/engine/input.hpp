@@ -7,8 +7,8 @@ namespace Engine
 
     struct InputState
     {
-        Math::Vector2 inputDirection = { 0.0f, 0.0f };
         float rotationDirection = 0.0f;
+        Math::Vector2 inputDirection = { 0.0f, 0.0f };
     };
 
     /**
@@ -30,12 +30,10 @@ namespace Engine
     public:
         InputManager();
 
-        InputState update();
+        InputState fetchInputState();
 
     private:
         float playerRotation();
         Math::Vector2 playerMovement();
-
-    private:
     };
 } // namespace Engine
