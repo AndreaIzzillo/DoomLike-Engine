@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "engine/input.hpp"
 #include "game/objects/object.hpp"
 #include "game/player/player.hpp"
 #include "io/mapfile.hpp"
@@ -16,7 +17,8 @@ namespace Game
     {
     private:
         Player player;
-        std::vector<std::unique_ptr<IWall>> objects;
+        std::vector<std::unique_ptr<IObject>> objects;
+        Engine::InputState inputState;
 
     public:
         Scene(const Player &player);
@@ -26,14 +28,17 @@ namespace Game
 
         /* Getters */
         const Player &getPlayer() const;
-        Player &getPlayer(); // Non-const version for player movement. (used in
-                             // InputManager.hpp)
-        const std::vector<std::unique_ptr<IWall>> &getObjects() const;
+        const Engine::InputState &getInputState() const;
+
+        const std::vector<std::unique_ptr<IObject>> &getObjects() const;
 
         void update(float dt);
         void fixedUpdate(float dt);
 
         /* Object management */
-        void addObject(std::unique_ptr<IWall> object);
+        void addObject(std::unique_ptr<IObject> object);
+
+        /* Input state management */
+        void setInputState(Engine::InputState inputState);
     };
 } // namespace Game

@@ -1,9 +1,16 @@
 #pragma once
 
-#include "game/scene/scene.hpp"
+#include "math/vector2.hpp"
 
 namespace Engine
 {
+
+    struct InputState
+    {
+        Math::Vector2 inputDirection = { 0.0f, 0.0f };
+        float rotationDirection = 0.0f;
+    };
+
     /**
      * @brief Handles user input and translates it into game actions, such as
      * moving the player or rotating the camera.
@@ -21,15 +28,14 @@ namespace Engine
     class InputManager
     {
     public:
-        InputManager(Game::Scene *scene);
+        InputManager();
 
-        void update();
-
-    private:
-        void playerRotation();
-        void playerMovement();
+        InputState update();
 
     private:
-        Game::Scene *scene;
+        float playerRotation();
+        Math::Vector2 playerMovement();
+
+    private:
     };
 } // namespace Engine

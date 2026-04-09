@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "game/settings.hpp"
+#include "math/vector2.hpp"
 
 namespace Game
 {
@@ -26,23 +27,17 @@ namespace Game
         return camera;
     }
 
+    const Math::Vector2 &Player::getVelocity() const
+    {
+        return velocity;
+    }
+
     void Player::update(float dt)
     {}
 
-    void Player::fixedUpdate(float dt)
+    void Player::fixedUpdate(Math::Vector2 resolvedVelocity, float dt)
     {
-        auto accelerationNorm = acceleration.norm();
-        if (accelerationNorm > FLT_EPSILON)
-            velocity += acceleration * accelerationRate * dt;
-        else
-            velocity -= velocity * friction * dt;
-
-        auto velocityNorm = velocity.norm();
-        if (velocityNorm >= maxSpeed)
-            velocity = velocity.normalized() * maxSpeed;
-        if (velocityNorm < 0.1f)
-            velocity = Math::Vector2(0.0f, 0.0f);
-
+        velocity = resolvedVelocity;
         camera.move(velocity * dt);
         camera.rotate(angularVelocity * rotationSpeed * dt);
 
@@ -65,9 +60,27 @@ namespace Game
         }
     }
 
-    void Player::setAcceleration(const Math::Vector2 &acceleration)
+    Math::Vector2 Player::computeVelocity(Engine::InputState inputState,
+                                          float dt)
     {
-        this->acceleration = acceleration;
+        Math::Vector2 intent = inputState.inputDirection;
+        Math::Vector2 velocity_tmp = velocity;
+        auto accelerationNorm = intent.norm();
+        if (accelerationNorm > FLT_EPSILON)
+        {
+            velocity_tmp += intent * accelerationRate * dt;
+        }
+        else
+            velocity_tmp -= velocity_tmp * friction * dt;
+
+        auto velocityNorm = velocity_tmp.norm();
+
+        if (velocityNorm >= maxSpeed)
+            velocity_tmp = velocity_tmp.normalized() * maxSpeed;
+        if (velocityNorm < 0.01f)
+            velocity_tmp = Math::Vector2(0.0f, 0.0f);
+
+        return velocity_tmp;
     }
 
     void Player::setAngularVelocity(float angularVelocity)
@@ -75,8 +88,4 @@ namespace Game
         this->angularVelocity = angularVelocity;
     }
 
-    void Player::setVelocity(const Math::Vector2 &velocity)
-    {
-        this->velocity = velocity;
-    }
 } // namespace Game

@@ -15,20 +15,16 @@
 
 namespace Engine
 {
-    InputManager::InputManager(Game::Scene *scene)
-        : scene(scene)
+    InputManager::InputManager()
     {}
 
-    void InputManager::update()
+    InputState InputManager::update()
     {
-        playerMovement();
-        playerRotation();
+        return { playerMovement(), playerRotation() };
     }
 
-    void InputManager::playerMovement()
+    Math::Vector2 InputManager::playerMovement()
     {
-        Game::Player &player = scene->getPlayer();
-
         Math::Vector2 velocity(0.0f, 0.0f);
         if (sf::Keyboard::isKeyPressed(W))
         {
@@ -47,23 +43,20 @@ namespace Engine
             velocity.x += 1.0f;
         }
 
-        player.setAcceleration(velocity.normalized());
+        return velocity.normalized();
     }
 
-    void InputManager::playerRotation()
+    float InputManager::playerRotation()
     {
-        Game::Player &player = scene->getPlayer();
-
-        float angularVelocity = 0.0f;
+        float rotationDirection = 0.0f;
         if (sf::Keyboard::isKeyPressed(LEFT))
         {
-            angularVelocity += 1.0f;
+            rotationDirection += 1.0f;
         }
         if (sf::Keyboard::isKeyPressed(RIGHT))
         {
-            angularVelocity -= 1.0f;
+            rotationDirection -= 1.0f;
         }
-
-        player.setAngularVelocity(angularVelocity);
+        return rotationDirection;
     }
 } // namespace Engine

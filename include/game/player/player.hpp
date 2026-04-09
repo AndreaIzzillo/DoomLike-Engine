@@ -1,6 +1,8 @@
 #pragma once
 
+#include "engine/input.hpp"
 #include "game/player/camera.hpp"
+#include "math/vector2.hpp"
 
 namespace Game
 {
@@ -15,15 +17,16 @@ namespace Game
 
         /* Getters */
         const Math::Point2 &getPosition() const;
+        const Math::Vector2 &getVelocity() const;
         const Game::Camera &getCamera() const;
 
         void update(float dt);
-        void fixedUpdate(float dt);
+        void fixedUpdate(Math::Vector2 resolvedIntent, float dt);
 
         /* Player physics */
-        void setVelocity(const Math::Vector2 &velocity);
         void setAngularVelocity(float angularVelocity);
-        void setAcceleration(const Math::Vector2 &acceleration);
+
+        Math::Vector2 computeVelocity(Engine::InputState inputState, float dt);
 
     private:
         /* Player camera */
@@ -43,7 +46,7 @@ namespace Game
         /* Spatial properties */
         static constexpr float maxSpeed = 5.f;
         static constexpr float accelerationRate = 30.f;
-        static constexpr float friction = 9.f;
+        static constexpr float friction = 1.f;
 
         /* Angular properties */
         static constexpr float rotationSpeed = 2.f;

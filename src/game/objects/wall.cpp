@@ -1,13 +1,15 @@
 #include "game/objects/wall.hpp"
 
+#include <algorithm>
 #include <cfloat>
 
 namespace Game
 {
     Wall::Wall(const Math::Point2 &start, const Math::Point2 &end)
-        : start(start)
-        , end(end)
-    {}
+    {
+        this->start = start;
+        this->end = end;
+    }
 
     void Wall::update(float dt)
     {}

@@ -30,12 +30,12 @@ namespace IO
         ~MapFile() = default;
 
         Player getPlayer() const;
-        std::vector<std::unique_ptr<IWall>> getObjects();
+        std::vector<std::unique_ptr<IObject>> getObjects();
 
     private:
         Point2 playerPosition;
         Point2 playerLookAt;
-        std::vector<std::unique_ptr<IWall>> objects;
+        std::vector<std::unique_ptr<IObject>> objects;
         std::map<std::string, std::shared_ptr<IMaterial>> materials;
     };
 } // namespace IO

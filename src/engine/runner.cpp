@@ -2,6 +2,7 @@
 
 #include <optional>
 
+#include "engine/input.hpp"
 #include "game/settings.hpp"
 
 namespace Engine
@@ -9,10 +10,10 @@ namespace Engine
     Runner::Runner(std::unique_ptr<::Game::Scene> scene)
         : renderer()
         , scene(std::move(scene))
-        , inputManager(scene.get())
+        , inputManager()
     {}
 
-    void Runner::addObject(std::unique_ptr<::Game::IWall> object)
+    void Runner::addObject(std::unique_ptr<::Game::IObject> object)
     {
         scene->addObject(std::move(object));
     }
@@ -27,15 +28,16 @@ namespace Engine
             handleEvents();
 
             sf::Time dt = clock.restart();
-            accumulatedTime += dt;
 
+            update(dt);
+
+            accumulatedTime += dt;
             while (accumulatedTime >= fixedDt)
             {
                 fixedUpdate(fixedDt);
                 accumulatedTime -= fixedDt;
             }
 
-            update(dt);
             renderer.render(*scene);
 
             const auto fps = 1.0f / dt.asSeconds();
@@ -65,7 +67,8 @@ namespace Engine
 
     void Runner::update(sf::Time dt)
     {
-        inputManager.update();
+        InputState inputState = inputManager.update();
+        scene->setInputState(inputState);
         scene->update(dt.asSeconds());
     }
 

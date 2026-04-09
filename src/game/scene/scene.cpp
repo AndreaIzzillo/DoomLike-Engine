@@ -1,7 +1,10 @@
 #include "game/scene/scene.hpp"
 
+#include "engine/collision.hpp"
+#include "engine/input.hpp"
 #include "game/player/player.hpp"
 #include "io/mapfile.hpp"
+#include "math/vector2.hpp"
 
 namespace Game
 {
@@ -19,14 +22,19 @@ namespace Game
         return player;
     }
 
-    Player &Scene::getPlayer()
-    {
-        return player;
-    }
-
-    const std::vector<std::unique_ptr<IWall>> &Scene::getObjects() const
+    const std::vector<std::unique_ptr<IObject>> &Scene::getObjects() const
     {
         return objects;
+    }
+
+    const Engine::InputState &Scene::getInputState() const
+    {
+        return inputState;
+    }
+
+    void Scene::setInputState(Engine::InputState inputState)
+    {
+        this->inputState = inputState;
     }
 
     void Scene::update(float dt)
@@ -38,12 +46,19 @@ namespace Game
 
     void Scene::fixedUpdate(float dt)
     {
-        player.fixedUpdate(dt);
+        Math::Vector2 velocity = player.computeVelocity(inputState, dt);
+        Engine::CollisionManager collisionManager;
+        Math::Vector2 resolvedIntent =
+            collisionManager.resolve(velocity * dt, player, *this);
+
+        player.setAngularVelocity(inputState.rotationDirection);
+
+        player.fixedUpdate(resolvedIntent / dt, dt);
         for (const auto &object : objects)
             object->fixedUpdate(dt);
     }
 
-    void Scene::addObject(std::unique_ptr<IWall> object)
+    void Scene::addObject(std::unique_ptr<IObject> object)
     {
         objects.push_back(std::move(object));
     }

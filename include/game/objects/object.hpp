@@ -10,6 +10,7 @@
 
 namespace Game
 {
+
     class IObject;
 
     /**
@@ -37,6 +38,13 @@ namespace Game
         const IMaterial *material = nullptr;
     };
 
+    struct CollisionHit
+    {
+        Math::Vector2 normal = { 0.f, 0.f };
+        float penetration = 0.f;
+        bool isColliding = false;
+    };
+
     /**
      * @brief A class representing an object in the game world.
      *
@@ -51,6 +59,16 @@ namespace Game
         virtual void update(float dt) = 0;
         virtual void fixedUpdate(float dt) = 0;
 
+        virtual const Math::Point2 &getStart() const
+        {
+            return start;
+        }
+
+        virtual const Math::Point2 &getEnd() const
+        {
+            return end;
+        }
+
         /* Material */
         virtual void setMaterial(std::shared_ptr<IMaterial> material)
         {
@@ -63,5 +81,7 @@ namespace Game
 
     protected:
         std::shared_ptr<IMaterial> material;
+        Math::Point2 start;
+        Math::Point2 end;
     };
 } // namespace Game

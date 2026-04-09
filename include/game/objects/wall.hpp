@@ -7,7 +7,7 @@ namespace Game
     /**
      * @brief A class representing a wall in the game world.
      */
-    class Wall : public IWall
+    class Wall : public IObject
     {
     public:
         Wall() = default;
@@ -18,10 +18,5 @@ namespace Game
 
         HitRecord hit(const Math::Ray &ray, float tMin,
                       float tMax) const override;
-
-    private:
-    public:
-        Math::Point2 start;
-        Math::Point2 end;
     };
 } // namespace Game
