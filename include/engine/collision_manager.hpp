@@ -5,11 +5,11 @@
 namespace Engine
 {
     /**
-     * @brief Handles collision detection between the player and the game
-     * objects.
+     * @brief Resolves player movement intent against world geometry.
      *
-     * This class is used to check if the player is colliding with any of the
-     * objects in the scene, and to prevent the player from moving through them.
+     * During fixed updates it converts player-local intent to world direction,
+     * tests wall intersections, and returns a blocked or unchanged velocity
+     * intent.
      */
     class CollisionManager
     {

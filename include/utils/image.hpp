@@ -5,6 +5,12 @@
 
 namespace Utils
 {
+    /**
+     * @brief RGB color in normalized float space.
+     *
+     * Supports basic arithmetic and clamping for material sampling and final
+     * framebuffer conversion.
+     */
     class Color
     {
     public:
@@ -34,6 +40,12 @@ namespace Utils
         friend std::ostream &operator<<(std::ostream &out, Color &color);
     };
 
+    /**
+     * @brief CPU-side 2D pixel buffer used by rendering and texture loading.
+     *
+     * Renderer writes into this buffer before uploading to SFML, while texture
+     * materials read from file-backed images.
+     */
     class Image
     {
     public:

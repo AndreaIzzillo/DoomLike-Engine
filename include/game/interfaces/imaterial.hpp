@@ -8,7 +8,10 @@ namespace Game
     struct HitRecord;
 
     /**
-     * @brief A structure to hold descriptor information for a material.
+     * @brief Static material metadata used by the renderer.
+     *
+     * Describes whether sampling is texture-based and, when textured, exposes
+     * texture dimensions for coordinate mapping.
      */
     struct MaterialDescriptor
     {
@@ -19,7 +22,9 @@ namespace Game
     };
 
     /**
-     * @brief A structure to hold material properties at a hit point.
+     * @brief Result of a material sample at a specific hit location.
+     *
+     * Currently stores the final surface color used for a rendered pixel.
      */
     struct MaterialSample
     {
@@ -27,7 +32,10 @@ namespace Game
     };
 
     /**
-     * @brief An interface for defining material properties.
+     * @brief Rendering material interface sampled after a ray hit.
+     *
+     * Implementations expose texture metadata and return the surface color used
+     * by Renderer when drawing wall columns.
      */
     class IMaterial
     {

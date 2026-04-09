@@ -16,11 +16,10 @@ namespace IO
     using namespace Math;
 
     /**
-     * @brief A class representing a map file.
+     * @brief Loads a map description and builds the initial scene content.
      *
-     * This class is responsible for loading a map file and extracting the
-     * player position, lookAt and the objects in the scene.
-     * Grammar of the map file defined in resources/maps/GRAMMAR.md
+     * It parses player spawn, material declarations, and wall definitions so
+     * Scene can be constructed from file data at startup.
      */
     class MapFile
     {

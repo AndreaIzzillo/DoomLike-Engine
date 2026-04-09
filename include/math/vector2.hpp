@@ -5,6 +5,12 @@
 
 namespace Math
 {
+    /**
+     * @brief 2D vector primitive for directions, velocities, and basis axes.
+     *
+     * It provides arithmetic, dot/cross products, and normalization used
+     * throughout movement, collisions, and ray computations.
+     */
     class Vector2
     {
     public:

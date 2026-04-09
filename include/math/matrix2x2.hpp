@@ -6,6 +6,12 @@
 
 namespace Math
 {
+    /**
+     * @brief 2x2 matrix utility used for 2D linear transforms.
+     *
+     * In this project it is primarily used to rotate camera orientation vectors
+     * while also exposing common matrix algebra helpers.
+     */
     class Matrix2x2
     {
     public:

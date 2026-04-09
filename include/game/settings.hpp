@@ -5,10 +5,10 @@
 namespace Game
 {
     /**
-     * @brief A class representing the game settings.
+     * @brief Global runtime configuration shared by engine and gameplay code.
      *
-     * This class is a singleton that holds all the settings of the game, such
-     * as window size, camera properties, etc.
+     * Exposes window, camera, and world constants through a singleton accessed
+     * by renderer, player camera setup, and hit defaults.
      */
     class Settings : public Utils::Singleton<Settings>
     {

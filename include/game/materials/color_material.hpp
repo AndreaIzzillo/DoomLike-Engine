@@ -5,11 +5,10 @@
 namespace Game
 {
     /**
-     * @brief A simple material that returns a constant color regardless of the
-     * texture coordinates.
+     * @brief Flat-color material used for untextured walls.
      *
-     * This material can be used for objects that do not require texture mapping
-     * and should be rendered with a single color.
+     * Sampling always returns the same RGB value, independently of texture
+     * coordinates.
      */
     class ColorMaterial : public IMaterial
     {

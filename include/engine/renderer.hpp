@@ -9,16 +9,11 @@
 namespace Engine
 {
     /**
-     * @brief A class for rendering the game scene.
+     * @brief Owns the window and renders the scene with a column raycaster.
      *
-     * The Renderer class is responsible for taking the generated frame from the
-     * RayCaster and displaying it on the screen.
-     *
-     * Engine classes execution flow:
-     * - Runner updates its InputManager (updates the scene components fields)
-     * - Runner updates its Scene (calculates physics, logic, etc.)
-     * - Renderer generates the current frame using RayCaster (based on the
-     * updated scene)
+     * It casts camera rays through RayCaster, projects wall slices with
+     * floor/ceiling filling into a software buffer, then uploads the buffer to
+     * an SFML texture for display.
      */
     class Renderer
     {
@@ -45,32 +40,12 @@ namespace Engine
         sf::Sprite sprite;
         std::vector<std::uint8_t> pixelBuffer;
 
-    private: /* Helper functions for rendering */
-        /** @brief Corrects the distance to avoid fish-eye effect.
-         *  @param distance The original distance.
-         *  @param rayDirection The direction of the ray.
-         *  @param cameraForward The forward direction of the camera.
-         *  @return The corrected distance.
-         */
+    private:
         float correctDist(float distance, const Math::Vector2 &rayDirection,
                           const Math::Vector2 &cameraForward) const;
 
-        /** @brief Calculates the vertical field of view.
-         *  @param horizontalFov The horizontal field of view.
-         *  @param aspectRatio The aspect ratio.
-         *  @return The vertical field of view.
-         */
         float getVerticalFov(float horizontalFov, float aspectRatio) const;
 
-        /** @brief Projects a point onto the screen.
-         *  Very important: projected value is not clamped.
-         *  @param horizon The horizon position.
-         *  @param cameraHeight The height of the camera.
-         *  @param z The z-coordinate of the point.
-         *  @param scale The scale factor for the perspective projection.
-         *  @param distance The distance to the point.
-         *  @return The projected position on the screen.
-         */
         int projectScreen(float horizon, float cameraHeight, float z,
                           float scale, float distance) const;
     };

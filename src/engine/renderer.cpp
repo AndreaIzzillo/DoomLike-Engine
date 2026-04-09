@@ -76,7 +76,7 @@ namespace Engine
                 unsigned horizon = screenHeight / 2;
                 float cameraHeight = player.getCamera().getCameraHeight()
                     + player.getCamera().getOffsetHeight();
-                // Both vectors already normalized
+                /* Both vectors already normalized */
                 auto rayDirection = ray.direction;
                 auto forward = player.getCamera().getForward();
 
@@ -91,7 +91,7 @@ namespace Engine
                 float scale = (screenHeight / 2.f) / std::tan(fovV / 2.f);
 
                 /* Apply the perspective projection formula */
-                // horizon - (z - cameraHeight) * scale / distance
+                /* horizon - (z - cameraHeight) * scale / distance */
                 int projectedCeiling = projectScreen(
                     horizon, cameraHeight, record.ceiling, scale, distance);
                 int projectedFloor = projectScreen(
@@ -113,7 +113,7 @@ namespace Engine
 
                 /* Calculate texture X coordinate */
                 auto wallX = record.hitDistance;
-                // Texture repeats every 1 coordinate unit
+                /* Texture repeats every 1 coordinate unit */
                 wallX -= std::floor(wallX);
                 texCoord.x =
                     wallX * static_cast<float>(texProperties.textureWidth);

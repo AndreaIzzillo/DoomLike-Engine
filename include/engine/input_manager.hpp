@@ -5,6 +5,12 @@
 namespace Engine
 {
 
+    /**
+     * @brief Snapshot of player input for one frame.
+     *
+     * Filled by InputManager and consumed by Scene to drive movement intent
+     * (`inputDirection`) and camera rotation intent (`rotationDirection`).
+     */
     struct InputState
     {
         float rotationDirection = 0.0f;
@@ -12,18 +18,10 @@ namespace Engine
     };
 
     /**
-     * @brief Handles user input and translates it into game actions, such as
-     * moving the player or rotating the camera.
+     * @brief Reads keyboard state and produces gameplay input commands.
      *
-     * This class is only responsible for changing the state of the scene
-     * components, such as the player, and does not directly interact with the
-     * renderer or the game objects.
-     *
-     * Engine classes execution flow:
-     * - Runner updates its InputManager (updates the scene components fields)
-     * - Runner updates its Scene (calculates physics, logic, etc.)
-     * - Renderer generates the current frame using RayCaster (based on the
-     * updated scene)
+     * Runner pulls an InputState each frame, then Scene consumes it during
+     * update/fixedUpdate to drive player movement and rotation intent.
      */
     class InputManager
     {

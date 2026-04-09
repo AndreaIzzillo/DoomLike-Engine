@@ -8,17 +8,11 @@
 namespace Engine
 {
     /**
-     * @brief A class for managing the main game loop and coordinating the
-     different engine systems.
+     * @brief Drives the main loop and orchestrates engine subsystems.
      *
-     * The Runner class is responsible for initializing the game systems,
-     * handling events, updating the game state, and rendering the scene.
-     *
-     * Engine classes execution flow:
-     * - Runner updates its InputManager (updates the scene components fields)
-     * - Runner updates its Scene (calculates physics, logic, etc.)
-     * - Renderer generates the current frame using RayCaster (based on the
-     updated scene)
+     * Per frame it handles window events, fetches input, updates the scene,
+     * runs fixed-step simulation with collision resolution, then renders the
+     * resulting state.
      */
     class Runner
     {

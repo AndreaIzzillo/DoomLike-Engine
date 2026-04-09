@@ -5,7 +5,10 @@
 namespace Game
 {
     /**
-     * @brief A class representing a wall in the game world.
+     * @brief Concrete line-segment wall with material and ray intersection.
+     *
+     * It provides hit information (distance, normal, material context) used by
+     * rendering and collision checks.
      */
     class Wall : public IWall
     {

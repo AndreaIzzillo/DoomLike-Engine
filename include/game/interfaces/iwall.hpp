@@ -14,7 +14,10 @@ namespace Game
     class IWall;
 
     /**
-     * @brief A struct representing the hit record of a ray-object intersection.
+     * @brief Ray-wall intersection payload shared by rendering and collisions.
+     *
+     * Carries geometric hit data plus wall/material context used for texture
+     * sampling and wall projection.
      */
     struct HitRecord
     {
@@ -38,6 +41,12 @@ namespace Game
         const IMaterial *material = nullptr;
     };
 
+    /**
+     * @brief Generic overlap-collision result (normal and penetration depth).
+     *
+     * Can be used by penetration-based solvers when broad collision queries
+     * return an overlapping state.
+     */
     struct CollisionHit
     {
         Math::Vector2 normal = { 0.f, 0.f };
@@ -46,10 +55,10 @@ namespace Game
     };
 
     /**
-     * @brief A class representing an object in the game world.
+     * @brief Interface for world wall geometry participating in simulation.
      *
-     * Is an interface that defines the necessary methods for an object to be
-     * updated and to be hit by a ray.
+     * Implementations can be updated over time and must provide ray-hit data
+     * for both rendering (RayCaster) and movement blocking (CollisionManager).
      */
     class IWall
     {

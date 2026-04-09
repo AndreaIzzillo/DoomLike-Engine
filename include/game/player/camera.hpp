@@ -7,11 +7,10 @@
 namespace Game
 {
     /**
-     * @brief A class representing the camera in the game world.
+     * @brief First-person camera bound to player spatial state.
      *
-     * The camera is responsible of the player's view of the world, and is used
-     * to generate rays for rendering. The camera contains the player's
-     * position, orientation, field of view, focal distance and resolution.
+     * It maintains orientation vectors and projection parameters, and exposes
+     * per-column rays consumed by the renderer raycasting pass.
      */
     class Camera
     {
