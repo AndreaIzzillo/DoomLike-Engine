@@ -136,7 +136,6 @@ namespace Engine
 
         texture.update(pixelBuffer.data());
 
-        window.clear(sf::Color::Black);
         window.draw(sprite);
         window.display();
     }

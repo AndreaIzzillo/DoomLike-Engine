@@ -37,17 +37,15 @@ namespace Game
         /* Camera Shaking properties */
         float cameraShakingTime = 0.0f;
         static constexpr float cameraShakingFrequency =
-            3.0f; // cycles par seconde à pleine vitesse
-        static constexpr float cameraShakingAmplitude = 0.02f;
-
-        /* Player properties */
+            2.25f; // cycles par seconde à pleine vitesse
+        static constexpr float cameraShakingAmplitude = 0.01f;
 
         /* Spatial properties */
-        static constexpr float maxSpeed = 3.0f;
-        static constexpr float accelerationRate = 6.f;
-        static constexpr float friction = 0.9f;
+        static constexpr float maxSpeed = 5.f;
+        static constexpr float accelerationRate = 30.f;
+        static constexpr float friction = 9.f;
 
-        /* angular properties */
-        static constexpr float rotationSpeed = 1.5f;
+        /* Angular properties */
+        static constexpr float rotationSpeed = 2.f;
     };
 } // namespace Game

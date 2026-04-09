@@ -12,6 +12,7 @@ namespace Game
                  Settings::get().cameraFocalDistance,
                  Settings::get().windowWidth)
         , velocity(Math::Vector2(0.0f, 0.0f))
+        , acceleration(Math::Vector2(0.0f, 0.0f))
         , angularVelocity(0.0f)
     {}
 
@@ -30,15 +31,16 @@ namespace Game
 
     void Player::fixedUpdate(float dt)
     {
-        if (acceleration.norm() > FLT_EPSILON)
+        auto accelerationNorm = acceleration.norm();
+        if (accelerationNorm > FLT_EPSILON)
             velocity += acceleration * accelerationRate * dt;
         else
-            velocity *= friction;
+            velocity -= velocity * friction * dt;
 
-        if (velocity.norm() >= maxSpeed)
+        auto velocityNorm = velocity.norm();
+        if (velocityNorm >= maxSpeed)
             velocity = velocity.normalized() * maxSpeed;
-
-        if (velocity.norm() < 0.01f)
+        if (velocityNorm < 0.1f)
             velocity = Math::Vector2(0.0f, 0.0f);
 
         camera.move(velocity * dt);
@@ -48,7 +50,7 @@ namespace Game
 
         if (speed > FLT_EPSILON)
         {
-            cameraShakingTime += dt * speed * cameraShakingFrequency;
+            cameraShakingTime += speed * cameraShakingFrequency * dt;
             const float raw = std::sin(cameraShakingTime);
             const float step =
                 -std::pow(std::abs(raw), 0.6f) * std::copysign(1.0f, raw);
@@ -58,7 +60,7 @@ namespace Game
         else
         {
             cameraShakingTime = 0.0f;
-            camera.setOffsetHeight(camera.getOffsetHeight() * 0.85f);
+            camera.setOffsetHeight(camera.getOffsetHeight() * std::pow(0.99f, dt));
         }
     }
 
