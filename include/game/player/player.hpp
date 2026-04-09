@@ -10,7 +10,8 @@ namespace Game
      * @brief Encapsulates controllable actor movement and camera state.
      *
      * It derives velocity intent from input, then applies collision-resolved
-     * velocity and angular speed during fixed updates, including camera bobbing.
+     * velocity and angular speed during fixed updates, including camera
+     * bobbing.
      */
     class Player
     {
