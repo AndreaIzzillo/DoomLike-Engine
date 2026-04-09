@@ -109,10 +109,8 @@ namespace Utils
 
         file >> token; // PPM type
         file >> token; // Width
-        std::cout << "Width: " << token << std::endl;
         width = std::stoi(token);
         file >> token; // Height
-        std::cout << "Height: " << token << std::endl;
         height = std::stoi(token);
         file >> token; // RGB
 
