@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game/scene/scene.hpp"
+#include "math/point2.hpp"
 
 namespace Engine
 {
@@ -19,9 +20,8 @@ namespace Engine
         Math::Vector2 resolveVelocity(Math::Vector2 intent,
                                       const Game::Player &player,
                                       const Game::Scene &scene) const;
-
     private:
         /* Hitbox size */
-        static constexpr float hitboxSize = 0.2f;
+        static constexpr float hitboxSize = 0.1f;
     };
 } // namespace Engine
