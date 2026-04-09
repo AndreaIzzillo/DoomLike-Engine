@@ -1,8 +1,6 @@
-#include "engine/collision.hpp"
+#include "engine/collision_manager.hpp"
 
 #include <cfloat>
-
-#include "math/vector2.hpp"
 
 namespace Engine
 {

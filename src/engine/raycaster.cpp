@@ -1,8 +1,5 @@
 #include "engine/raycaster.hpp"
 
-#include "game/materials/material.hpp"
-#include "game/objects/object.hpp"
-
 namespace Engine
 {
     Game::HitRecord RayCaster::castRay(const Math::Ray &ray,

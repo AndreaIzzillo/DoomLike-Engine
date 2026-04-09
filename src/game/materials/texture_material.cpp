@@ -1,4 +1,4 @@
-#include "game/materials/texturematerial.hpp"
+#include "game/materials/texture_material.hpp"
 
 namespace Game
 {

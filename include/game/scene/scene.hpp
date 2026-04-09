@@ -3,15 +3,19 @@
 #include <memory>
 #include <vector>
 
-#include "engine/input.hpp"
-#include "game/objects/object.hpp"
+#include "engine/input_manager.hpp"
+#include "game/interfaces/iwall.hpp"
 #include "game/player/player.hpp"
-#include "io/mapfile.hpp"
 
 /* Forward declaration to avoid circular dependency */
 namespace Engine
 {
     class CollisionManager;
+}
+
+namespace IO
+{
+    class MapFile;
 }
 
 namespace Game

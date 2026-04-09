@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/objects/object.hpp"
+#include "game/interfaces/iwall.hpp"
 
 namespace Game
 {

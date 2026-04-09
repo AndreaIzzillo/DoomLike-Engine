@@ -1,9 +1,8 @@
 #pragma once
 
-#include "engine/collision.hpp"
-#include "engine/input.hpp"
+#include "engine/collision_manager.hpp"
+#include "engine/input_manager.hpp"
 #include "engine/renderer.hpp"
-#include "game/objects/object.hpp"
 #include "game/scene/scene.hpp"
 
 namespace Engine

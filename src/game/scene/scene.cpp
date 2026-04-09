@@ -1,10 +1,7 @@
 #include "game/scene/scene.hpp"
 
-#include "engine/collision.hpp"
-#include "engine/input.hpp"
-#include "game/player/player.hpp"
+#include "engine/collision_manager.hpp"
 #include "io/mapfile.hpp"
-#include "math/vector2.hpp"
 
 namespace Game
 {

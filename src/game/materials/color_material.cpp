@@ -1,6 +1,4 @@
-#include "game/materials/colormaterial.hpp"
-
-#include "game/materials/material.hpp"
+#include "game/materials/color_material.hpp"
 
 namespace Game
 {

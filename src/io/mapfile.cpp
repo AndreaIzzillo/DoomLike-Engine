@@ -1,12 +1,13 @@
 #include "io/mapfile.hpp"
 
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 
-#include "game/materials/colormaterial.hpp"
-#include "game/materials/texturematerial.hpp"
-#include "game/objects/wall.hpp"
+#include "game/materials/color_material.hpp"
+#include "game/materials/texture_material.hpp"
+#include "game/walls/plain_wall.hpp"
 
 namespace IO
 {

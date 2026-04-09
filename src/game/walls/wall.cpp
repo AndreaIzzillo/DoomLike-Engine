@@ -1,7 +1,7 @@
-#include "game/objects/wall.hpp"
+#include "game/walls/plain_wall.hpp"
 
-#include <algorithm>
 #include <cfloat>
+#include <cmath>
 
 namespace Game
 {

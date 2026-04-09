@@ -1,6 +1,8 @@
 #pragma once
 
-#include "game/materials/material.hpp"
+#include <string>
+
+#include "game/interfaces/imaterial.hpp"
 #include "utils/image.hpp"
 
 namespace Game

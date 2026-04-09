@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/materials/material.hpp"
+#include "game/interfaces/imaterial.hpp"
 
 namespace Game
 {

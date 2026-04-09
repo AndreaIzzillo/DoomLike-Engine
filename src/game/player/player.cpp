@@ -1,10 +1,9 @@
 #include "game/player/player.hpp"
 
 #include <cfloat>
-#include <cstdlib>
+#include <cmath>
 
 #include "game/settings.hpp"
-#include "math/vector2.hpp"
 
 namespace Game
 {

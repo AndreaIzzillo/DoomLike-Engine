@@ -2,7 +2,6 @@
 
 #include <optional>
 
-#include "engine/input.hpp"
 #include "game/settings.hpp"
 
 namespace Engine

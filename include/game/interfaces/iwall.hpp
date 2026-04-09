@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "game/materials/material.hpp"
+#include "game/interfaces/imaterial.hpp"
 #include "game/settings.hpp"
 #include "math/point2.hpp"
 #include "math/ray.hpp"

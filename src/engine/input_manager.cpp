@@ -1,9 +1,6 @@
-#include "engine/input.hpp"
+#include "engine/input_manager.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
-
-#include "game/player/player.hpp"
-#include "math/vector2.hpp"
 
 #define W sf::Keyboard::Scancode::W
 #define A sf::Keyboard::Scancode::A

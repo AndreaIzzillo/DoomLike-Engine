@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "game/materials/material.hpp"
-#include "game/objects/object.hpp"
+#include "game/interfaces/imaterial.hpp"
+#include "game/interfaces/iwall.hpp"
 #include "game/player/player.hpp"
 #include "math/point2.hpp"
 

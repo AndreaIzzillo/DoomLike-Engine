@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/input.hpp"
+#include "engine/input_manager.hpp"
 #include "game/player/camera.hpp"
 #include "math/vector2.hpp"
 
