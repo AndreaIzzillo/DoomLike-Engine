@@ -1,7 +1,5 @@
 #pragma once
 
-#include <math.h>
-
 #include "utils/singleton.hpp"
 
 namespace Game
@@ -23,8 +21,8 @@ namespace Game
         int targetFramerate = 60;
 
         /* Camera settings */
-        float cameraFov = M_PI_2;
-        float cameraFocalDistance = 1.0f;
+        float cameraFov = 1.57079632679f;
+        float cameraFocalDistance = 1.f;
 
         /* World settings */
         float worldFloor = 0.f;

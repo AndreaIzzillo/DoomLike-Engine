@@ -1,20 +1,20 @@
 #pragma once
 
 #include "game/materials/material.hpp"
+#include "utils/image.hpp"
 
 namespace Game
 {
     /**
-     * @brief A simple material that returns a constant color regardless of the
-     * texture coordinates.
+     * @brief A class representing a texture material.
      *
-     * This material can be used for objects that do not require texture mapping
-     * and should be rendered with a single color.
+     * Texture are images that can be mapped onto the surface of a 3D object.
+     * File formats supported is ASCII PPM.
      */
-    class ColorMaterial : public IMaterial
+    class TextureMaterial : public IMaterial
     {
     public:
-        ColorMaterial(Utils::Color color);
+        TextureMaterial(const std::string &filename);
 
         virtual MaterialDescriptor getDescriptor() const override;
 
@@ -24,6 +24,6 @@ namespace Game
                                                         0.0f)) const override;
 
     private:
-        Utils::Color color;
+        Utils::Image texture;
     };
 } // namespace Game

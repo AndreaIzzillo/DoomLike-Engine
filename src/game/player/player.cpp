@@ -60,7 +60,8 @@ namespace Game
         else
         {
             cameraShakingTime = 0.0f;
-            camera.setOffsetHeight(camera.getOffsetHeight() * std::pow(0.99f, dt));
+            camera.setOffsetHeight(camera.getOffsetHeight()
+                                   * std::pow(0.99f, dt));
         }
     }
 

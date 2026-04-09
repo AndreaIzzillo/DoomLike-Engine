@@ -38,6 +38,7 @@ namespace Utils
     {
     public:
         Image(unsigned width, unsigned height);
+        Image(const std::string &filename);
 
         unsigned getWidth() const;
         unsigned getHeight() const;

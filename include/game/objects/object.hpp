@@ -17,14 +17,22 @@ namespace Game
      */
     struct HitRecord
     {
+        /* Intersection properties */
         bool isHit = false;
         float t = 0.f;
         Math::Point2 point = { 0.f, 0.f };
         Math::Vector2 normal = { 0.f, 0.f };
 
+        /* Floor and ceiling settings for rendering */
         float floor = Settings::get().worldFloor;
         float ceiling = Settings::get().worldCeiling;
 
+        /* Other wall properties for rendering */
+        const Math::Point2 *wallStart = nullptr;
+        const Math::Point2 *wallEnd = nullptr;
+        float hitDistance = 0.f;
+
+        /* Object and material pointers */
         const IObject *object = nullptr;
         const IMaterial *material = nullptr;
     };

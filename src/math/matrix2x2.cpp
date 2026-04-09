@@ -1,7 +1,6 @@
 #include "math/matrix2x2.hpp"
 
 #include <iomanip>
-#include <math.h>
 #include <ostream>
 
 namespace Math
@@ -17,8 +16,8 @@ namespace Math
 
     Matrix2x2::Matrix2x2(float angle)
     {
-        float cosA = cos(angle);
-        float sinA = sin(angle);
+        float cosA = std::cos(angle);
+        float sinA = std::sin(angle);
         a = cosA;
         b = -sinA;
         c = sinA;

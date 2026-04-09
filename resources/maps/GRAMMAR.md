@@ -25,9 +25,9 @@ M <Type> "<Name>" <Properties>...
 
 Where:
 - `M` indicates a material definition.
-- `<Type>` is the type of material. Supported types are `Color`.
+- `<Type>` is the type of material. Supported types are `Color` and `Texture`.
 - `"<Name>"` is the name of the material, enclosed in double quotes.
-- `<Properties>` are the properties of the material, which depend on the type. For `Color`, the properties are the RGB values in the format `(R,G,B)`.
+- `<Properties>` are the properties of the material, which depend on the type. For `Color`, the properties are the RGB values in the format `(R,G,B)`. For `Texture`, the properties are the file path to the texture image, enclosed in double quotes.
 
 ## Wall Definitions
 Walls are defined using the following format:

@@ -16,7 +16,7 @@ namespace Game
     {
     private:
         Player player;
-        std::vector<std::unique_ptr<IObject>> objects;
+        std::vector<std::unique_ptr<IWall>> objects;
 
     public:
         Scene(const Player &player);
@@ -28,12 +28,12 @@ namespace Game
         const Player &getPlayer() const;
         Player &getPlayer(); // Non-const version for player movement. (used in
                              // InputManager.hpp)
-        const std::vector<std::unique_ptr<IObject>> &getObjects() const;
+        const std::vector<std::unique_ptr<IWall>> &getObjects() const;
 
         void update(float dt);
         void fixedUpdate(float dt);
 
         /* Object management */
-        void addObject(std::unique_ptr<IObject> object);
+        void addObject(std::unique_ptr<IWall> object);
     };
 } // namespace Game

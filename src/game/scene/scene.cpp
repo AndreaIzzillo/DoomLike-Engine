@@ -24,7 +24,7 @@ namespace Game
         return player;
     }
 
-    const std::vector<std::unique_ptr<IObject>> &Scene::getObjects() const
+    const std::vector<std::unique_ptr<IWall>> &Scene::getObjects() const
     {
         return objects;
     }
@@ -43,7 +43,7 @@ namespace Game
             object->fixedUpdate(dt);
     }
 
-    void Scene::addObject(std::unique_ptr<IObject> object)
+    void Scene::addObject(std::unique_ptr<IWall> object)
     {
         objects.push_back(std::move(object));
     }

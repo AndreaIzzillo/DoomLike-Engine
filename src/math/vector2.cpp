@@ -1,7 +1,6 @@
 #include "math/vector2.hpp"
 
 #include <cfloat>
-#include <math.h>
 #include <ostream>
 
 namespace Math
@@ -69,7 +68,7 @@ namespace Math
 
     float Vector2::norm() const
     {
-        return sqrt(x * x + y * y);
+        return std::sqrt(x * x + y * y);
     }
 
     Vector2 Vector2::normalized() const

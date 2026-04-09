@@ -3,8 +3,12 @@
 #include <algorithm>
 #include <cfloat>
 #include <cmath>
+#include <fstream>
+#include <iostream>
 #include <ostream>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 namespace Utils
 {
@@ -97,6 +101,33 @@ namespace Utils
         , height(height)
         , pixels(width * height)
     {}
+
+    Image::Image(const std::string &filename)
+    {
+        auto file = std::ifstream(filename);
+        std::string token;
+
+        file >> token; // PPM type
+        file >> token; // Width
+        std::cout << "Width: " << token << std::endl;
+        width = std::stoi(token);
+        file >> token; // Height
+        std::cout << "Height: " << token << std::endl;
+        height = std::stoi(token);
+        file >> token; // RGB
+
+        pixels = std::vector<Color>(width * height);
+
+        unsigned i = 0;
+        std::string r, g, b;
+        while (file >> r && file >> g && file >> b)
+        {
+            pixels[i].r = std::stof(r) / 255.f;
+            pixels[i].g = std::stof(g) / 255.f;
+            pixels[i].b = std::stof(b) / 255.f;
+            i++;
+        }
+    }
 
     unsigned Image::getWidth() const
     {

@@ -8,11 +8,22 @@ namespace Game
     struct HitRecord;
 
     /**
-     * @brief A structure to hold the properties of a material.
+     * @brief A structure to hold descriptor information for a material.
      */
-    struct MaterialProperties
+    struct MaterialDescriptor
     {
-        Utils::Color color;
+        bool isTextured = false;
+
+        int textureWidth = 0;
+        int textureHeight = 0;
+    };
+
+    /**
+     * @brief A structure to hold material properties at a hit point.
+     */
+    struct MaterialSample
+    {
+        Utils::Color color = Utils::Color(1.f, 1.f, 1.f);
     };
 
     /**
@@ -23,7 +34,9 @@ namespace Game
     public:
         virtual ~IMaterial() = default;
 
-        virtual MaterialProperties getProperties(
+        virtual MaterialDescriptor getDescriptor() const = 0;
+
+        virtual MaterialSample getSample(
             const HitRecord &record,
             const Math::Point2 &texCoord = Math::Point2(0.0f, 0.0f)) const = 0;
     };

@@ -35,12 +35,14 @@ namespace Game
         rec.isHit = true;
         rec.t = t;
         rec.point = ray.at(t);
+        rec.wallStart = &start;
+        rec.wallEnd = &end;
+        rec.hitDistance = (rec.point - *rec.wallStart).norm();
         rec.object = this;
         rec.material = material.get();
 
         Math::Vector2 segDir = s.normalized();
         rec.normal = Math::Vector2(-segDir.y, segDir.x);
-
         if (rec.normal * ray.direction > 0.f)
             rec.normal = rec.normal * -1.f;
 

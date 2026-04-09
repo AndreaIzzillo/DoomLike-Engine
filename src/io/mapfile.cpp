@@ -5,6 +5,7 @@
 #include <stdexcept>
 
 #include "game/materials/colormaterial.hpp"
+#include "game/materials/texturematerial.hpp"
 #include "game/objects/wall.hpp"
 
 namespace IO
@@ -71,6 +72,13 @@ namespace IO
                     materials[name] =
                         std::make_shared<ColorMaterial>(parseColor(colorS));
                 }
+                else if (type == "Texture")
+                {
+                    std::string pathS;
+                    iss >> pathS;
+                    pathS = parseQuoted(pathS);
+                    materials[name] = std::make_shared<TextureMaterial>(pathS);
+                }
                 else
                 {
                     std::runtime_error("Unsupported material type: " + type);
@@ -104,7 +112,7 @@ namespace IO
         return Player(playerPosition, playerLookAt);
     }
 
-    std::vector<std::unique_ptr<IObject>> MapFile::getObjects()
+    std::vector<std::unique_ptr<IWall>> MapFile::getObjects()
     {
         return std::move(objects);
     }

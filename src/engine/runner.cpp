@@ -12,7 +12,7 @@ namespace Engine
         , inputManager(scene.get())
     {}
 
-    void Runner::addObject(std::unique_ptr<::Game::IObject> object)
+    void Runner::addObject(std::unique_ptr<::Game::IWall> object)
     {
         scene->addObject(std::move(object));
     }

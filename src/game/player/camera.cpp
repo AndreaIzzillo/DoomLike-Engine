@@ -1,5 +1,7 @@
 #include "game/player/camera.hpp"
 
+#include <cmath>
+
 #include "math/matrix2x2.hpp"
 
 namespace Game
@@ -14,9 +16,9 @@ namespace Game
         , resolution(resolution)
     {
         right = Math::Vector2(forward.y, -forward.x).normalized();
-        viewportWidth = 2.0 * focalDistance * tan(fov / 2.0);
+        viewportWidth = 2.f * focalDistance * std::tan(fov / 2.f);
         viewportPosition =
-            position + forward * focalDistance - right * (viewportWidth / 2.0);
+            position + forward * focalDistance - right * (viewportWidth / 2.f);
     };
 
     const Math::Point2 &Camera::getPosition() const
@@ -84,14 +86,14 @@ namespace Game
         right = rotation_matrix * right;
 
         viewportPosition =
-            position + forward * focalDistance - right * (viewportWidth / 2.0);
+            position + forward * focalDistance - right * (viewportWidth / 2.f);
     }
 
     Math::Ray Camera::getRay(unsigned x) const
     {
         float pixel_size = viewportWidth / resolution;
         Math::Point2 pixel_position =
-            viewportPosition + right * (pixel_size / 2.0 + x * pixel_size);
+            viewportPosition + right * (pixel_size / 2.f + x * pixel_size);
         return Math::Ray(position, pixel_position - position);
     }
 } // namespace Game
