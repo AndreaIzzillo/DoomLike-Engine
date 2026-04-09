@@ -29,7 +29,7 @@ namespace IO
         ~MapFile() = default;
 
         Player getPlayer() const;
-        std::vector<std::unique_ptr<IWall>> getObjects();
+        std::vector<std::unique_ptr<IWall>> getWalls();
 
     private:
         Point2 playerPosition;

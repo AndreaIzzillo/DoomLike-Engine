@@ -113,7 +113,7 @@ namespace IO
         return Player(playerPosition, playerLookAt);
     }
 
-    std::vector<std::unique_ptr<IWall>> MapFile::getObjects()
+    std::vector<std::unique_ptr<IWall>> MapFile::getWalls()
     {
         return std::move(objects);
     }

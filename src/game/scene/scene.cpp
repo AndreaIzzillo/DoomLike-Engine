@@ -11,7 +11,7 @@ namespace Game
 
     Scene::Scene(IO::MapFile &mapFile)
         : player(mapFile.getPlayer())
-        , objects(mapFile.getObjects())
+        , walls(mapFile.getWalls())
     {}
 
     const Player &Scene::getPlayer() const
@@ -19,9 +19,9 @@ namespace Game
         return player;
     }
 
-    const std::vector<std::unique_ptr<IWall>> &Scene::getObjects() const
+    const std::vector<std::unique_ptr<IWall>> &Scene::getWalls() const
     {
-        return objects;
+        return walls;
     }
 
     const Engine::InputState &Scene::getInputState() const
@@ -39,7 +39,7 @@ namespace Game
         /* Scene update routine: update player and objects based on the current
          * input state and other logic */
         player.update(dt);
-        for (const auto &object : objects)
+        for (const auto &object : walls)
             object->update(dt);
     }
 
@@ -59,12 +59,12 @@ namespace Game
         /* Scene fixed update routine: update player and objects based on the
          * resolved intent */
         player.fixedUpdate(resolvedIntent / dt, dt);
-        for (const auto &object : objects)
+        for (const auto &object : walls)
             object->fixedUpdate(dt);
     }
 
     void Scene::addObject(std::unique_ptr<IWall> object)
     {
-        objects.push_back(std::move(object));
+        walls.push_back(std::move(object));
     }
 } // namespace Game

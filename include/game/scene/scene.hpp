@@ -30,7 +30,7 @@ namespace Game
     {
     private:
         Player player;
-        std::vector<std::unique_ptr<IWall>> objects;
+        std::vector<std::unique_ptr<IWall>> walls;
 
         Engine::InputState inputState;
 
@@ -44,7 +44,7 @@ namespace Game
         const Player &getPlayer() const;
         const Engine::InputState &getInputState() const;
 
-        const std::vector<std::unique_ptr<IWall>> &getObjects() const;
+        const std::vector<std::unique_ptr<IWall>> &getWalls() const;
 
         void update(float dt);
         void fixedUpdate(const Engine::CollisionManager &collisionManager,

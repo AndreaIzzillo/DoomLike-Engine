@@ -20,7 +20,7 @@ namespace Engine
         if (norm < FLT_EPSILON)
             return intent;
 
-        for (auto &object : scene.getObjects())
+        for (auto &object : scene.getWalls())
         {
             /* Collision is checked using the hit function of the walls */
             Game::HitRecord hit =

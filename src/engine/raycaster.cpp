@@ -9,7 +9,7 @@ namespace Engine
         Game::HitRecord record;
 
         float closest = tMax;
-        for (const auto &object : scene.getObjects())
+        for (const auto &object : scene.getWalls())
         {
             auto tempRecord = object->hit(ray, tMin, closest);
 
