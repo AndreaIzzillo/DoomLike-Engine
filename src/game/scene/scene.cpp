@@ -36,11 +36,11 @@ namespace Game
 
     void Scene::update(float dt)
     {
-        /* Scene update routine: update player and objects based on the current
+        /* Scene update routine: update player and walls based on the current
          * input state and other logic */
         player.update(dt);
-        for (const auto &object : walls)
-            object->update(dt);
+        for (const auto &wall : walls)
+            wall->update(dt);
     }
 
     void Scene::fixedUpdate(const Engine::CollisionManager &collisionManager,
@@ -48,7 +48,7 @@ namespace Game
     {
         /* The scene fixed update is responsible for resolving the player's
          * movement intent with collision detection and updating the player and
-         * objects accordingly */
+         * walls accordingly */
         Math::Vector2 velocity = player.computeVelocity(inputState, dt);
         Math::Vector2 resolvedIntent =
             collisionManager.resolveVelocity(velocity * dt, player, *this);
@@ -56,15 +56,15 @@ namespace Game
         /* Update the player's angular velocity based on the input state */
         player.setAngularVelocity(inputState.rotationDirection);
 
-        /* Scene fixed update routine: update player and objects based on the
+        /* Scene fixed update routine: update player and walls based on the
          * resolved intent */
         player.fixedUpdate(resolvedIntent / dt, dt);
-        for (const auto &object : walls)
-            object->fixedUpdate(dt);
+        for (const auto &wall : walls)
+            wall->fixedUpdate(dt);
     }
 
-    void Scene::addObject(std::unique_ptr<IWall> object)
+    void Scene::addWall(std::unique_ptr<IWall> wall)
     {
-        walls.push_back(std::move(object));
+        walls.push_back(std::move(wall));
     }
 } // namespace Game

@@ -50,8 +50,8 @@ namespace Game
         void fixedUpdate(const Engine::CollisionManager &collisionManager,
                          float dt);
 
-        /* Object management */
-        void addObject(std::unique_ptr<IWall> object);
+        /* Wall management */
+        void addWall(std::unique_ptr<IWall> wall);
 
         /* Input state management */
         void setInputState(Engine::InputState inputState);

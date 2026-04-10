@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "game/interfaces/imaterial.hpp"
-#include "game/settings.hpp"
 #include "math/point2.hpp"
 #include "math/ray.hpp"
 #include "math/vector2.hpp"
@@ -27,17 +26,15 @@ namespace Game
         Math::Point2 point = { 0.f, 0.f };
         Math::Vector2 normal = { 0.f, 0.f };
 
-        /* Floor and ceiling settings for rendering */
-        float floor = Settings::get().worldFloor;
-        float ceiling = Settings::get().worldCeiling;
+        /* Other wall properties for texture mapping */
+        float u = 0.f;
+        float textureScaleX = 1.f;
+        float textureOffsetX = 0.f;
+        float textureScaleY = 1.f;
+        float textureOffsetY = 0.f;
 
-        /* Other wall properties for rendering */
-        const Math::Point2 *wallStart = nullptr;
-        const Math::Point2 *wallEnd = nullptr;
-        float hitDistance = 0.f;
-
-        /* Object and material pointers */
-        const IWall *object = nullptr;
+        /* Wall and material pointers */
+        const IWall *wall = nullptr;
         const IMaterial *material = nullptr;
     };
 
@@ -84,13 +81,19 @@ namespace Game
             this->material = material;
         }
 
-        /* Ray-Object Intersection */
+        /* Ray-wall intersection */
         virtual HitRecord hit(const Math::Ray &ray, float tMin,
                               float tMax) const = 0;
 
     protected:
         std::shared_ptr<IMaterial> material;
+
         Math::Point2 start;
         Math::Point2 end;
+
+        float textureScaleX = 1.f;
+        float textureOffsetX = 0.f;
+        float textureScaleY = 1.f;
+        float textureOffsetY = 0.f;
     };
 } // namespace Game

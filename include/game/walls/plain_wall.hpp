@@ -10,11 +10,14 @@ namespace Game
      * It provides hit information (distance, normal, material context) used by
      * rendering and collision checks.
      */
-    class Wall : public IWall
+    class PlainWall : public IWall
     {
     public:
-        Wall() = default;
-        Wall(const Math::Point2 &start, const Math::Point2 &end);
+        PlainWall() = default;
+        PlainWall(const Math::Point2 &start, const Math::Point2 &end);
+        PlainWall(const Math::Point2 &start, const Math::Point2 &end,
+                  float textureScaleX, float textureOffsetX,
+                  float textureScaleY, float textureOffsetY);
 
         void update(float dt) override;
         void fixedUpdate(float dt) override;

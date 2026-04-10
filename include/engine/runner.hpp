@@ -20,7 +20,7 @@ namespace Engine
         Runner(std::unique_ptr<Game::Scene> scene);
         ~Runner() = default;
 
-        void addObject(std::unique_ptr<Game::IWall> object);
+        void addWall(std::unique_ptr<Game::IWall> wall);
 
         void run();
 

@@ -95,11 +95,11 @@ namespace IO
                 if (materials.find(mat) == materials.end())
                     throw std::runtime_error("Undefined material: " + mat);
 
-                auto wall = std::make_unique<Wall>(parsePoint(startS),
-                                                   parsePoint(endS));
+                auto wall = std::make_unique<PlainWall>(parsePoint(startS),
+                                                        parsePoint(endS));
                 wall->setMaterial(materials[mat]);
 
-                objects.push_back(std::move(wall));
+                walls.push_back(std::move(wall));
             }
         }
 
@@ -115,6 +115,6 @@ namespace IO
 
     std::vector<std::unique_ptr<IWall>> MapFile::getWalls()
     {
-        return std::move(objects);
+        return std::move(walls);
     }
 } // namespace IO

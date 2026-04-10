@@ -34,7 +34,7 @@ namespace IO
     private:
         Point2 playerPosition;
         Point2 playerLookAt;
-        std::vector<std::unique_ptr<IWall>> objects;
+        std::vector<std::unique_ptr<IWall>> walls;
         std::map<std::string, std::shared_ptr<IMaterial>> materials;
     };
 } // namespace IO

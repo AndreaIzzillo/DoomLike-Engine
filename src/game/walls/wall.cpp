@@ -5,19 +5,30 @@
 
 namespace Game
 {
-    Wall::Wall(const Math::Point2 &start, const Math::Point2 &end)
+    PlainWall::PlainWall(const Math::Point2 &start, const Math::Point2 &end)
     {
         this->start = start;
         this->end = end;
     }
 
-    void Wall::update(float dt)
+    PlainWall::PlainWall(const Math::Point2 &start, const Math::Point2 &end,
+                         float textureScaleX, float textureOffsetX,
+                         float textureScaleY, float textureOffsetY)
+        : PlainWall(start, end)
+    {
+        this->textureScaleX = textureScaleX;
+        this->textureOffsetX = textureOffsetX;
+        this->textureScaleY = textureScaleY;
+        this->textureOffsetY = textureOffsetY;
+    }
+
+    void PlainWall::update(float dt)
     {}
 
-    void Wall::fixedUpdate(float dt)
+    void PlainWall::fixedUpdate(float dt)
     {}
 
-    HitRecord Wall::hit(const Math::Ray &ray, float tMin, float tMax) const
+    HitRecord PlainWall::hit(const Math::Ray &ray, float tMin, float tMax) const
     {
         Math::Vector2 r = ray.direction;
         Math::Vector2 s = end - start;
@@ -33,14 +44,20 @@ namespace Game
         if (t < tMin || t > tMax || u < 0.f || u > 1.f)
             return HitRecord{};
 
+        /* HitRecord settings */
         HitRecord rec;
         rec.isHit = true;
+        /* Hit point information */
         rec.t = t;
         rec.point = ray.at(t);
-        rec.wallStart = &start;
-        rec.wallEnd = &end;
-        rec.hitDistance = (rec.point - *rec.wallStart).norm();
-        rec.object = this;
+        /* Texture mapping information */
+        rec.u = u;
+        rec.textureOffsetX = textureOffsetX;
+        rec.textureScaleX = textureScaleX;
+        rec.textureOffsetY = textureOffsetY;
+        rec.textureScaleY = textureScaleY;
+        /* Object information */
+        rec.wall = this;
         rec.material = material.get();
 
         Math::Vector2 segDir = s.normalized();

@@ -11,9 +11,9 @@ namespace Engine
         , scene(std::move(scene))
     {}
 
-    void Runner::addObject(std::unique_ptr<::Game::IWall> object)
+    void Runner::addWall(std::unique_ptr<::Game::IWall> wall)
     {
-        scene->addObject(std::move(object));
+        scene->addWall(std::move(wall));
     }
 
     void Runner::run()

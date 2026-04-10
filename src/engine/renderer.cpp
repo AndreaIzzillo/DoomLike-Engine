@@ -93,9 +93,11 @@ namespace Engine
                 /* Apply the perspective projection formula */
                 /* horizon - (z - cameraHeight) * scale / distance */
                 int projectedCeiling = projectScreen(
-                    horizon, cameraHeight, record.ceiling, scale, distance);
+                    horizon, cameraHeight, Game::Settings::get().worldCeiling,
+                    scale, distance);
                 int projectedFloor = projectScreen(
-                    horizon, cameraHeight, record.floor, scale, distance);
+                    horizon, cameraHeight, Game::Settings::get().worldFloor,
+                    scale, distance);
                 unsigned screenCeiling = static_cast<unsigned>(std::clamp(
                     projectedCeiling, 0, static_cast<int>(screenHeight)));
                 unsigned screenFloor = static_cast<unsigned>(std::clamp(
@@ -107,31 +109,36 @@ namespace Engine
                     image(x, y) = Utils::Color(0.5f, 0.7f, 1.0f);
                 }
 
+                auto material = record.material;
+
                 /* Texture mapping */
-                auto texProperties = record.material->getDescriptor();
+                auto texProperties = material->getDescriptor();
                 auto texCoord = Math::Point2(0.f, 0.f);
 
-                /* Calculate texture X coordinate */
-                auto wallX = record.hitDistance;
-                /* Texture repeats every 1 coordinate unit */
-                wallX -= std::floor(wallX);
-                texCoord.x =
-                    wallX * static_cast<float>(texProperties.textureWidth);
+                /* Calculate texture X (u) coordinate */
+                float u = record.u;
+                u = u * record.textureScaleX + record.textureOffsetX;
+                u = std::fmod(u, 1.f);
+                texCoord.x = u * texProperties.textureWidth;
 
-                /* Calculate texture Y coordinate */
+                /* Calculate texture Y (v) coordinate */
                 float lineHeight = projectedFloor - projectedCeiling;
-                float step = static_cast<float>(texProperties.textureHeight)
+                float step =
+                    (texProperties.textureHeight * record.textureScaleY)
                     / lineHeight;
-                float texCoordY = (screenCeiling - projectedCeiling) * step;
+                float v = (screenCeiling - projectedCeiling) * step;
+                v += record.textureOffsetY * texProperties.textureHeight;
 
                 /* WALL RENDERING */
                 for (unsigned y = screenCeiling; y < screenFloor; y++)
                 {
-                    texCoord.y = texCoordY;
-                    texCoordY += step;
+                    float wrappedV = std::fmod(v, texProperties.textureHeight);
+                    if (wrappedV < 0.f)
+                        wrappedV += texProperties.textureHeight;
+                    texCoord.y = wrappedV;
+                    v += step;
 
-                    image(x, y) =
-                        record.material->getSample(record, texCoord).color;
+                    image(x, y) = material->getSample(record, texCoord).color;
                 }
 
                 /* FLOOR RENDERING */

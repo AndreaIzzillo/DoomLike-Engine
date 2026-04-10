@@ -20,12 +20,12 @@ namespace Engine
         if (norm < FLT_EPSILON)
             return intent;
 
-        for (auto &object : scene.getWalls())
+        for (auto &wall : scene.getWalls())
         {
             /* Collision is checked using the hit function of the walls */
             Game::HitRecord hit =
-                object->hit(Math::Ray(player.getPosition(), relativeIntent),
-                            FLT_EPSILON, norm + hitboxSize);
+                wall->hit(Math::Ray(player.getPosition(), relativeIntent),
+                          FLT_EPSILON, norm + hitboxSize);
 
             /* If a collision is detected, we return a zero velocity to stop the
              * player */
