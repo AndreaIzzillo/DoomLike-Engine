@@ -58,12 +58,23 @@ namespace Engine
 
     void Renderer::render(const Game::Scene &scene)
     {
-        const auto width = image.getWidth();
-        const auto height = image.getHeight();
+        const auto screenWidth = image.getWidth();
+        const auto screenHeight = image.getHeight();
 
         const auto &player = scene.getPlayer();
 
-        for (unsigned x = 0; x < width; x++)
+        /* Pre-calculations and naming variables for projection */
+        double fovH = player.getCamera().getFov();
+        double aspectRatio = static_cast<double>(screenHeight)
+            / static_cast<double>(screenWidth);
+        double fovV = getVerticalFov(fovH, aspectRatio);
+        double scale = (screenHeight / 2.0) / std::tan(fovV / 2.0);
+        unsigned horizon = screenHeight / 2;
+        float cameraHeight = player.getCamera().getCameraHeight()
+            + player.getCamera().getOffsetHeight();
+
+        /* RAYCASTING AND WALL PROJECTION */
+        for (unsigned x = 0; x < screenWidth; x++)
         {
             auto ray = player.getCamera().getRay(x);
             auto record = rayCaster.castRay(ray, scene, T_MIN, T_MAX);
@@ -71,24 +82,12 @@ namespace Engine
             if (record.isHit)
             {
                 /* Naming variables */
-                unsigned screenHeight = image.getHeight();
-                unsigned screenWidth = image.getWidth();
-                unsigned horizon = screenHeight / 2;
-                float cameraHeight = player.getCamera().getCameraHeight()
-                    + player.getCamera().getOffsetHeight();
                 /* Both vectors already normalized */
                 auto rayDirection = ray.direction;
                 auto forward = player.getCamera().getForward();
 
                 /* Calculate the corrected distance to avoid fish-eye effect */
                 float distance = correctDist(record.t, rayDirection, forward);
-
-                /* Calculate the scale factor for the perspective projection */
-                float fovH = player.getCamera().getFov();
-                float aspectRatio = static_cast<float>(screenHeight)
-                    / static_cast<float>(screenWidth);
-                float fovV = getVerticalFov(fovH, aspectRatio);
-                float scale = (screenHeight / 2.f) / std::tan(fovV / 2.f);
 
                 /* Apply the perspective projection formula */
                 /* horizon - (z - cameraHeight) * scale / distance */
@@ -103,7 +102,9 @@ namespace Engine
                 unsigned screenFloor = static_cast<unsigned>(std::clamp(
                     projectedFloor, 0, static_cast<int>(screenHeight)));
 
+                /* ================= */
                 /* CEILING RENDERING */
+                /* ================= */
                 for (unsigned y = 0; y < screenCeiling; y++)
                 {
                     image(x, y) = Utils::Color(0.5f, 0.7f, 1.0f);
@@ -129,7 +130,9 @@ namespace Engine
                 float v = (screenCeiling - projectedCeiling) * step;
                 v += record.textureOffsetY * texProperties.textureHeight;
 
+                /* ============== */
                 /* WALL RENDERING */
+                /* ============== */
                 for (unsigned y = screenCeiling; y < screenFloor; y++)
                 {
                     float wrappedV = std::fmod(v, texProperties.textureHeight);
@@ -141,8 +144,10 @@ namespace Engine
                     image(x, y) = material->getSample(record, texCoord).color;
                 }
 
+                /* =============== */
                 /* FLOOR RENDERING */
-                for (unsigned y = screenFloor; y < height; y++)
+                /* =============== */
+                for (unsigned y = screenFloor; y < screenHeight; y++)
                 {
                     image(x, y) = Utils::Color(0.3f, 0.3f, 0.3f);
                 }
@@ -150,14 +155,14 @@ namespace Engine
         }
 
 #pragma omp parallel for collapse(2)
-        for (unsigned y = 0; y < height; y++)
+        for (unsigned y = 0; y < screenHeight; y++)
         {
-            for (unsigned x = 0; x < width; x++)
+            for (unsigned x = 0; x < screenWidth; x++)
             {
                 const Utils::Color color = image(x, y).clamp();
 
                 const std::size_t index =
-                    (static_cast<std::size_t>(y) * width + x) * 4;
+                    (static_cast<std::size_t>(y) * screenWidth + x) * 4;
 
                 pixelBuffer[index] =
                     static_cast<std::uint8_t>(color.r * 255.0f);
