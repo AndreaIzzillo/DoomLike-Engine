@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cfloat>
 #include <cmath>
 
@@ -62,9 +63,16 @@ namespace Game
 
         Math::Vector2 segDir = s.normalized();
         rec.normal = Math::Vector2(-segDir.y, segDir.x);
-        if (rec.normal * ray.direction > 0.f)
-            rec.normal = rec.normal * -1.f;
 
         return rec;
+    }
+
+    Math::Point2 PlainWall::closestPoint(const Math::Point2 &p) const
+    {
+        Math::Vector2 seg = end - start;
+        Math::Vector2 toP = p - start;
+        float t = (toP * seg) / (seg * seg);
+        t = std::clamp(t, 0.f, 1.f);
+        return start + seg * t;
     }
 } // namespace Game

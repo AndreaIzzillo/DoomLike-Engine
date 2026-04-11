@@ -34,32 +34,48 @@ namespace Game
     void Player::update(float dt)
     {}
 
-    void Player::fixedUpdate(Math::Vector2 resolvedVelocity, float dt)
+    void Player::fixedUpdate(Math::Vector2 resolvedVelocity,
+                             const std::vector<Math::Vector2> &hitNormals,
+                             float dt)
     {
         /* Player fixed update is responsible for updating the player's position
          * and rotation based on the resolved velocity */
         velocity = resolvedVelocity;
+
+        const auto &right = camera.getRight();
+        const auto &forward = camera.getForward();
+
+        for (const auto &normal : hitNormals)
+        {
+            /* Convert stored velocity to world space */
+            Math::Vector2 worldVel = right * velocity.x + forward * velocity.y;
+            float penetration = worldVel * normal;
+            if (penetration < 0.f)
+            {
+                worldVel = worldVel - normal * penetration;
+                /* Back to camera space */
+                velocity = Math::Vector2(worldVel * right, worldVel * forward);
+            }
+        }
+
         camera.move(velocity * dt);
         camera.rotate(angularVelocity * rotationSpeed * dt);
+    }
 
-        const float speed = velocity.norm();
-
-        /* Camera shaking logic */
-        if (speed > FLT_EPSILON)
-        {
-            cameraShakingTime += speed * cameraShakingFrequency * dt;
-            const float raw = std::sin(cameraShakingTime);
-            const float step =
-                -std::pow(std::abs(raw), 0.6f) * std::copysign(1.0f, raw);
-            const float shaking = step * speed * cameraShakingAmplitude;
-            camera.setOffsetHeight(shaking);
-        }
-        else
-        {
-            cameraShakingTime = 0.0f;
-            camera.setOffsetHeight(camera.getOffsetHeight()
-                                   * std::pow(0.99f, dt));
-        }
+    void Player::BobCamera(float speed, float dt)
+    {
+    if (speed > FLT_EPSILON)
+    {
+        cameraShakingTime += speed * cameraShakingFrequency * dt;
+        const float raw  = std::sin(cameraShakingTime);
+        const float step = -std::pow(std::abs(raw), 0.6f) * std::copysign(1.0f, raw);
+        camera.setOffsetHeight(step * speed * cameraShakingAmplitude);
+    }
+    else
+    {
+        cameraShakingTime = 0.0f;
+        camera.setOffsetHeight(camera.getOffsetHeight() * std::pow(0.99f, dt));
+    }
     }
 
     Math::Vector2 Player::computeVelocity(Engine::InputState inputState,
@@ -91,6 +107,11 @@ namespace Game
     void Player::setAngularVelocity(float angularVelocity)
     {
         this->angularVelocity = angularVelocity;
+    }
+
+    void Player::nudge(const Math::Vector2 &delta)
+    {
+        camera.moveWorld(delta); // world space direct, pas de transform caméra
     }
 
 } // namespace Game

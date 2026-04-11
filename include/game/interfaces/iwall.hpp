@@ -85,6 +85,9 @@ namespace Game
         virtual HitRecord hit(const Math::Ray &ray, float tMin,
                               float tMax) const = 0;
 
+        /* Closest point on the wall segment to a given point (for push-out) */
+        virtual Math::Point2 closestPoint(const Math::Point2 &p) const = 0;
+
     protected:
         std::shared_ptr<IMaterial> material;
 

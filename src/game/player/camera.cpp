@@ -78,6 +78,12 @@ namespace Game
         viewportPosition += movement;
     };
 
+    void Camera::moveWorld(const Math::Vector2 &delta)
+    {
+        position += delta;
+        viewportPosition += delta;
+    }
+
     void Camera::rotate(float angle)
     {
         auto rotation_matrix = Math::Matrix2x2(angle);

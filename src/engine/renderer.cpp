@@ -73,8 +73,9 @@ namespace Engine
         float cameraHeight = player.getCamera().getCameraHeight()
             + player.getCamera().getOffsetHeight();
 
-        /* RAYCASTING AND WALL PROJECTION */
-        for (unsigned x = 0; x < screenWidth; x++)
+/* RAYCASTING AND WALL PROJECTION */
+#pragma omp parallel for schedule(dynamic, 8)
+        for (int x = 0; x < screenWidth; x++)
         {
             auto ray = player.getCamera().getRay(x);
             auto record = rayCaster.castRay(ray, scene, T_MIN, T_MAX);
@@ -154,10 +155,10 @@ namespace Engine
             }
         }
 
-#pragma omp parallel for collapse(2)
-        for (unsigned y = 0; y < screenHeight; y++)
+        #pragma omp parallel for collapse(2)
+        for (int y = 0; y < screenHeight; y++)
         {
-            for (unsigned x = 0; x < screenWidth; x++)
+            for (int x = 0; x < screenWidth; x++)
             {
                 const Utils::Color color = image(x, y).clamp();
 

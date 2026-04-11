@@ -35,6 +35,8 @@ namespace Game
 
         /* Camera physics */
         void move(const Math::Vector2 &delta);
+        void moveWorld(const Math::Vector2 &delta);
+
         void rotate(float angle);
 
         /* Ray generation (for RayCaster.hpp) */

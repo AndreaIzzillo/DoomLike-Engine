@@ -24,5 +24,7 @@ namespace Game
 
         HitRecord hit(const Math::Ray &ray, float tMin,
                       float tMax) const override;
+
+        virtual Math::Point2 closestPoint(const Math::Point2 &p) const override;
     };
 } // namespace Game

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "engine/input_manager.hpp"
 #include "game/player/camera.hpp"
 #include "math/vector2.hpp"
@@ -25,10 +27,14 @@ namespace Game
         const Game::Camera &getCamera() const;
 
         void update(float dt);
-        void fixedUpdate(Math::Vector2 resolvedIntent, float dt);
+        void fixedUpdate(Math::Vector2 resolvedIntent,
+                         const std::vector<Math::Vector2> &hitNormals,
+                         float dt);
 
         /* Player physics */
         void setAngularVelocity(float angularVelocity);
+        void nudge(const Math::Vector2 &delta);
+        void BobCamera(float speed,float dt);
 
         Math::Vector2 computeVelocity(Engine::InputState inputState, float dt);
 

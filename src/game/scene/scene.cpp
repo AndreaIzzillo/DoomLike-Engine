@@ -1,4 +1,5 @@
 #include "game/scene/scene.hpp"
+#include <cfloat>
 
 #include "engine/collision_manager.hpp"
 #include "io/mapfile.hpp"
@@ -50,7 +51,7 @@ namespace Game
          * movement intent with collision detection and updating the player and
          * walls accordingly */
         Math::Vector2 velocity = player.computeVelocity(inputState, dt);
-        Math::Vector2 resolvedIntent =
+        auto [resolvedIntent, hitNormals] =
             collisionManager.resolveVelocity(velocity * dt, player, *this);
 
         /* Update the player's angular velocity based on the input state */
@@ -58,7 +59,9 @@ namespace Game
 
         /* Scene fixed update routine: update player and walls based on the
          * resolved intent */
-        player.fixedUpdate(resolvedIntent / dt, dt);
+        player.fixedUpdate(resolvedIntent / dt, hitNormals, dt);
+        collisionManager.pushOut(player, *this);
+        player.BobCamera(resolvedIntent.norm() / dt, dt);
         for (const auto &wall : walls)
             wall->fixedUpdate(dt);
     }

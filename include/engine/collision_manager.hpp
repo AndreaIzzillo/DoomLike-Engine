@@ -4,6 +4,16 @@
 
 namespace Engine
 {
+
+    /**
+     * @brief Represents the resolved motion after collision handling.
+     */
+    struct ResolvedMotion
+    {
+        Math::Vector2 velocity;
+        std::vector<Math::Vector2> hitNormals;
+    };
+
     /**
      * @brief Resolves player movement intent against world geometry.
      *
@@ -16,12 +26,13 @@ namespace Engine
     public:
         CollisionManager();
 
-        Math::Vector2 resolveVelocity(Math::Vector2 intent,
-                                      const Game::Player &player,
-                                      const Game::Scene &scene) const;
+        ResolvedMotion resolveVelocity(Math::Vector2 intent,
+                                       const Game::Player &player,
+                                       const Game::Scene &scene) const;
+        bool pushOut(Game::Player &player, const Game::Scene &scene) const;
 
     private:
         /* Hitbox size */
-        static constexpr float hitboxSize = 0.2f;
+        static constexpr float hitboxSize = 0.3f;
     };
 } // namespace Engine

@@ -96,7 +96,7 @@ namespace Utils
                    << ")";
     }
 
-    Image::Image(unsigned width, unsigned height)
+    Image::Image(int width, int height)
         : width(width)
         , height(height)
         , pixels(width * height)
@@ -127,17 +127,17 @@ namespace Utils
         }
     }
 
-    unsigned Image::getWidth() const
+    int Image::getWidth() const
     {
         return width;
     }
 
-    unsigned Image::getHeight() const
+    int Image::getHeight() const
     {
         return height;
     }
 
-    Color Image::operator()(unsigned x, unsigned y) const
+    Color Image::operator()(int x, int y) const
     {
         if (x >= width || y >= height)
         {
@@ -147,7 +147,7 @@ namespace Utils
         return pixels[y * width + x];
     }
 
-    Color &Image::operator()(unsigned x, unsigned y)
+    Color &Image::operator()(int x, int y)
     {
         if (x >= width || y >= height)
         {

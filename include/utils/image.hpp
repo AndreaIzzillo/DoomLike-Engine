@@ -49,18 +49,18 @@ namespace Utils
     class Image
     {
     public:
-        Image(unsigned width, unsigned height);
+        Image(int width, int height);
         Image(const std::string &filename);
 
-        unsigned getWidth() const;
-        unsigned getHeight() const;
+        int getWidth() const;
+        int getHeight() const;
 
-        Color operator()(unsigned x, unsigned y) const;
-        Color &operator()(unsigned x, unsigned y);
+        Color operator()(int x, int y) const;
+        Color &operator()(int x, int y);
 
     private:
-        unsigned width;
-        unsigned height;
+        int width;
+        int height;
 
         std::vector<Color> pixels;
     };
