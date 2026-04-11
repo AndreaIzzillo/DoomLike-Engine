@@ -64,18 +64,20 @@ namespace Game
 
     void Player::BobCamera(float speed, float dt)
     {
-    if (speed > FLT_EPSILON)
-    {
-        cameraShakingTime += speed * cameraShakingFrequency * dt;
-        const float raw  = std::sin(cameraShakingTime);
-        const float step = -std::pow(std::abs(raw), 0.6f) * std::copysign(1.0f, raw);
-        camera.setOffsetHeight(step * speed * cameraShakingAmplitude);
-    }
-    else
-    {
-        cameraShakingTime = 0.0f;
-        camera.setOffsetHeight(camera.getOffsetHeight() * std::pow(0.99f, dt));
-    }
+        if (speed > FLT_EPSILON)
+        {
+            cameraShakingTime += speed * cameraShakingFrequency * dt;
+            const float raw = std::sin(cameraShakingTime);
+            const float step =
+                -std::pow(std::abs(raw), 0.6f) * std::copysign(1.0f, raw);
+            camera.setOffsetHeight(step * speed * cameraShakingAmplitude);
+        }
+        else
+        {
+            cameraShakingTime = 0.0f;
+            camera.setOffsetHeight(camera.getOffsetHeight()
+                                   * std::pow(0.99f, dt));
+        }
     }
 
     Math::Vector2 Player::computeVelocity(Engine::InputState inputState,

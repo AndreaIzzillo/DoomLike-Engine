@@ -155,7 +155,7 @@ namespace Engine
             }
         }
 
-        #pragma omp parallel for collapse(2)
+#pragma omp parallel for collapse(2)
         for (int y = 0; y < screenHeight; y++)
         {
             for (int x = 0; x < screenWidth; x++)

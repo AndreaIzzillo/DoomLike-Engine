@@ -8,14 +8,12 @@ M Color "wall_pillar" (1.0,0.8,0.4)
 M Texture "brick" "./resources/textures/rom6432.ppm"
 
 # Salle centrale (sens horaire → normales vers intérieur)
-W (-4,-4) (4,-4) "brick"
-W (4,-4) (4,-1) "brick"
-W (4,1) (4,4) "brick"
-W (4,4) (-4,4) "brick"
-W (-4,4) (-4,1) "brick"
-W (-4,-1) (-4,-4) "brick"
-# Ouvertures: nord (-1,4)(1,4), sud (-1,-4)(1,-4)
-#             est (4,-1)(4,1), ouest (-4,-1)(-4,1)
+W (4,-4) (-4,-4) "brick"
+W (4,-1) (4,-4) "brick"
+W (4,4) (4,1) "brick"
+W (-4,4) (4,4) "brick"
+W (-4,1) (-4,4) "brick"
+W (-4,-4) (-4,-1) "brick"
 
 # Couloir EST
 W (4,1) (10,1) "brick"

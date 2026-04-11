@@ -1,4 +1,5 @@
 #include "game/scene/scene.hpp"
+
 #include <cfloat>
 
 #include "engine/collision_manager.hpp"

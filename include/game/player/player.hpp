@@ -34,7 +34,7 @@ namespace Game
         /* Player physics */
         void setAngularVelocity(float angularVelocity);
         void nudge(const Math::Vector2 &delta);
-        void BobCamera(float speed,float dt);
+        void BobCamera(float speed, float dt);
 
         Math::Vector2 computeVelocity(Engine::InputState inputState, float dt);
 

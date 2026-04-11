@@ -30,8 +30,9 @@ namespace Engine
 
             if (hit.isHit)
             {
-                // We need all normals that are colliding to resolve the velocity correctly in corners
-                hitNormals.push_back(hit.normal );
+                // We need all normals that are colliding to resolve the
+                // velocity correctly in corners
+                hitNormals.push_back(hit.normal);
             }
         }
 
