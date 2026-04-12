@@ -69,7 +69,7 @@ namespace Engine
             / static_cast<double>(screenWidth);
         double fovV = getVerticalFov(fovH, aspectRatio);
         double scale = (screenHeight / 2.0) / std::tan(fovV / 2.0);
-        unsigned horizon = screenHeight / 2;
+        int horizon = screenHeight / 2;
         float cameraHeight = player.getCamera().getCameraHeight()
             + player.getCamera().getOffsetHeight();
 
@@ -98,15 +98,15 @@ namespace Engine
                 int projectedFloor = projectScreen(
                     horizon, cameraHeight, Game::Settings::get().worldFloor,
                     scale, distance);
-                unsigned screenCeiling = static_cast<unsigned>(std::clamp(
+                int screenCeiling = static_cast<int>(std::clamp(
                     projectedCeiling, 0, static_cast<int>(screenHeight)));
-                unsigned screenFloor = static_cast<unsigned>(std::clamp(
+                int screenFloor = static_cast<int>(std::clamp(
                     projectedFloor, 0, static_cast<int>(screenHeight)));
 
                 /* ================= */
                 /* CEILING RENDERING */
                 /* ================= */
-                for (unsigned y = 0; y < screenCeiling; y++)
+                for (int y = 0; y < screenCeiling; y++)
                 {
                     image(x, y) = Utils::Color(0.5f, 0.7f, 1.0f);
                 }
@@ -134,7 +134,7 @@ namespace Engine
                 /* ============== */
                 /* WALL RENDERING */
                 /* ============== */
-                for (unsigned y = screenCeiling; y < screenFloor; y++)
+                for (int y = screenCeiling; y < screenFloor; y++)
                 {
                     float wrappedV = std::fmod(v, texProperties.textureHeight);
                     if (wrappedV < 0.f)
@@ -148,7 +148,7 @@ namespace Engine
                 /* =============== */
                 /* FLOOR RENDERING */
                 /* =============== */
-                for (unsigned y = screenFloor; y < screenHeight; y++)
+                for (int y = screenFloor; y < screenHeight; y++)
                 {
                     image(x, y) = Utils::Color(0.3f, 0.3f, 0.3f);
                 }

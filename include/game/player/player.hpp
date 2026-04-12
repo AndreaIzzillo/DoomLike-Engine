@@ -4,6 +4,7 @@
 
 #include "engine/input_manager.hpp"
 #include "game/player/camera.hpp"
+#include "game/world/sector.hpp"
 #include "math/vector2.hpp"
 
 namespace Game
@@ -25,6 +26,10 @@ namespace Game
         const Math::Point2 &getPosition() const;
         const Math::Vector2 &getVelocity() const;
         const Game::Camera &getCamera() const;
+        const Sector *getCurrentSector() const;
+
+        /* Setters */
+        void setCurrentSector(const Sector *sector);
 
         void update(float dt);
         void fixedUpdate(Math::Vector2 resolvedIntent,
@@ -35,7 +40,6 @@ namespace Game
         void setAngularVelocity(float angularVelocity);
         void nudge(const Math::Vector2 &delta);
         void BobCamera(float speed, float dt);
-
         Math::Vector2 computeVelocity(Engine::InputState inputState, float dt);
 
     private:

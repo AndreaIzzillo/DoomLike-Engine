@@ -9,9 +9,15 @@ namespace Engine
     Runner::Runner(std::unique_ptr<::Game::Scene> scene)
         : renderer()
         , scene(std::move(scene))
-    {}
+    {
+        if (this->scene == nullptr)
+            throw std::invalid_argument("Scene cannot be null");
+        if (this->scene->getCurrentSector() == nullptr)
+            throw std::invalid_argument(
+                "Scene must have a valid current sector");
+    }
 
-    void Runner::addWall(std::unique_ptr<::Game::IWall> wall)
+    void Runner::addWall(std::unique_ptr<::Game::Wall> wall)
     {
         scene->addWall(std::move(wall));
     }

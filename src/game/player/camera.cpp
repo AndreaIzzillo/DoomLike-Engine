@@ -7,7 +7,7 @@
 namespace Game
 {
     Camera::Camera(const Math::Point2 &position, const Math::Point2 &lookAt,
-                   float fov, float focalDistance, unsigned resolution)
+                   float fov, float focalDistance, int resolution)
         : position(position)
         , cameraHeight(0.5f)
         , forward((lookAt - position).normalized())
@@ -51,7 +51,7 @@ namespace Game
         return focalDistance;
     }
 
-    unsigned Camera::getResolution() const
+    int Camera::getResolution() const
     {
         return resolution;
     }
@@ -66,9 +66,19 @@ namespace Game
         return offsetHeight;
     }
 
+    const Sector *Camera::getCurrentSector() const
+    {
+        return currentSector;
+    }
+
     void Camera::setOffsetHeight(float offsetHeight)
     {
         this->offsetHeight = offsetHeight;
+    }
+
+    void Camera::setCurrentSector(const Sector *sector)
+    {
+        currentSector = sector;
     }
 
     void Camera::move(const Math::Vector2 &delta)
@@ -95,7 +105,7 @@ namespace Game
             position + forward * focalDistance - right * (viewportWidth / 2.f);
     }
 
-    Math::Ray Camera::getRay(unsigned x) const
+    Math::Ray Camera::getRay(int x) const
     {
         float pixel_size = viewportWidth / resolution;
         Math::Point2 pixel_position =

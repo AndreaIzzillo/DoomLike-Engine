@@ -4,8 +4,9 @@
 #include <vector>
 
 #include "engine/input_manager.hpp"
-#include "game/interfaces/iwall.hpp"
 #include "game/player/player.hpp"
+#include "game/world/sector.hpp"
+#include "game/world/wall.hpp"
 
 /* Forward declaration to avoid circular dependency */
 namespace Engine
@@ -30,7 +31,10 @@ namespace Game
     {
     private:
         Player player;
-        std::vector<std::unique_ptr<IWall>> walls;
+        const Sector *currentSector;
+
+        std::vector<std::unique_ptr<Sector>> sectors;
+        std::vector<std::unique_ptr<Wall>> walls;
 
         Engine::InputState inputState;
 
@@ -44,14 +48,19 @@ namespace Game
         const Player &getPlayer() const;
         const Engine::InputState &getInputState() const;
 
-        const std::vector<std::unique_ptr<IWall>> &getWalls() const;
+        const std::vector<std::unique_ptr<Wall>> &getWalls() const;
+        const std::vector<std::unique_ptr<Sector>> &getSectors() const;
+
+        const Sector *getCurrentSector() const;
 
         void update(float dt);
         void fixedUpdate(const Engine::CollisionManager &collisionManager,
                          float dt);
 
-        /* Wall management */
-        void addWall(std::unique_ptr<IWall> wall);
+        /* World management */
+        void addSector(std::unique_ptr<Sector> sector);
+        void addWall(std::unique_ptr<Wall> wall);
+        void setCurrentSector(const Sector *sector);
 
         /* Input state management */
         void setInputState(Engine::InputState inputState);

@@ -14,6 +14,8 @@ namespace Game
     Scene::Scene(IO::MapFile &mapFile)
         : player(mapFile.getPlayer())
         , walls(mapFile.getWalls())
+        , sectors(mapFile.getSectors())
+        , currentSector(mapFile.getStartingSector())
     {}
 
     const Player &Scene::getPlayer() const
@@ -21,7 +23,12 @@ namespace Game
         return player;
     }
 
-    const std::vector<std::unique_ptr<IWall>> &Scene::getWalls() const
+    const std::vector<std::unique_ptr<Sector>> &Scene::getSectors() const
+    {
+        return sectors;
+    }
+
+    const std::vector<std::unique_ptr<Wall>> &Scene::getWalls() const
     {
         return walls;
     }
@@ -29,6 +36,11 @@ namespace Game
     const Engine::InputState &Scene::getInputState() const
     {
         return inputState;
+    }
+
+    const Sector *Scene::getCurrentSector() const
+    {
+        return currentSector;
     }
 
     void Scene::setInputState(Engine::InputState inputState)
@@ -41,8 +53,6 @@ namespace Game
         /* Scene update routine: update player and walls based on the current
          * input state and other logic */
         player.update(dt);
-        for (const auto &wall : walls)
-            wall->update(dt);
     }
 
     void Scene::fixedUpdate(const Engine::CollisionManager &collisionManager,
@@ -63,12 +73,21 @@ namespace Game
         player.fixedUpdate(resolvedIntent / dt, hitNormals, dt);
         collisionManager.pushOut(player, *this);
         player.BobCamera(resolvedIntent.norm() / dt, dt);
-        for (const auto &wall : walls)
-            wall->fixedUpdate(dt);
     }
 
-    void Scene::addWall(std::unique_ptr<IWall> wall)
+    void Scene::addWall(std::unique_ptr<Wall> wall)
     {
         walls.push_back(std::move(wall));
+    }
+
+    void Scene::addSector(std::unique_ptr<Sector> sector)
+    {
+        sectors.push_back(std::move(sector));
+    }
+
+    void Scene::setCurrentSector(const Sector *sector)
+    {
+        currentSector = sector;
+        player.setCurrentSector(sector);
     }
 } // namespace Game

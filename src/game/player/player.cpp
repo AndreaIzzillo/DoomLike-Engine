@@ -31,6 +31,16 @@ namespace Game
         return velocity;
     }
 
+    const Sector *Player::getCurrentSector() const
+    {
+        return camera.getCurrentSector();
+    }
+
+    void Player::setCurrentSector(const Sector *sector)
+    {
+        camera.setCurrentSector(sector);
+    }
+
     void Player::update(float dt)
     {}
 

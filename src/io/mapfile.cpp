@@ -7,7 +7,7 @@
 
 #include "game/materials/color_material.hpp"
 #include "game/materials/texture_material.hpp"
-#include "game/walls/plain_wall.hpp"
+#include "game/world/wall.hpp"
 
 namespace IO
 {
@@ -55,7 +55,7 @@ namespace IO
             {
                 std::string posS, lookS;
                 float fov, focal;
-                unsigned res;
+                int res;
                 iss >> posS >> lookS;
                 playerPosition = parsePoint(posS);
                 playerLookAt = parsePoint(lookS);
@@ -85,21 +85,61 @@ namespace IO
                     std::runtime_error("Unsupported material type: " + type);
                 }
             }
+            else if (type == 'S')
+            {
+                std::string id, floorHeight, ceilingHeight, floorMat,
+                    ceilingMat;
+                iss >> id >> floorHeight >> ceilingHeight >> floorMat
+                    >> ceilingMat;
+                int sectorId = std::stoi(id);
+                float floorH = std::stof(floorHeight);
+                float ceilingH = std::stof(ceilingHeight);
+                floorMat = parseQuoted(floorMat);
+                ceilingMat = parseQuoted(ceilingMat);
+
+                if (sectors.find(sectorId) != sectors.end())
+                    throw std::runtime_error("Duplicate sector ID: " + id);
+                if (materials.find(floorMat) == materials.end())
+                    throw std::runtime_error("Undefined material: " + floorMat);
+                if (materials.find(ceilingMat) == materials.end())
+                    throw std::runtime_error("Undefined material: "
+                                             + ceilingMat);
+
+                sectors[sectorId] = std::make_unique<Sector>(
+                    floorH, ceilingH, materials[floorMat],
+                    materials[ceilingMat]);
+            }
             else if (type == 'W')
             {
                 std::string startS, endS, mat;
-                iss >> startS >> endS;
+                iss >> startS >> endS >> mat;
 
-                std::getline(iss, mat);
                 mat = parseQuoted(mat);
                 if (materials.find(mat) == materials.end())
                     throw std::runtime_error("Undefined material: " + mat);
 
-                auto wall = std::make_unique<PlainWall>(parsePoint(startS),
-                                                        parsePoint(endS));
-                wall->setMaterial(materials[mat]);
+                std::string frontS, backS;
+                iss >> frontS >> backS;
+                int front = std::stoi(frontS);
+                int back = std::stoi(backS);
+                if (sectors.find(front) == sectors.end())
+                    throw std::runtime_error("Undefined sector ID: " + frontS);
+                if (back != -1 && sectors.find(back) == sectors.end())
+                    throw std::runtime_error("Undefined sector ID: " + backS);
 
-                walls.push_back(std::move(wall));
+                if (back == -1)
+                {
+                    walls.push_back(std::make_unique<Wall>(
+                        parsePoint(startS), parsePoint(endS),
+                        sectors[front].get(), nullptr, materials[mat]));
+                }
+                else
+                {
+                    walls.push_back(std::make_unique<Wall>(
+                        parsePoint(startS), parsePoint(endS),
+                        sectors[front].get(), sectors[back].get(),
+                        materials[mat]));
+                }
             }
         }
 
@@ -113,8 +153,26 @@ namespace IO
         return Player(playerPosition, playerLookAt);
     }
 
-    std::vector<std::unique_ptr<IWall>> MapFile::getWalls()
+    std::vector<std::unique_ptr<Wall>> MapFile::getWalls()
     {
         return std::move(walls);
+    }
+
+    std::vector<std::unique_ptr<Sector>> MapFile::getSectors()
+    {
+        std::vector<std::unique_ptr<Sector>> result;
+        for (auto &entry : sectors)
+            result.push_back(std::move(entry.second));
+        return result;
+    }
+
+    const Sector *MapFile::getStartingSector() const
+    {
+        for (const auto &entry : sectors)
+        {
+            if (entry.first == 0)
+                return entry.second.get();
+        }
+        return nullptr;
     }
 } // namespace IO

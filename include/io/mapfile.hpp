@@ -6,8 +6,9 @@
 #include <vector>
 
 #include "game/interfaces/imaterial.hpp"
-#include "game/interfaces/iwall.hpp"
 #include "game/player/player.hpp"
+#include "game/world/sector.hpp"
+#include "game/world/wall.hpp"
 #include "math/point2.hpp"
 
 namespace IO
@@ -29,12 +30,15 @@ namespace IO
         ~MapFile() = default;
 
         Player getPlayer() const;
-        std::vector<std::unique_ptr<IWall>> getWalls();
+        std::vector<std::unique_ptr<Wall>> getWalls();
+        std::vector<std::unique_ptr<Sector>> getSectors();
+        const Sector *getStartingSector() const;
 
     private:
         Point2 playerPosition;
         Point2 playerLookAt;
-        std::vector<std::unique_ptr<IWall>> walls;
+        std::vector<std::unique_ptr<Wall>> walls;
         std::map<std::string, std::shared_ptr<IMaterial>> materials;
+        std::map<int, std::unique_ptr<Sector>> sectors;
     };
 } // namespace IO

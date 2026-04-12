@@ -116,7 +116,7 @@ namespace Utils
 
         pixels = std::vector<Color>(width * height);
 
-        unsigned i = 0;
+        int i = 0;
         std::string r, g, b;
         while (file >> r && file >> g && file >> b)
         {
