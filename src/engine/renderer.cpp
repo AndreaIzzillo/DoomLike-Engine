@@ -9,8 +9,11 @@
 #include "game/settings.hpp"
 #include "math/point2.hpp"
 
-#define T_MIN FLT_EPSILON
+#define T_MIN 1e-5f
 #define T_MAX std::numeric_limits<float>::infinity()
+
+#define CEILING Utils::Color(0.5f, 0.5f, 0.5f)
+#define FLOOR Utils::Color(0.3f, 0.3f, 0.3f)
 
 namespace Engine
 {
@@ -78,79 +81,134 @@ namespace Engine
         for (int x = 0; x < screenWidth; x++)
         {
             auto ray = player.getCamera().getRay(x);
-            auto record = rayCaster.castRay(ray, scene, T_MIN, T_MAX);
+            auto records = rayCaster.castRay(ray, scene, T_MIN, T_MAX);
 
-            if (record.isHit)
+            /* Vertical clipping variables */
+            int top = 0;
+            int bottom = screenHeight;
+
+            auto currentSector = scene.getCurrentSector();
+
+            for (const auto &record : records)
             {
+                /* Maps are supposed to be closed, no hit = no rendering, every
+                 * wall is supposed to be textured */
+                if (!record.isHit || !currentSector)
+                    continue;
+
+                auto frontSector = currentSector;
+                auto backSector = record.frontSector == frontSector
+                    ? record.backSector
+                    : record.frontSector;
+
                 /* Naming variables */
                 /* Both vectors already normalized */
                 auto rayDirection = ray.direction;
                 auto forward = player.getCamera().getForward();
 
-                /* Calculate the corrected distance to avoid fish-eye effect */
+                /* Corrected distance to avoid fish-eye effect */
                 float distance = correctDist(record.t, rayDirection, forward);
+                distance = std::max(distance, T_MIN);
 
                 /* Apply the perspective projection formula */
                 /* horizon - (z - cameraHeight) * scale / distance */
-                int projectedCeiling = projectScreen(
-                    horizon, cameraHeight, Game::Settings::get().worldCeiling,
-                    scale, distance);
-                int projectedFloor = projectScreen(
-                    horizon, cameraHeight, Game::Settings::get().worldFloor,
-                    scale, distance);
-                int screenCeiling = static_cast<int>(std::clamp(
-                    projectedCeiling, 0, static_cast<int>(screenHeight)));
-                int screenFloor = static_cast<int>(std::clamp(
-                    projectedFloor, 0, static_cast<int>(screenHeight)));
+                int yTop = projectScreen(horizon, cameraHeight,
+                                         frontSector->getCeilingHeight(), scale,
+                                         distance);
+                int yBottom = projectScreen(horizon, cameraHeight,
+                                            frontSector->getFloorHeight(),
+                                            scale, distance);
 
-                /* ================= */
-                /* CEILING RENDERING */
-                /* ================= */
-                for (int y = 0; y < screenCeiling; y++)
+                int drawTop = std::max(yTop, top);
+                int drawBottom = std::min(yBottom, bottom);
+
+                /* Plain Wall */
+                if (record.backSector == nullptr)
                 {
-                    image(x, y) = Utils::Color(0.5f, 0.7f, 1.0f);
+                    /* Ceiling rendering */
+                    int ceilingBottom = std::clamp(yTop, top, bottom);
+                    for (int y = top; y < ceilingBottom; y++)
+                    {
+                        image(x, y) = CEILING;
+                    }
+
+                    /* Wall rendering */
+                    drawWallVertical(yTop, yBottom, drawTop, drawBottom, x,
+                                     record, record.material,
+                                     record.textureTransform.scaleX,
+                                     record.textureTransform.offsetX,
+                                     record.textureTransform.scaleY,
+                                     record.textureTransform.offsetY);
+
+                    /* Floor rendering */
+                    int floorTop = std::clamp(yBottom, top, bottom);
+                    for (int y = floorTop; y < bottom; y++)
+                    {
+                        image(x, y) = FLOOR;
+                    }
+
+                    /* No portal, no more rendering for this column */
+                    break;
                 }
-
-                auto material = record.material;
-
-                /* Texture mapping */
-                auto texProperties = material->getDescriptor();
-                auto texCoord = Math::Point2(0.f, 0.f);
-
-                /* Calculate texture X (u) coordinate */
-                float u = record.u;
-                u = u * record.textureScaleX + record.textureOffsetX;
-                u = std::fmod(u, 1.f);
-                texCoord.x = u * texProperties.textureWidth;
-
-                /* Calculate texture Y (v) coordinate */
-                float lineHeight = projectedFloor - projectedCeiling;
-                float step =
-                    (texProperties.textureHeight * record.textureScaleY)
-                    / lineHeight;
-                float v = (screenCeiling - projectedCeiling) * step;
-                v += record.textureOffsetY * texProperties.textureHeight;
-
-                /* ============== */
-                /* WALL RENDERING */
-                /* ============== */
-                for (int y = screenCeiling; y < screenFloor; y++)
+                /* Portal */
+                else
                 {
-                    float wrappedV = std::fmod(v, texProperties.textureHeight);
-                    if (wrappedV < 0.f)
-                        wrappedV += texProperties.textureHeight;
-                    texCoord.y = wrappedV;
-                    v += step;
+                    /* Calculate projected coordinates for the next sector */
+                    int nextTop = projectScreen(horizon, cameraHeight,
+                                                backSector->getCeilingHeight(),
+                                                scale, distance);
+                    int nextBottom = projectScreen(horizon, cameraHeight,
+                                                   backSector->getFloorHeight(),
+                                                   scale, distance);
 
-                    image(x, y) = material->getSample(record, texCoord).color;
-                }
+                    /* Calculate the opening between the current sector and the
+                     * next one */
+                    int openingTop = std::max({ top, yTop, nextTop });
+                    int openingBottom =
+                        std::min({ bottom, yBottom, nextBottom });
 
-                /* =============== */
-                /* FLOOR RENDERING */
-                /* =============== */
-                for (int y = screenFloor; y < screenHeight; y++)
-                {
-                    image(x, y) = Utils::Color(0.3f, 0.3f, 0.3f);
+                    /* Ceiling rendering */
+                    int ceilingBottom = std::clamp(yTop, top, bottom);
+                    for (int y = top; y < ceilingBottom; y++)
+                    {
+                        image(x, y) = CEILING;
+                    }
+
+                    /* Upper wall rendering */
+                    int upperWallTop = std::max(top, yTop);
+                    int upperWallBottom = std::min(bottom, nextTop);
+                    drawWallVertical(yTop, nextTop, upperWallTop,
+                                     upperWallBottom, x, record,
+                                     record.upperMaterial,
+                                     record.upperTextureTransform.scaleX,
+                                     record.upperTextureTransform.offsetX,
+                                     record.upperTextureTransform.scaleY,
+                                     record.upperTextureTransform.offsetY);
+
+                    /* Lower wall rendering */
+                    int lowerWallTop = std::max(top, nextBottom);
+                    int lowerWallBottom = std::min(bottom, yBottom);
+                    drawWallVertical(nextBottom, yBottom, lowerWallTop,
+                                     lowerWallBottom, x, record,
+                                     record.lowerMaterial,
+                                     record.lowerTextureTransform.scaleX,
+                                     record.lowerTextureTransform.offsetX,
+                                     record.lowerTextureTransform.scaleY,
+                                     record.lowerTextureTransform.offsetY);
+
+                    /* Floor rendering */
+                    int floorTop = std::clamp(yBottom, top, bottom);
+                    for (int y = floorTop; y < bottom; y++)
+                    {
+                        image(x, y) = FLOOR;
+                    }
+
+                    /* Update clipping for the next sector */
+                    top = openingTop;
+                    bottom = openingBottom;
+                    currentSector = backSector;
+                    if (top >= bottom)
+                        break;
                 }
             }
         }
@@ -176,6 +234,7 @@ namespace Engine
         }
 
         texture.update(pixelBuffer.data());
+        image.clear();
 
         window.draw(sprite);
         window.display();
@@ -199,5 +258,44 @@ namespace Engine
     {
         float p = horizon - (z - cameraHeight) * scale / distance;
         return static_cast<int>(p);
+    }
+
+    void Renderer::drawWallVertical(int yTop, int yBottom, int top, int bottom,
+                                    int x, const Game::HitRecord &record,
+                                    const Game::IMaterial *material,
+                                    float scaleX, float offsetX, float scaleY,
+                                    float offsetY)
+    {
+        /* Texture mapping */
+        if (material == nullptr)
+            material = record.material;
+        auto texProperties = material->getDescriptor();
+        auto texCoord = Math::Point2(0.f, 0.f);
+
+        /* Calculate texture X (u) coordinate */
+        float u = record.u;
+        u = u * scaleX + offsetX;
+        u = std::fmod(u, 1.f);
+        texCoord.x = u * texProperties.textureWidth;
+
+        /* Calculate texture Y (v) coordinate */
+        float lineHeight = yBottom - yTop;
+        if (lineHeight <= 0)
+            return;
+
+        float step = (texProperties.textureHeight * scaleY) / lineHeight;
+        float v = (top - yTop) * step;
+        v += offsetY * texProperties.textureHeight;
+
+        for (int y = top; y < bottom; y++)
+        {
+            float wrappedV = std::fmod(v, texProperties.textureHeight);
+            if (wrappedV < 0.f)
+                wrappedV += texProperties.textureHeight;
+            texCoord.y = wrappedV;
+            v += step;
+
+            image(x, y) = material->getSample(record, texCoord).color;
+        }
     }
 } // namespace Engine

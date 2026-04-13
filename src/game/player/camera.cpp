@@ -78,7 +78,13 @@ namespace Game
 
     void Camera::setCurrentSector(const Sector *sector)
     {
+        auto floorHeight = sector->getFloorHeight();
+        auto ceilingHeight = sector->getCeilingHeight();
+        if (ceilingHeight - floorHeight < 1.0f)
+            throw std::runtime_error("Camera cannot fit in the current sector");
+
         currentSector = sector;
+        cameraHeight = sector->getFloorHeight() + 0.5f;
     }
 
     void Camera::move(const Math::Vector2 &delta)

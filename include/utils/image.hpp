@@ -58,6 +58,8 @@ namespace Utils
         Color operator()(int x, int y) const;
         Color &operator()(int x, int y);
 
+        void clear(const Color &color = Color(0, 0, 0));
+
     private:
         int width;
         int height;

@@ -156,4 +156,9 @@ namespace Utils
 
         return pixels[y * width + x];
     }
+
+    void Image::clear(const Color &color)
+    {
+        std::fill(pixels.begin(), pixels.end(), color);
+    }
 } // namespace Utils

@@ -1,6 +1,10 @@
 #pragma once
 
+#include <vector>
+
 #include "game/scene/scene.hpp"
+#include "game/world/sector.hpp"
+#include "game/world/wall.hpp"
 #include "math/ray.hpp"
 
 namespace Engine
@@ -16,7 +20,8 @@ namespace Engine
     public:
         RayCaster() = default;
 
-        Game::HitRecord castRay(const Math::Ray &ray, const Game::Scene &scene,
-                                float tMin, float tMax) const;
+        std::vector<Game::HitRecord> castRay(const Math::Ray &ray,
+                                             const Game::Scene &scene,
+                                             float tMin, float tMax) const;
     };
 } // namespace Engine

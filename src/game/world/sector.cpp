@@ -11,22 +11,22 @@ namespace Game
         , ceilingMaterial(std::move(ceilingMaterial))
     {}
 
-    float Sector::getFloorHeight()
+    float Sector::getFloorHeight() const
     {
         return floorHeight;
     }
 
-    float Sector::getCeilingHeight()
+    float Sector::getCeilingHeight() const
     {
         return ceilingHeight;
     }
 
-    std::shared_ptr<IMaterial> Sector::getFloorMaterial()
+    std::shared_ptr<IMaterial> Sector::getFloorMaterial() const
     {
         return floorMaterial;
     }
 
-    std::shared_ptr<IMaterial> Sector::getCeilingMaterial()
+    std::shared_ptr<IMaterial> Sector::getCeilingMaterial() const
     {
         return ceilingMaterial;
     }

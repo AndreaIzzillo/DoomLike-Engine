@@ -13,6 +13,21 @@ namespace Game
     class Sector;
 
     /**
+     * @brief Ray-wall intersection result with hit data and material context.
+     *
+     * It contains geometric hit information (hit point, normal, distance) and
+     * wall/material context (texture coordinates, sector pointers) used for
+     * rendering and collision response.
+     */
+    struct TextureTransform
+    {
+        float scaleX = 1.f;
+        float offsetX = 0.f;
+        float scaleY = 1.f;
+        float offsetY = 0.f;
+    };
+
+    /**
      * @brief Ray-wall intersection payload shared by rendering and collisions.
      *
      * Carries geometric hit data plus wall/material context used for texture
@@ -28,14 +43,15 @@ namespace Game
 
         /* Other wall properties for texture mapping */
         float u = 0.f;
-        float textureScaleX = 1.f;
-        float textureOffsetX = 0.f;
-        float textureScaleY = 1.f;
-        float textureOffsetY = 0.f;
+        TextureTransform textureTransform;
+        TextureTransform upperTextureTransform;
+        TextureTransform lowerTextureTransform;
 
         /* Wall and material pointers */
         const Wall *wall = nullptr;
         const IMaterial *material = nullptr;
+        const IMaterial *upperMaterial = nullptr;
+        const IMaterial *lowerMaterial = nullptr;
 
         /* Sector */
         const Sector *frontSector = nullptr;
@@ -54,20 +70,31 @@ namespace Game
         Wall() = default;
         Wall(const Math::Point2 &start, const Math::Point2 &end,
              Sector *frontSector, Sector *backSector = nullptr,
-             std::shared_ptr<IMaterial> material = nullptr);
-        Wall(const Math::Point2 &start, const Math::Point2 &end,
-             float textureScaleX, float textureOffsetX, float textureScaleY,
-             float textureOffsetY, Sector *frontSector,
-             Sector *backSector = nullptr,
-             std::shared_ptr<IMaterial> material = nullptr);
+             std::shared_ptr<IMaterial> material = nullptr,
+             std::shared_ptr<IMaterial> upperMaterial = nullptr,
+             std::shared_ptr<IMaterial> lowerMaterial = nullptr);
         ~Wall() = default;
+
+        /* Builders to make our lives easier */
+        static std::unique_ptr<Wall>
+        createPlain(const Math::Point2 &start, const Math::Point2 &end,
+                    Sector *frontSector, std::shared_ptr<IMaterial> material);
+        static std::unique_ptr<Wall>
+        createPortal(const Math::Point2 &start, const Math::Point2 &end,
+                     Sector *frontSector, Sector *backSector,
+                     std::shared_ptr<IMaterial> upperMaterial,
+                     std::shared_ptr<IMaterial> lowerMaterial);
 
         /* Getters */
         const Math::Point2 &getStart() const;
         const Math::Point2 &getEnd() const;
 
-        /* Setters */
-        void setMaterial(std::shared_ptr<IMaterial> material);
+        void setTextureTransform(float scaleX, float offsetX, float scaleY,
+                                 float offsetY);
+        void setUpperTextureTransform(float scaleX, float offsetX, float scaleY,
+                                      float offsetY);
+        void setLowerTextureTransform(float scaleX, float offsetX, float scaleY,
+                                      float offsetY);
 
         /* Ray-wall intersection */
         HitRecord hit(const Math::Ray &ray, float tMin, float tMax) const;
@@ -79,14 +106,18 @@ namespace Game
         Sector *frontSector;
         Sector *backSector = nullptr;
 
+        /* Plain Wall Material */
         std::shared_ptr<IMaterial> material;
+
+        /* Portal Material */
+        std::shared_ptr<IMaterial> upperMaterial;
+        std::shared_ptr<IMaterial> lowerMaterial;
 
         Math::Point2 start;
         Math::Point2 end;
 
-        float textureScaleX = 1.f;
-        float textureOffsetX = 0.f;
-        float textureScaleY = 1.f;
-        float textureOffsetY = 0.f;
+        TextureTransform textureTransform;
+        TextureTransform upperTextureTransform;
+        TextureTransform lowerTextureTransform;
     };
 } // namespace Game

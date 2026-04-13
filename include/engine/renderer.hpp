@@ -3,7 +3,9 @@
 #include <vector>
 
 #include "engine/raycaster.hpp"
+#include "game/interfaces/imaterial.hpp"
 #include "game/scene/scene.hpp"
+#include "game/world/wall.hpp"
 #include "math/vector2.hpp"
 
 namespace Engine
@@ -48,5 +50,10 @@ namespace Engine
 
         int projectScreen(float horizon, float cameraHeight, float z,
                           float scale, float distance) const;
+
+        void drawWallVertical(int yTop, int yBottom, int top, int bottom, int x,
+                              const Game::HitRecord &record,
+                              const Game::IMaterial *material, float scaleX,
+                              float offsetX, float scaleY, float offsetY);
     };
 } // namespace Engine

@@ -10,7 +10,9 @@ namespace Game
 {
     Wall::Wall(const Math::Point2 &start, const Math::Point2 &end,
                Sector *frontSector, Sector *backSector,
-               std::shared_ptr<IMaterial> material)
+               std::shared_ptr<IMaterial> material,
+               std::shared_ptr<IMaterial> upperMaterial,
+               std::shared_ptr<IMaterial> lowerMaterial)
     {
         if (frontSector == nullptr)
             throw std::invalid_argument("Front sector cannot be null");
@@ -18,21 +20,30 @@ namespace Game
         this->backSector = backSector;
 
         this->material = material;
+        this->upperMaterial = upperMaterial;
+        this->lowerMaterial = lowerMaterial;
 
         this->start = start;
         this->end = end;
     }
 
-    Wall::Wall(const Math::Point2 &start, const Math::Point2 &end,
-               float textureScaleX, float textureOffsetX, float textureScaleY,
-               float textureOffsetY, Sector *frontSector, Sector *backSector,
-               std::shared_ptr<IMaterial> material)
-        : Wall(start, end, frontSector, backSector, material)
+    std::unique_ptr<Wall> Wall::createPlain(const Math::Point2 &start,
+                                            const Math::Point2 &end,
+                                            Sector *frontSector,
+                                            std::shared_ptr<IMaterial> material)
     {
-        this->textureScaleX = textureScaleX;
-        this->textureOffsetX = textureOffsetX;
-        this->textureScaleY = textureScaleY;
-        this->textureOffsetY = textureOffsetY;
+        return std::make_unique<Wall>(start, end, frontSector, nullptr,
+                                      material, nullptr, nullptr);
+    }
+
+    std::unique_ptr<Wall>
+    Wall::createPortal(const Math::Point2 &start, const Math::Point2 &end,
+                       Sector *frontSector, Sector *backSector,
+                       std::shared_ptr<IMaterial> upperMaterial,
+                       std::shared_ptr<IMaterial> lowerMaterial)
+    {
+        return std::make_unique<Wall>(start, end, frontSector, backSector,
+                                      nullptr, upperMaterial, lowerMaterial);
     }
 
     const Math::Point2 &Wall::getStart() const
@@ -45,9 +56,22 @@ namespace Game
         return end;
     }
 
-    void Wall::setMaterial(std::shared_ptr<IMaterial> material)
+    void Wall::setTextureTransform(float scaleX, float offsetX, float scaleY,
+                                   float offsetY)
     {
-        this->material = material;
+        textureTransform = { scaleX, offsetX, scaleY, offsetY };
+    }
+
+    void Wall::setUpperTextureTransform(float scaleX, float offsetX,
+                                        float scaleY, float offsetY)
+    {
+        upperTextureTransform = { scaleX, offsetX, scaleY, offsetY };
+    }
+
+    void Wall::setLowerTextureTransform(float scaleX, float offsetX,
+                                        float scaleY, float offsetY)
+    {
+        lowerTextureTransform = { scaleX, offsetX, scaleY, offsetY };
     }
 
     HitRecord Wall::hit(const Math::Ray &ray, float tMin, float tMax) const
@@ -76,13 +100,14 @@ namespace Game
         rec.normal = Math::Vector2(-segDir.y, segDir.x);
         /* Texture mapping information */
         rec.u = u;
-        rec.textureOffsetX = textureOffsetX;
-        rec.textureScaleX = textureScaleX;
-        rec.textureOffsetY = textureOffsetY;
-        rec.textureScaleY = textureScaleY;
+        rec.textureTransform = textureTransform;
+        rec.upperTextureTransform = upperTextureTransform;
+        rec.lowerTextureTransform = lowerTextureTransform;
         /* Object information */
         rec.wall = this;
         rec.material = material.get();
+        rec.upperMaterial = upperMaterial.get();
+        rec.lowerMaterial = lowerMaterial.get();
         /* Sector information */
         rec.frontSector = frontSector;
         rec.backSector = backSector;

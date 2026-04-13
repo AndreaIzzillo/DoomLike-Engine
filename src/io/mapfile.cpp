@@ -51,6 +51,7 @@ namespace IO
             char type;
             iss >> type;
 
+            /* Player start position */
             if (type == 'P')
             {
                 std::string posS, lookS;
@@ -61,6 +62,7 @@ namespace IO
                 playerLookAt = parsePoint(lookS);
                 playerSet = true;
             }
+            /* Material definition */
             else if (type == 'M')
             {
                 std::string type, name;
@@ -85,6 +87,7 @@ namespace IO
                     std::runtime_error("Unsupported material type: " + type);
                 }
             }
+            /* Sector definition */
             else if (type == 'S')
             {
                 std::string id, floorHeight, ceilingHeight, floorMat,
@@ -109,13 +112,14 @@ namespace IO
                     floorH, ceilingH, materials[floorMat],
                     materials[ceilingMat]);
             }
+            /* Wall definition */
             else if (type == 'W')
             {
                 std::string startS, endS, mat;
                 iss >> startS >> endS >> mat;
 
                 mat = parseQuoted(mat);
-                if (materials.find(mat) == materials.end())
+                if (!mat.empty() && materials.find(mat) == materials.end())
                     throw std::runtime_error("Undefined material: " + mat);
 
                 std::string frontS, backS;
@@ -127,18 +131,50 @@ namespace IO
                 if (back != -1 && sectors.find(back) == sectors.end())
                     throw std::runtime_error("Undefined sector ID: " + backS);
 
+                std::string upperMatS, lowerMatS;
+                iss >> upperMatS >> lowerMatS;
+                upperMatS = parseQuoted(upperMatS);
+                lowerMatS = parseQuoted(lowerMatS);
+                if (!upperMatS.empty()
+                    && materials.find(upperMatS) == materials.end())
+                    throw std::runtime_error("Undefined material: "
+                                             + upperMatS);
+                if (!lowerMatS.empty()
+                    && materials.find(lowerMatS) == materials.end())
+                    throw std::runtime_error("Undefined material: "
+                                             + lowerMatS);
+
+                Wall *wall = nullptr;
+
+                /* Plain wall*/
                 if (back == -1)
                 {
-                    walls.push_back(std::make_unique<Wall>(
+                    if (mat.empty())
+                        throw std::runtime_error(
+                            "One-sided walls must have a material");
+
+                    walls.push_back(Wall::createPlain(
                         parsePoint(startS), parsePoint(endS),
-                        sectors[front].get(), nullptr, materials[mat]));
+                        sectors[front].get(), materials[mat]));
+
+                    wall = walls.back().get();
+                    sectors[front]->addWall(wall);
                 }
+                /* Portal */
                 else
                 {
-                    walls.push_back(std::make_unique<Wall>(
+                    if (upperMatS.empty() || lowerMatS.empty())
+                        throw std::runtime_error(
+                            "Portal walls must have upper and lower materials");
+
+                    walls.push_back(Wall::createPortal(
                         parsePoint(startS), parsePoint(endS),
                         sectors[front].get(), sectors[back].get(),
-                        materials[mat]));
+                        materials[upperMatS], materials[lowerMatS]));
+
+                    wall = walls.back().get();
+                    sectors[front]->addWall(wall);
+                    sectors[back]->addWall(wall);
                 }
             }
         }
@@ -146,6 +182,15 @@ namespace IO
         if (!playerSet)
             throw std::runtime_error(
                 "Scene file missing player definition (P)");
+        if (materials.empty())
+            throw std::runtime_error(
+                "Scene file must define at least one material");
+        if (sectors.empty())
+            throw std::runtime_error(
+                "Scene file must define at least one sector");
+        if (sectors.find(0) == sectors.end())
+            throw std::runtime_error(
+                "Scene file must define sector with ID 0 as starting sector");
     }
 
     Player MapFile::getPlayer() const

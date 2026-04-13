@@ -33,6 +33,6 @@ namespace Engine
 
     private:
         /* Hitbox size */
-        static constexpr float hitboxSize = 0.1f;
+        static constexpr float hitboxSize = 0.25f;
     };
 } // namespace Engine

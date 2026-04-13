@@ -16,7 +16,9 @@ namespace Game
         , walls(mapFile.getWalls())
         , sectors(mapFile.getSectors())
         , currentSector(mapFile.getStartingSector())
-    {}
+    {
+        player.setCurrentSector(currentSector);
+    }
 
     const Player &Scene::getPlayer() const
     {

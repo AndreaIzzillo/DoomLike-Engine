@@ -7,6 +7,15 @@
 
 namespace Game
 {
+    /**
+     * @brief A sector in the game world, representing a 3D space with a floor
+     * and ceiling.
+     *
+     * A sector is defined by its floor and ceiling heights, materials, and the
+     * walls that enclose it. It serves as a container for walls and provides
+     * context for rendering and collision detection. Sectors can be connected
+     * by portal walls, allowing the player to see and
+     */
     class Sector
     {
     public:
@@ -16,10 +25,10 @@ namespace Game
         ~Sector() = default;
 
         /* Getters */
-        float getFloorHeight();
-        float getCeilingHeight();
-        std::shared_ptr<IMaterial> getFloorMaterial();
-        std::shared_ptr<IMaterial> getCeilingMaterial();
+        float getFloorHeight() const;
+        float getCeilingHeight() const;
+        std::shared_ptr<IMaterial> getFloorMaterial() const;
+        std::shared_ptr<IMaterial> getCeilingMaterial() const;
         const std::vector<Wall *> &getWalls() const;
 
         void addWall(Wall *wall);
