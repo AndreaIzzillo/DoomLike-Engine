@@ -15,6 +15,13 @@ namespace Game
                std::shared_ptr<IMaterial> ceilingMaterial);
         ~Sector() = default;
 
+        /* Getters */
+        float getFloorHeight();
+        float getCeilingHeight();
+        std::shared_ptr<IMaterial> getFloorMaterial();
+        std::shared_ptr<IMaterial> getCeilingMaterial();
+        const std::vector<Wall *> &getWalls() const;
+
         void addWall(Wall *wall);
 
     private:
