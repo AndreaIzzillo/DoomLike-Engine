@@ -46,7 +46,7 @@ namespace Game
 
         std::shared_ptr<IMaterial> floorMaterial;
         std::shared_ptr<IMaterial> ceilingMaterial;
-        
+
         TextureTransform floorTextureTransform;
         TextureTransform ceilingTextureTransform;
     };

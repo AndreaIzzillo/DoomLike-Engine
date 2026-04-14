@@ -18,11 +18,11 @@
 
 #define EPS 1e-5f
 
->>>>>>> Stashed changes
+    >>>>>>> Stashed changes
 #define T_MIN 0.f
 #define T_MAX std::numeric_limits<float>::infinity()
 
-namespace Engine
+    namespace Engine
 {
     Renderer::Renderer()
         : image(Game::Settings::get().windowWidth,
@@ -139,8 +139,9 @@ namespace Engine
                     /* Wall rendering */
                     int wallTop = std::clamp(yTop, top, bottom);
                     int wallBottom = std::clamp(yBottom, top, bottom);
-                    drawWallVertical(yTop, yBottom, wallTop, wallBottom, x, record,
-                                     record.material, record.textureTransform);
+                    drawWallVertical(yTop, yBottom, wallTop, wallBottom, x,
+                                     record, record.material,
+                                     record.textureTransform);
 
                     /* Keep the floor */
                     int floorTop = std::clamp(yBottom, top, bottom);
@@ -295,11 +296,10 @@ namespace Engine
         return static_cast<int>(p);
     }
 
-    void
-    Renderer::drawWallVertical(int yTop, int yBottom, int top, int bottom,
-                               int x, const Game::HitRecord &record,
-                               const Game::IMaterial *material,
-                               const Game::TextureTransform &textureTransform)
+    void Renderer::drawWallVertical(
+        int yTop, int yBottom, int top, int bottom, int x,
+        const Game::HitRecord &record, const Game::IMaterial *material,
+        const Game::TextureTransform &textureTransform)
     {
         /* Texture mapping */
         if (material == nullptr)
