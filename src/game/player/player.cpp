@@ -85,7 +85,6 @@ namespace Game
         }
     }
 
-
     Math::Vector2 Player::computeVelocity(Engine::InputState inputState,
                                           float dt)
     {

@@ -39,8 +39,7 @@ namespace Engine
         // Pass 1: gather blocking normals and detect passable portal.
         for (const auto &wall : walls)
         {
-            Game::HitRecord hit =
-                wall->hit(intentRay, FLT_EPSILON, norm);
+            Game::HitRecord hit = wall->hit(intentRay, FLT_EPSILON, norm);
             if (!hit.isHit)
                 continue;
 
@@ -59,17 +58,17 @@ namespace Engine
                     const auto *targetSector =
                         (hit.frontSector == currentSector) ? hit.backSector
                                                            : hit.frontSector;
-                    const bool enoughHeadroom = (targetSector->getCeilingHeight()
-                            - targetSector->getFloorHeight())
-                            >= requiredHeight;
+                    const bool enoughHeadroom =
+                        (targetSector->getCeilingHeight()
+                         - targetSector->getFloorHeight())
+                        >= requiredHeight;
                     const bool canStep = wall->stepHeight()
                         <= player.getJumpHeight() + FLT_EPSILON;
 
                     if (enoughHeadroom && canStep)
                     {
                         if (std::find(passablePortals.begin(),
-                                      passablePortals.end(),
-                                      wall)
+                                      passablePortals.end(), wall)
                             == passablePortals.end())
                             passablePortals.push_back(wall);
 
@@ -107,9 +106,10 @@ namespace Engine
             for (const auto *wall : walls)
             {
                 // not optimal but this should be enough to have good collision
-                if (wall->isPortal() || std::find(passablePortals.begin(), passablePortals.end(),
-                              wall)
-                    != passablePortals.end())
+                if (wall->isPortal()
+                    || std::find(passablePortals.begin(), passablePortals.end(),
+                                 wall)
+                        != passablePortals.end())
                     continue;
 
                 const Math::Point2 closest = wall->closestPoint(correctedPos);

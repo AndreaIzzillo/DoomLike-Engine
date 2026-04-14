@@ -78,7 +78,6 @@ namespace Game
         /* Scene fixed update routine: update player and walls based on the
          * resolved intent */
         player.fixedUpdate(resolvedIntent / dt, dt);
-
     }
 
     void Scene::addWall(std::unique_ptr<Wall> wall)
