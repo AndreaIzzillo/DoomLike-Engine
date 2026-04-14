@@ -20,10 +20,9 @@ namespace Game
 
         virtual MaterialDescriptor getDescriptor() const override;
 
-        virtual MaterialSample getSample(
-            const HitRecord &record,
-            const Math::Point2 &texCoord = Math::Point2(0.0f,
-                                                        0.0f)) const override;
+        virtual MaterialSample
+        getSample(const HitRecord &record,
+                  const Math::Point2 &texCoord = Math::Point2(0.0f, 0.0f)) const override;
 
     private:
         Utils::Image texture;

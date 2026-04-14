@@ -26,11 +26,8 @@ namespace Engine
     public:
         CollisionManager();
 
-        CollisionInfo computeCollision(Math::Vector2 intent,
-                                       const Game::Player &player,
-                                       const Game::Scene &scene,
-                                       float dt) const;
-        bool pushOut(Game::Player &player, const Game::Scene &scene) const;
+        CollisionInfo computeCollision(Math::Vector2 intent, const Game::Player &player,
+                                       const Game::Scene &scene) const;
 
     private:
         /* Hitbox size */

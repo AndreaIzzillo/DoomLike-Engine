@@ -6,10 +6,8 @@
 
 namespace Engine
 {
-    std::vector<Game::HitRecord> RayCaster::castRay(const Math::Ray &ray,
-                                                    const Game::Scene &scene,
-                                                    float tMin,
-                                                    float tMax) const
+    std::vector<Game::HitRecord> RayCaster::castRay(const Math::Ray &ray, const Game::Scene &scene,
+                                                    float tMin, float tMax) const
     {
         std::vector<Game::HitRecord> hitRecords;
 
@@ -35,9 +33,8 @@ namespace Engine
             if (record.isHit)
             {
                 hitRecords.push_back(record);
-                currentSector = currentSector == record.frontSector
-                    ? record.backSector
-                    : record.frontSector;
+                currentSector =
+                    currentSector == record.frontSector ? record.backSector : record.frontSector;
                 from = record.t + 1e-5f;
             }
             else

@@ -16,8 +16,8 @@ namespace Game
     class Camera
     {
     public:
-        Camera(const Math::Point2 &position, const Math::Point2 &lookAt,
-               float fov, float focalDistance, int resolution);
+        Camera(const Math::Point2 &position, const Math::Point2 &lookAt, float fov,
+               float focalDistance, int resolution);
         ~Camera() = default;
 
         /* Getters */

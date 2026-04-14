@@ -12,21 +12,17 @@
 #include "math/vector2.hpp"
 #include "utils/image.hpp"
 
-<<<<<<< Updated upstream
-=======
 #define FLT(x) static_cast<float>(x)
 
 #define EPS 1e-5f
 
-    >>>>>>> Stashed changes
 #define T_MIN 0.f
 #define T_MAX std::numeric_limits<float>::infinity()
 
-    namespace Engine
+namespace Engine
 {
     Renderer::Renderer()
-        : image(Game::Settings::get().windowWidth,
-                Game::Settings::get().windowHeight)
+        : image(Game::Settings::get().windowWidth, Game::Settings::get().windowHeight)
         , sprite(texture)
     {
         const auto windowWidth = Game::Settings::get().windowWidth;
@@ -34,9 +30,8 @@
 
         sf::ContextSettings settings;
 
-        window = sf::RenderWindow(
-            sf::VideoMode(sf::Vector2u(windowWidth, windowHeight)),
-            "Projet ISIM", sf::Style::Default, sf::State::Windowed, settings);
+        window = sf::RenderWindow(sf::VideoMode(sf::Vector2u(windowWidth, windowHeight)),
+                                  "Projet ISIM", sf::Style::Default, sf::State::Windowed, settings);
 
         view.setSize(sf::Vector2f(windowWidth, windowHeight));
         view.setCenter({ FLT(windowWidth) / 2.f, FLT(windowHeight) / 2.f });
@@ -87,7 +82,7 @@
         {
             /* Raycasting */
             auto ray = player.getCamera().getRay(x);
-            auto records = rayCaster.castRay(ray, scene, T_MIN, T_MAX);
+            auto records = rayCaster.castRay(ray, scene, 0.f, T_MAX);
 
             /* Vertical clipping variables */
             int top = 0;
@@ -100,31 +95,22 @@
                     continue;
 
                 auto frontSector = currentSector;
-                auto backSector = record.frontSector == frontSector
-                    ? record.backSector
-                    : record.frontSector;
+                auto backSector =
+                    record.frontSector == frontSector ? record.backSector : record.frontSector;
 
-<<<<<<< Updated upstream
                 /* Naming variables */
                 /* Both vectors already normalized */
                 auto rayDirection = ray.direction;
                 auto forward = player.getCamera().getForward();
 
                 /* Corrected distance to avoid fish-eye effect */
-                float distance = correctDist(record.t, rayDirection, forward);
-                distance = std::max(distance, 1e-5f);
-=======
                 auto rayDir = ray.direction;
-                auto forward = cam.getForward();
                 float distance = record.t * (rayDir * forward);
->>>>>>> Stashed changes
 
                 /* Apply the perspective projection formula */
-                int yTop = projectScreen(horizon, cameraHeight,
-                                         frontSector->getCeilingHeight(), scale,
-                                         distance);
-                int yBottom = projectScreen(horizon, cameraHeight,
-                                            frontSector->getFloorHeight(),
+                int yTop = projectScreen(horizon, cameraHeight, frontSector->getCeilingHeight(),
+                                         scale, distance);
+                int yBottom = projectScreen(horizon, cameraHeight, frontSector->getFloorHeight(),
                                             scale, distance);
 
                 /* Plain Wall */
@@ -132,15 +118,13 @@
                 {
                     /* Keep the ceiling */
                     int ceilingBottom = std::clamp(yTop, top, bottom);
-                    planeSegments[x].push_back({ top, ceilingBottom, x,
-                                                 PlaneType::Ceiling,
-                                                 frontSector });
+                    planeSegments[x].push_back(
+                        { top, ceilingBottom, x, PlaneType::Ceiling, frontSector });
 
                     /* Wall rendering */
                     int wallTop = std::clamp(yTop, top, bottom);
                     int wallBottom = std::clamp(yBottom, top, bottom);
-                    drawWallVertical(yTop, yBottom, wallTop, wallBottom, x,
-                                     record, record.material,
+                    drawWallVertical(yTop, yBottom, wallTop, wallBottom, x, record, record.material,
                                      record.textureTransform);
 
                     /* Keep the floor */
@@ -155,37 +139,30 @@
                 {
                     /* Calculate projected coordinates of the back sector */
                     int nextTop = projectScreen(horizon, cameraHeight,
-                                                backSector->getCeilingHeight(),
-                                                scale, distance);
+                                                backSector->getCeilingHeight(), scale, distance);
                     int nextBottom = projectScreen(horizon, cameraHeight,
-                                                   backSector->getFloorHeight(),
-                                                   scale, distance);
+                                                   backSector->getFloorHeight(), scale, distance);
 
                     /* Calculate the opening between the two sectors */
                     int openingTop = std::max({ top, yTop, nextTop });
-                    int openingBottom =
-                        std::min({ bottom, yBottom, nextBottom });
+                    int openingBottom = std::min({ bottom, yBottom, nextBottom });
 
                     /* Keep the ceiling */
                     int ceilingBottom = std::clamp(yTop, top, bottom);
-                    planeSegments[x].push_back({ top, ceilingBottom, x,
-                                                 PlaneType::Ceiling,
-                                                 frontSector });
+                    planeSegments[x].push_back(
+                        { top, ceilingBottom, x, PlaneType::Ceiling, frontSector });
 
                     /* Upper wall rendering */
                     int upperWallTop = std::max(top, yTop);
                     int upperWallBottom = std::min(bottom, nextTop);
-                    drawWallVertical(
-                        yTop, nextTop, upperWallTop, upperWallBottom, x, record,
-                        record.upperMaterial, record.upperTextureTransform);
+                    drawWallVertical(yTop, nextTop, upperWallTop, upperWallBottom, x, record,
+                                     record.upperMaterial, record.upperTextureTransform);
 
                     /* Lower wall rendering */
                     int lowerWallTop = std::max(top, nextBottom);
                     int lowerWallBottom = std::min(bottom, yBottom);
-                    drawWallVertical(nextBottom, yBottom, lowerWallTop,
-                                     lowerWallBottom, x, record,
-                                     record.lowerMaterial,
-                                     record.lowerTextureTransform);
+                    drawWallVertical(nextBottom, yBottom, lowerWallTop, lowerWallBottom, x, record,
+                                     record.lowerMaterial, record.lowerTextureTransform);
 
                     /* Keep the floor */
                     int floorTop = std::clamp(yBottom, top, bottom);
@@ -229,31 +206,24 @@
                     if (y - horizon == 0)
                         continue;
 
-                    float rowDistance =
-                        (cameraHeight - zPlane) * scale / FLT(y - horizon);
+                    float rowDistance = (cameraHeight - zPlane) * scale / FLT(y - horizon);
                     if (rowDistance <= 0.f)
                         continue;
 
                     float tRay = rowDistance / (rayDir * forward);
                     auto world = camPos + rayDir * tRay;
 
-                    float u =
-                        world.x * texTransform.scaleX + texTransform.offsetX;
+                    float u = world.x * texTransform.scaleX + texTransform.offsetX;
                     u -= std::floor(u);
-                    float v =
-                        world.y * texTransform.scaleY + texTransform.offsetY;
+                    float v = world.y * texTransform.scaleY + texTransform.offsetY;
                     v -= std::floor(v);
 
-                    Math::Point2 texCoord(u * texDesc.textureWidth,
-                                          v * texDesc.textureHeight);
+                    Math::Point2 texCoord(u * texDesc.textureWidth, v * texDesc.textureHeight);
 
-                    texCoord.x =
-                        std::clamp(texCoord.x, 0.f, texDesc.textureWidth - 1.f);
-                    texCoord.y = std::clamp(texCoord.y, 0.f,
-                                            texDesc.textureHeight - 1.f);
+                    texCoord.x = std::clamp(texCoord.x, 0.f, texDesc.textureWidth - 1.f);
+                    texCoord.y = std::clamp(texCoord.y, 0.f, texDesc.textureHeight - 1.f);
 
-                    image(x, y) =
-                        material->getSample(Game::HitRecord(), texCoord).color;
+                    image(x, y) = material->getSample(Game::HitRecord(), texCoord).color;
                 }
             }
         }
@@ -265,20 +235,17 @@
             {
                 const Utils::Color color = image(x, y).clamp();
 
-                const std::size_t index =
-                    (static_cast<std::size_t>(y) * screenWidth + x) * 4;
+                const std::size_t index = (static_cast<std::size_t>(y) * screenWidth + x) * 4;
 
                 pixelBuffer[index] = static_cast<std::uint8_t>(color.r * 255.f);
-                pixelBuffer[index + 1] =
-                    static_cast<std::uint8_t>(color.g * 255.f);
-                pixelBuffer[index + 2] =
-                    static_cast<std::uint8_t>(color.b * 255.f);
+                pixelBuffer[index + 1] = static_cast<std::uint8_t>(color.g * 255.f);
+                pixelBuffer[index + 2] = static_cast<std::uint8_t>(color.b * 255.f);
                 pixelBuffer[index + 3] = 255;
             }
         }
 
         texture.update(pixelBuffer.data());
-        image.clear();
+        // image.clear({ 1.f, 0.f, 0.f });
 
         window.draw(sprite);
         window.display();
@@ -289,17 +256,16 @@
         return 2.f * std::atan(std::tan(horizontalFov / 2.f) * aspectRatio);
     }
 
-    int Renderer::projectScreen(float horizon, float cameraHeight, float z,
-                                float scale, float distance) const
+    int Renderer::projectScreen(float horizon, float cameraHeight, float z, float scale,
+                                float distance) const
     {
         float p = horizon - (z - cameraHeight) * scale / distance;
         return static_cast<int>(p);
     }
 
-    void Renderer::drawWallVertical(
-        int yTop, int yBottom, int top, int bottom, int x,
-        const Game::HitRecord &record, const Game::IMaterial *material,
-        const Game::TextureTransform &textureTransform)
+    void Renderer::drawWallVertical(int yTop, int yBottom, int top, int bottom, int x,
+                                    const Game::HitRecord &record, const Game::IMaterial *material,
+                                    const Game::TextureTransform &textureTransform)
     {
         /* Texture mapping */
         if (material == nullptr)
@@ -318,8 +284,7 @@
         if (lineHeight <= 0)
             return;
 
-        float step = (texProperties.textureHeight * textureTransform.scaleY)
-            / lineHeight;
+        float step = (texProperties.textureHeight * textureTransform.scaleY) / lineHeight;
         float v = (top - yTop) * step;
         v += textureTransform.offsetY * texProperties.textureHeight;
 

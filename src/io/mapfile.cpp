@@ -34,9 +34,7 @@ namespace IO
 
         auto parseQuoted = [](const std::string &s) -> std::string {
             size_t a = s.find('"'), b = s.rfind('"');
-            return (a != std::string::npos && b != a)
-                ? s.substr(a + 1, b - a - 1)
-                : s;
+            return (a != std::string::npos && b != a) ? s.substr(a + 1, b - a - 1) : s;
         };
 
         std::string line;
@@ -72,8 +70,7 @@ namespace IO
                 {
                     std::string colorS;
                     iss >> colorS;
-                    materials[name] =
-                        std::make_shared<ColorMaterial>(parseColor(colorS));
+                    materials[name] = std::make_shared<ColorMaterial>(parseColor(colorS));
                 }
                 else if (type == "Texture")
                 {
@@ -90,10 +87,8 @@ namespace IO
             /* Sector definition */
             else if (type == 'S')
             {
-                std::string id, floorHeight, ceilingHeight, floorMat,
-                    ceilingMat;
-                iss >> id >> floorHeight >> ceilingHeight >> floorMat
-                    >> ceilingMat;
+                std::string id, floorHeight, ceilingHeight, floorMat, ceilingMat;
+                iss >> id >> floorHeight >> ceilingHeight >> floorMat >> ceilingMat;
                 int sectorId = std::stoi(id);
                 float floorH = std::stof(floorHeight);
                 float ceilingH = std::stof(ceilingHeight);
@@ -105,12 +100,10 @@ namespace IO
                 if (materials.find(floorMat) == materials.end())
                     throw std::runtime_error("Undefined material: " + floorMat);
                 if (materials.find(ceilingMat) == materials.end())
-                    throw std::runtime_error("Undefined material: "
-                                             + ceilingMat);
+                    throw std::runtime_error("Undefined material: " + ceilingMat);
 
-                sectors[sectorId] = std::make_unique<Sector>(
-                    floorH, ceilingH, materials[floorMat],
-                    materials[ceilingMat]);
+                sectors[sectorId] = std::make_unique<Sector>(floorH, ceilingH, materials[floorMat],
+                                                             materials[ceilingMat]);
             }
             /* Wall definition */
             else if (type == 'W')
@@ -135,14 +128,10 @@ namespace IO
                 iss >> upperMatS >> lowerMatS;
                 upperMatS = parseQuoted(upperMatS);
                 lowerMatS = parseQuoted(lowerMatS);
-                if (!upperMatS.empty()
-                    && materials.find(upperMatS) == materials.end())
-                    throw std::runtime_error("Undefined material: "
-                                             + upperMatS);
-                if (!lowerMatS.empty()
-                    && materials.find(lowerMatS) == materials.end())
-                    throw std::runtime_error("Undefined material: "
-                                             + lowerMatS);
+                if (!upperMatS.empty() && materials.find(upperMatS) == materials.end())
+                    throw std::runtime_error("Undefined material: " + upperMatS);
+                if (!lowerMatS.empty() && materials.find(lowerMatS) == materials.end())
+                    throw std::runtime_error("Undefined material: " + lowerMatS);
 
                 Wall *wall = nullptr;
 
@@ -150,12 +139,10 @@ namespace IO
                 if (back == -1)
                 {
                     if (mat.empty())
-                        throw std::runtime_error(
-                            "One-sided walls must have a material");
+                        throw std::runtime_error("One-sided walls must have a material");
 
-                    walls.push_back(Wall::createPlain(
-                        parsePoint(startS), parsePoint(endS),
-                        sectors[front].get(), materials[mat]));
+                    walls.push_back(Wall::createPlain(parsePoint(startS), parsePoint(endS),
+                                                      sectors[front].get(), materials[mat]));
 
                     wall = walls.back().get();
                     sectors[front]->addWall(wall);
@@ -167,10 +154,9 @@ namespace IO
                         throw std::runtime_error(
                             "Portal walls must have upper and lower materials");
 
-                    walls.push_back(Wall::createPortal(
-                        parsePoint(startS), parsePoint(endS),
-                        sectors[front].get(), sectors[back].get(),
-                        materials[upperMatS], materials[lowerMatS]));
+                    walls.push_back(Wall::createPortal(parsePoint(startS), parsePoint(endS),
+                                                       sectors[front].get(), sectors[back].get(),
+                                                       materials[upperMatS], materials[lowerMatS]));
 
                     wall = walls.back().get();
                     sectors[front]->addWall(wall);
@@ -180,17 +166,13 @@ namespace IO
         }
 
         if (!playerSet)
-            throw std::runtime_error(
-                "Scene file missing player definition (P)");
+            throw std::runtime_error("Scene file missing player definition (P)");
         if (materials.empty())
-            throw std::runtime_error(
-                "Scene file must define at least one material");
+            throw std::runtime_error("Scene file must define at least one material");
         if (sectors.empty())
-            throw std::runtime_error(
-                "Scene file must define at least one sector");
+            throw std::runtime_error("Scene file must define at least one sector");
         if (sectors.find(0) == sectors.end())
-            throw std::runtime_error(
-                "Scene file must define sector with ID 0 as starting sector");
+            throw std::runtime_error("Scene file must define sector with ID 0 as starting sector");
     }
 
     Player MapFile::getPlayer() const

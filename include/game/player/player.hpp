@@ -59,11 +59,7 @@ namespace Game
         /* Spatial properties */
         static constexpr float maxSpeed = 5.f;
         static constexpr float accelerationRate = 30.f;
-<<<<<<< Updated upstream
-        static constexpr float friction = 10.f;
-=======
         static constexpr float friction = 8.f;
->>>>>>> Stashed changes
 
         /* Angular properties */
         static constexpr float rotationSpeed = 2.f;

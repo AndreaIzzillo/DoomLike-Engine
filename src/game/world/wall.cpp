@@ -8,11 +8,9 @@
 
 namespace Game
 {
-    Wall::Wall(const Math::Point2 &start, const Math::Point2 &end,
-               Sector *frontSector, Sector *backSector,
-               std::shared_ptr<IMaterial> material,
-               std::shared_ptr<IMaterial> upperMaterial,
-               std::shared_ptr<IMaterial> lowerMaterial)
+    Wall::Wall(const Math::Point2 &start, const Math::Point2 &end, Sector *frontSector,
+               Sector *backSector, std::shared_ptr<IMaterial> material,
+               std::shared_ptr<IMaterial> upperMaterial, std::shared_ptr<IMaterial> lowerMaterial)
     {
         if (frontSector == nullptr)
             throw std::invalid_argument("Front sector cannot be null");
@@ -27,23 +25,20 @@ namespace Game
         this->end = end;
     }
 
-    std::unique_ptr<Wall> Wall::createPlain(const Math::Point2 &start,
-                                            const Math::Point2 &end,
+    std::unique_ptr<Wall> Wall::createPlain(const Math::Point2 &start, const Math::Point2 &end,
                                             Sector *frontSector,
                                             std::shared_ptr<IMaterial> material)
     {
-        return std::make_unique<Wall>(start, end, frontSector, nullptr,
-                                      material, nullptr, nullptr);
+        return std::make_unique<Wall>(start, end, frontSector, nullptr, material, nullptr, nullptr);
     }
 
-    std::unique_ptr<Wall>
-    Wall::createPortal(const Math::Point2 &start, const Math::Point2 &end,
-                       Sector *frontSector, Sector *backSector,
-                       std::shared_ptr<IMaterial> upperMaterial,
-                       std::shared_ptr<IMaterial> lowerMaterial)
+    std::unique_ptr<Wall> Wall::createPortal(const Math::Point2 &start, const Math::Point2 &end,
+                                             Sector *frontSector, Sector *backSector,
+                                             std::shared_ptr<IMaterial> upperMaterial,
+                                             std::shared_ptr<IMaterial> lowerMaterial)
     {
-        return std::make_unique<Wall>(start, end, frontSector, backSector,
-                                      nullptr, upperMaterial, lowerMaterial);
+        return std::make_unique<Wall>(start, end, frontSector, backSector, nullptr, upperMaterial,
+                                      lowerMaterial);
     }
 
     const Math::Point2 &Wall::getStart() const
@@ -56,35 +51,43 @@ namespace Game
         return end;
     }
 
+    void Wall::setTextureTransform(float scaleX, float offsetX, float scaleY, float offsetY)
+    {
+        textureTransform = { scaleX, offsetX, scaleY, offsetY };
+    }
+
+    void Wall::setUpperTextureTransform(float scaleX, float offsetX, float scaleY, float offsetY)
+    {
+        upperTextureTransform = { scaleX, offsetX, scaleY, offsetY };
+    }
+
+    void Wall::setLowerTextureTransform(float scaleX, float offsetX, float scaleY, float offsetY)
+    {
+        lowerTextureTransform = { scaleX, offsetX, scaleY, offsetY };
+    }
+
     bool Wall::isPortal() const
     {
         return backSector != nullptr;
     }
 
-    void Wall::setTextureTransform(float scaleX, float offsetX, float scaleY,
-                                   float offsetY)
+    bool Wall::canTraverse(float playerHeight, float jumpHeight, const Sector *from) const
     {
-        textureTransform = { scaleX, offsetX, scaleY, offsetY };
-    }
+        if (!isPortal())
+            return false;
 
-    void Wall::setUpperTextureTransform(float scaleX, float offsetX,
-                                        float scaleY, float offsetY)
-    {
-        upperTextureTransform = { scaleX, offsetX, scaleY, offsetY };
-    }
+        const Sector *to = (from == frontSector) ? backSector : frontSector;
+        float floorDiff = std::abs(to->getFloorHeight() - from->getFloorHeight());
+        float headroom = to->getCeilingHeight() - to->getFloorHeight();
 
-    void Wall::setLowerTextureTransform(float scaleX, float offsetX,
-                                        float scaleY, float offsetY)
-    {
-        lowerTextureTransform = { scaleX, offsetX, scaleY, offsetY };
+        return floorDiff <= jumpHeight && headroom >= playerHeight;
     }
 
     float Wall::stepHeight() const
     {
         if (!isPortal())
             return 0.f;
-        return std::abs(frontSector->getFloorHeight()
-                        - backSector->getFloorHeight());
+        return std::abs(frontSector->getFloorHeight() - backSector->getFloorHeight());
     }
 
     HitRecord Wall::hit(const Math::Ray &ray, float tMin, float tMax) const

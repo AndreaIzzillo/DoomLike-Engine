@@ -19,8 +19,7 @@ namespace Game
     class Sector
     {
     public:
-        Sector(float floorHeight, float ceilingHeight,
-               std::shared_ptr<IMaterial> floorMaterial,
+        Sector(float floorHeight, float ceilingHeight, std::shared_ptr<IMaterial> floorMaterial,
                std::shared_ptr<IMaterial> ceilingMaterial);
         ~Sector() = default;
 

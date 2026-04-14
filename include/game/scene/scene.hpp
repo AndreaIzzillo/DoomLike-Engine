@@ -54,8 +54,7 @@ namespace Game
         const Sector *getCurrentSector() const;
 
         void update(float dt);
-        void fixedUpdate(const Engine::CollisionManager &collisionManager,
-                         float dt);
+        void fixedUpdate(const Engine::CollisionManager &collisionManager, float dt);
 
         /* World management */
         void addSector(std::unique_ptr<Sector> sector);

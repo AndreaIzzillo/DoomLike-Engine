@@ -57,15 +57,14 @@ namespace Game
         player.update(dt);
     }
 
-    void Scene::fixedUpdate(const Engine::CollisionManager &collisionManager,
-                            float dt)
+    void Scene::fixedUpdate(const Engine::CollisionManager &collisionManager, float dt)
     {
         /* The scene fixed update is responsible for resolving the player's
          * movement intent with collision detection and updating the player and
          * walls accordingly */
         Math::Vector2 velocity = player.computeVelocity(inputState, dt);
         auto [resolvedIntent, newSector] =
-            collisionManager.computeCollision(velocity * dt, player, *this, dt);
+            collisionManager.computeCollision(velocity * dt, player, *this);
 
         if (newSector)
         {

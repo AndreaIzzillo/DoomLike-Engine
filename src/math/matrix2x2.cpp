@@ -113,10 +113,8 @@ namespace Math
         out << std::fixed << std::setprecision(2);
 
         out << "┌             ┐\n";
-        out << "│ " << std::setw(8) << m.a << " " << std::setw(8) << m.b
-            << " │\n";
-        out << "│ " << std::setw(8) << m.c << " " << std::setw(8) << m.d
-            << " │\n";
+        out << "│ " << std::setw(8) << m.a << " " << std::setw(8) << m.b << " │\n";
+        out << "│ " << std::setw(8) << m.c << " " << std::setw(8) << m.d << " │\n";
         out << "└             ┘";
 
         return out;

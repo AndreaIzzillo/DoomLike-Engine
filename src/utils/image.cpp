@@ -46,8 +46,7 @@ namespace Utils
 
     bool Color::operator==(const Color &v) const
     {
-        return std::abs(r - v.r) < FLT_EPSILON
-            && std::abs(b - v.b) < FLT_EPSILON
+        return std::abs(r - v.r) < FLT_EPSILON && std::abs(b - v.b) < FLT_EPSILON
             && std::abs(g - v.g) < FLT_EPSILON;
     }
 
@@ -92,8 +91,7 @@ namespace Utils
 
     std::ostream &operator<<(std::ostream &out, Color &color)
     {
-        return out << "(" << color.r << ", " << color.g << ", " << color.b
-                   << ")";
+        return out << "(" << color.r << ", " << color.g << ", " << color.b << ")";
     }
 
     Image::Image(int width, int height)

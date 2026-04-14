@@ -69,12 +69,11 @@ namespace Engine
     private:
         float getVerticalFov(float horizontalFov, float aspectRatio) const;
 
-        int projectScreen(float horizon, float cameraHeight, float z,
-                          float scale, float distance) const;
+        int projectScreen(float horizon, float cameraHeight, float z, float scale,
+                          float distance) const;
 
         void drawWallVertical(int yTop, int yBottom, int top, int bottom, int x,
-                              const Game::HitRecord &record,
-                              const Game::IMaterial *material,
+                              const Game::HitRecord &record, const Game::IMaterial *material,
                               const Game::TextureTransform &textureTransform);
     };
 } // namespace Engine

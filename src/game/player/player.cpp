@@ -8,8 +8,7 @@
 namespace Game
 {
     Player::Player(const Math::Point2 &position, const Math::Point2 &lookAt)
-        : camera(position, lookAt, Settings::get().cameraFov,
-                 Settings::get().cameraFocalDistance,
+        : camera(position, lookAt, Settings::get().cameraFov, Settings::get().cameraFocalDistance,
                  Settings::get().windowWidth)
         , velocity(Math::Vector2(0.0f, 0.0f))
         , acceleration(Math::Vector2(0.0f, 0.0f))
@@ -73,20 +72,17 @@ namespace Game
         {
             cameraShakingTime += speed * cameraShakingFrequency * dt;
             const float raw = std::sin(cameraShakingTime);
-            const float step =
-                -std::pow(std::abs(raw), 0.6f) * std::copysign(1.0f, raw);
+            const float step = -std::pow(std::abs(raw), 0.6f) * std::copysign(1.0f, raw);
             camera.setOffsetHeight(step * speed * cameraShakingAmplitude);
         }
         else
         {
             cameraShakingTime = 0.0f;
-            camera.setOffsetHeight(camera.getOffsetHeight()
-                                   * std::pow(0.99f, dt));
+            camera.setOffsetHeight(camera.getOffsetHeight() * std::pow(0.99f, dt));
         }
     }
 
-    Math::Vector2 Player::computeVelocity(Engine::InputState inputState,
-                                          float dt)
+    Math::Vector2 Player::computeVelocity(Engine::InputState inputState, float dt)
     {
         Math::Vector2 intent = inputState.inputDirection;
         Math::Vector2 velocity_tmp = velocity;

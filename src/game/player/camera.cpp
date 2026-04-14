@@ -6,8 +6,8 @@
 
 namespace Game
 {
-    Camera::Camera(const Math::Point2 &position, const Math::Point2 &lookAt,
-                   float fov, float focalDistance, int resolution)
+    Camera::Camera(const Math::Point2 &position, const Math::Point2 &lookAt, float fov,
+                   float focalDistance, int resolution)
         : position(position)
         , cameraHeight(0.5f)
         , forward((lookAt - position).normalized())
@@ -17,8 +17,7 @@ namespace Game
     {
         right = Math::Vector2(forward.y, -forward.x).normalized();
         viewportWidth = 2.f * focalDistance * std::tan(fov / 2.f);
-        viewportPosition =
-            position + forward * focalDistance - right * (viewportWidth / 2.f);
+        viewportPosition = position + forward * focalDistance - right * (viewportWidth / 2.f);
     };
 
     const Math::Point2 &Camera::getPosition() const
@@ -102,8 +101,7 @@ namespace Game
         forward = rotation_matrix * forward;
         right = rotation_matrix * right;
 
-        viewportPosition =
-            position + forward * focalDistance - right * (viewportWidth / 2.f);
+        viewportPosition = position + forward * focalDistance - right * (viewportWidth / 2.f);
     }
 
     Math::Ray Camera::getRay(int x) const

@@ -13,8 +13,7 @@ namespace Engine
         if (this->scene == nullptr)
             throw std::invalid_argument("Scene cannot be null");
         if (this->scene->getCurrentSector() == nullptr)
-            throw std::invalid_argument(
-                "Scene must have a valid current sector");
+            throw std::invalid_argument("Scene must have a valid current sector");
     }
 
     void Runner::addWall(std::unique_ptr<::Game::Wall> wall)
@@ -24,8 +23,8 @@ namespace Engine
 
     void Runner::run()
     {
-        const sf::Time fixedDt = sf::seconds(
-            1.0f / static_cast<float>(::Game::Settings::get().targetFramerate));
+        const sf::Time fixedDt =
+            sf::seconds(1.0f / static_cast<float>(::Game::Settings::get().targetFramerate));
 
         while (renderer.getWindow().isOpen())
         {
@@ -52,8 +51,8 @@ namespace Engine
 
             /* Display the current FPS */
             const auto fps = 1.0f / dt.asSeconds();
-            renderer.getWindow().setTitle(
-                "Projet ISIM - FPS: " + std::to_string(static_cast<int>(fps)));
+            renderer.getWindow().setTitle("Projet ISIM - FPS: "
+                                          + std::to_string(static_cast<int>(fps)));
         }
     }
 

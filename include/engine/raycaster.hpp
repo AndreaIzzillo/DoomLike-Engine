@@ -20,8 +20,7 @@ namespace Engine
     public:
         RayCaster() = default;
 
-        std::vector<Game::HitRecord> castRay(const Math::Ray &ray,
-                                             const Game::Scene &scene,
+        std::vector<Game::HitRecord> castRay(const Math::Ray &ray, const Game::Scene &scene,
                                              float tMin, float tMax) const;
     };
 } // namespace Engine

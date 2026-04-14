@@ -68,33 +68,29 @@ namespace Game
     {
     public:
         Wall() = default;
-        Wall(const Math::Point2 &start, const Math::Point2 &end,
-             Sector *frontSector, Sector *backSector = nullptr,
-             std::shared_ptr<IMaterial> material = nullptr,
+        Wall(const Math::Point2 &start, const Math::Point2 &end, Sector *frontSector,
+             Sector *backSector = nullptr, std::shared_ptr<IMaterial> material = nullptr,
              std::shared_ptr<IMaterial> upperMaterial = nullptr,
              std::shared_ptr<IMaterial> lowerMaterial = nullptr);
         ~Wall() = default;
 
         /* Builders to make our lives easier */
-        static std::unique_ptr<Wall>
-        createPlain(const Math::Point2 &start, const Math::Point2 &end,
-                    Sector *frontSector, std::shared_ptr<IMaterial> material);
-        static std::unique_ptr<Wall>
-        createPortal(const Math::Point2 &start, const Math::Point2 &end,
-                     Sector *frontSector, Sector *backSector,
-                     std::shared_ptr<IMaterial> upperMaterial,
-                     std::shared_ptr<IMaterial> lowerMaterial);
+        static std::unique_ptr<Wall> createPlain(const Math::Point2 &start, const Math::Point2 &end,
+                                                 Sector *frontSector,
+                                                 std::shared_ptr<IMaterial> material);
+        static std::unique_ptr<Wall> createPortal(const Math::Point2 &start,
+                                                  const Math::Point2 &end, Sector *frontSector,
+                                                  Sector *backSector,
+                                                  std::shared_ptr<IMaterial> upperMaterial,
+                                                  std::shared_ptr<IMaterial> lowerMaterial);
 
         /* Getters */
         const Math::Point2 &getStart() const;
         const Math::Point2 &getEnd() const;
 
-        void setTextureTransform(float scaleX, float offsetX, float scaleY,
-                                 float offsetY);
-        void setUpperTextureTransform(float scaleX, float offsetX, float scaleY,
-                                      float offsetY);
-        void setLowerTextureTransform(float scaleX, float offsetX, float scaleY,
-                                      float offsetY);
+        void setTextureTransform(float scaleX, float offsetX, float scaleY, float offsetY);
+        void setUpperTextureTransform(float scaleX, float offsetX, float scaleY, float offsetY);
+        void setLowerTextureTransform(float scaleX, float offsetX, float scaleY, float offsetY);
 
         /* Ray-wall intersection */
         HitRecord hit(const Math::Ray &ray, float tMin, float tMax) const;
@@ -102,8 +98,9 @@ namespace Game
         /* Closest point on the wall segment to a given point (for push-out) */
         Math::Point2 closestPoint(const Math::Point2 &p) const;
 
-        /* return if a wall is a Portal*/
+        /* Portal related methods */
         bool isPortal() const;
+        bool canTraverse(float playerHeight, float jumpHeight, const Sector *from) const;
 
         /* return the height of the step if its a Portal */
         float stepHeight() const;

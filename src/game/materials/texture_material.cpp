@@ -15,9 +15,8 @@ namespace Game
         return descriptor;
     }
 
-    MaterialSample
-    TextureMaterial::getSample(const HitRecord &record,
-                               const Math::Point2 &texCoord) const
+    MaterialSample TextureMaterial::getSample(const HitRecord &record,
+                                              const Math::Point2 &texCoord) const
     {
         MaterialSample properties;
         properties.color = texture(texCoord.x, texCoord.y);
