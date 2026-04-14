@@ -36,6 +36,26 @@ namespace Game
         return walls;
     }
 
+    TextureTransform Sector::getFloorTextureTransform() const
+    {
+        return floorTextureTransform;
+    }
+
+    TextureTransform Sector::getCeilingTextureTransform() const
+    {
+        return ceilingTextureTransform;
+    }
+
+    void Sector::setFloorTextureTransform(const TextureTransform &transform)
+    {
+        floorTextureTransform = transform;
+    }
+
+    void Sector::setCeilingTextureTransform(const TextureTransform &transform)
+    {
+        ceilingTextureTransform = transform;
+    }
+
     void Sector::addWall(Wall *wall)
     {
         walls.push_back(wall);

@@ -7,13 +7,20 @@
 #include <stdexcept>
 
 #include "game/settings.hpp"
+#include "game/world/wall.hpp"
 #include "math/point2.hpp"
+#include "math/vector2.hpp"
+#include "utils/image.hpp"
 
+<<<<<<< Updated upstream
+=======
+#define FLT(x) static_cast<float>(x)
+
+#define EPS 1e-5f
+
+>>>>>>> Stashed changes
 #define T_MIN 0.f
 #define T_MAX std::numeric_limits<float>::infinity()
-
-#define CEILING Utils::Color(0.5f, 0.5f, 0.5f)
-#define FLOOR Utils::Color(0.3f, 0.3f, 0.3f)
 
 namespace Engine
 {
@@ -32,17 +39,14 @@ namespace Engine
             "Projet ISIM", sf::Style::Default, sf::State::Windowed, settings);
 
         view.setSize(sf::Vector2f(windowWidth, windowHeight));
-        view.setCenter(sf::Vector2f(static_cast<float>(windowWidth) / 2.0f,
-                                    static_cast<float>(windowHeight) / 2.0f));
+        view.setCenter({ FLT(windowWidth) / 2.f, FLT(windowHeight) / 2.f });
         window.setView(view);
 
         window.setFramerateLimit(Game::Settings::get().targetFramerate);
         window.setVerticalSyncEnabled(false);
 
         if (!texture.resize(sf::Vector2u(windowWidth, windowHeight)))
-        {
             throw std::runtime_error("Failed to allocate renderer texture");
-        }
 
         sprite.setTexture(texture, true);
         pixelBuffer.resize(static_cast<std::size_t>(windowWidth)
@@ -61,25 +65,27 @@ namespace Engine
 
     void Renderer::render(const Game::Scene &scene)
     {
-        const auto screenWidth = image.getWidth();
-        const auto screenHeight = image.getHeight();
-
+        const auto &screenWidth = image.getWidth();
+        const auto &screenHeight = image.getHeight();
         const auto &player = scene.getPlayer();
+        const auto &cam = player.getCamera();
+        const auto &camPos = cam.getPosition();
+        const auto &forward = cam.getForward();
 
-        /* Pre-calculations and naming variables for projection */
-        double fovH = player.getCamera().getFov();
-        double aspectRatio = static_cast<double>(screenHeight)
-            / static_cast<double>(screenWidth);
-        double fovV = getVerticalFov(fovH, aspectRatio);
-        double scale = (screenHeight / 2.0) / std::tan(fovV / 2.0);
+        float aspectRatio = FLT(screenHeight) / FLT(screenWidth);
+        float fovH = player.getCamera().getFov();
+        float fovV = getVerticalFov(fovH, aspectRatio);
+        float scale = (screenHeight / 2.f) / std::tan(fovV / 2.f);
+        float cameraHeight = cam.getCameraHeight() + cam.getOffsetHeight();
         int horizon = screenHeight / 2;
-        float cameraHeight = player.getCamera().getCameraHeight()
-            + player.getCamera().getOffsetHeight();
 
-/* RAYCASTING AND WALL PROJECTION */
+        std::vector<std::vector<PlaneSegment>> planeSegments(screenWidth);
+
 #pragma omp parallel for schedule(dynamic, 8)
+        /* RAYCASTING & WALL RENDERING */
         for (int x = 0; x < screenWidth; x++)
         {
+            /* Raycasting */
             auto ray = player.getCamera().getRay(x);
             auto records = rayCaster.castRay(ray, scene, T_MIN, T_MAX);
 
@@ -88,12 +94,9 @@ namespace Engine
             int bottom = screenHeight;
 
             auto currentSector = scene.getCurrentSector();
-
             for (const auto &record : records)
             {
-                /* Maps are supposed to be closed, no hit = no rendering, every
-                 * wall is supposed to be textured */
-                if (!record.isHit || !currentSector)
+                if (!record.isHit)
                     continue;
 
                 auto frontSector = currentSector;
@@ -101,6 +104,7 @@ namespace Engine
                     ? record.backSector
                     : record.frontSector;
 
+<<<<<<< Updated upstream
                 /* Naming variables */
                 /* Both vectors already normalized */
                 auto rayDirection = ray.direction;
@@ -109,9 +113,13 @@ namespace Engine
                 /* Corrected distance to avoid fish-eye effect */
                 float distance = correctDist(record.t, rayDirection, forward);
                 distance = std::max(distance, 1e-5f);
+=======
+                auto rayDir = ray.direction;
+                auto forward = cam.getForward();
+                float distance = record.t * (rayDir * forward);
+>>>>>>> Stashed changes
 
                 /* Apply the perspective projection formula */
-                /* horizon - (z - cameraHeight) * scale / distance */
                 int yTop = projectScreen(horizon, cameraHeight,
                                          frontSector->getCeilingHeight(), scale,
                                          distance);
@@ -119,41 +127,32 @@ namespace Engine
                                             frontSector->getFloorHeight(),
                                             scale, distance);
 
-                int drawTop = std::max(yTop, top);
-                int drawBottom = std::min(yBottom, bottom);
-
                 /* Plain Wall */
                 if (record.backSector == nullptr)
                 {
-                    /* Ceiling rendering */
+                    /* Keep the ceiling */
                     int ceilingBottom = std::clamp(yTop, top, bottom);
-                    for (int y = top; y < ceilingBottom; y++)
-                    {
-                        image(x, y) = CEILING;
-                    }
+                    planeSegments[x].push_back({ top, ceilingBottom, x,
+                                                 PlaneType::Ceiling,
+                                                 frontSector });
 
                     /* Wall rendering */
-                    drawWallVertical(yTop, yBottom, drawTop, drawBottom, x,
-                                     record, record.material,
-                                     record.textureTransform.scaleX,
-                                     record.textureTransform.offsetX,
-                                     record.textureTransform.scaleY,
-                                     record.textureTransform.offsetY);
+                    int wallTop = std::clamp(yTop, top, bottom);
+                    int wallBottom = std::clamp(yBottom, top, bottom);
+                    drawWallVertical(yTop, yBottom, wallTop, wallBottom, x, record,
+                                     record.material, record.textureTransform);
 
-                    /* Floor rendering */
+                    /* Keep the floor */
                     int floorTop = std::clamp(yBottom, top, bottom);
-                    for (int y = floorTop; y < bottom; y++)
-                    {
-                        image(x, y) = FLOOR;
-                    }
+                    planeSegments[x].push_back(
+                        { floorTop, bottom, x, PlaneType::Floor, frontSector });
 
-                    /* No portal, no more rendering for this column */
                     break;
                 }
                 /* Portal */
                 else
                 {
-                    /* Calculate projected coordinates for the next sector */
+                    /* Calculate projected coordinates of the back sector */
                     int nextTop = projectScreen(horizon, cameraHeight,
                                                 backSector->getCeilingHeight(),
                                                 scale, distance);
@@ -161,29 +160,23 @@ namespace Engine
                                                    backSector->getFloorHeight(),
                                                    scale, distance);
 
-                    /* Calculate the opening between the current sector and the
-                     * next one */
+                    /* Calculate the opening between the two sectors */
                     int openingTop = std::max({ top, yTop, nextTop });
                     int openingBottom =
                         std::min({ bottom, yBottom, nextBottom });
 
-                    /* Ceiling rendering */
+                    /* Keep the ceiling */
                     int ceilingBottom = std::clamp(yTop, top, bottom);
-                    for (int y = top; y < ceilingBottom; y++)
-                    {
-                        image(x, y) = CEILING;
-                    }
+                    planeSegments[x].push_back({ top, ceilingBottom, x,
+                                                 PlaneType::Ceiling,
+                                                 frontSector });
 
                     /* Upper wall rendering */
                     int upperWallTop = std::max(top, yTop);
                     int upperWallBottom = std::min(bottom, nextTop);
-                    drawWallVertical(yTop, nextTop, upperWallTop,
-                                     upperWallBottom, x, record,
-                                     record.upperMaterial,
-                                     record.upperTextureTransform.scaleX,
-                                     record.upperTextureTransform.offsetX,
-                                     record.upperTextureTransform.scaleY,
-                                     record.upperTextureTransform.offsetY);
+                    drawWallVertical(
+                        yTop, nextTop, upperWallTop, upperWallBottom, x, record,
+                        record.upperMaterial, record.upperTextureTransform);
 
                     /* Lower wall rendering */
                     int lowerWallTop = std::max(top, nextBottom);
@@ -191,17 +184,12 @@ namespace Engine
                     drawWallVertical(nextBottom, yBottom, lowerWallTop,
                                      lowerWallBottom, x, record,
                                      record.lowerMaterial,
-                                     record.lowerTextureTransform.scaleX,
-                                     record.lowerTextureTransform.offsetX,
-                                     record.lowerTextureTransform.scaleY,
-                                     record.lowerTextureTransform.offsetY);
+                                     record.lowerTextureTransform);
 
-                    /* Floor rendering */
+                    /* Keep the floor */
                     int floorTop = std::clamp(yBottom, top, bottom);
-                    for (int y = floorTop; y < bottom; y++)
-                    {
-                        image(x, y) = FLOOR;
-                    }
+                    planeSegments[x].push_back(
+                        { floorTop, bottom, x, PlaneType::Floor, frontSector });
 
                     /* Update clipping for the next sector */
                     top = openingTop;
@@ -209,6 +197,62 @@ namespace Engine
                     currentSector = backSector;
                     if (top >= bottom)
                         break;
+                }
+            }
+        }
+
+#pragma omp parallel for schedule(dynamic, 8)
+        /* FLOOR & CEILING RENDERING */
+        for (int x = 0; x < screenWidth; x++)
+        {
+            auto ray = cam.getRay(x);
+            auto rayDir = ray.direction;
+
+            for (const auto &segment : planeSegments[x])
+            {
+                auto zPlane = segment.sector->getFloorHeight();
+                auto material = segment.sector->getFloorMaterial();
+                auto texDesc = material->getDescriptor();
+                auto texTransform = segment.sector->getFloorTextureTransform();
+
+                if (segment.type == PlaneType::Ceiling)
+                {
+                    zPlane = segment.sector->getCeilingHeight();
+                    material = segment.sector->getCeilingMaterial();
+                    texDesc = material->getDescriptor();
+                    texTransform = segment.sector->getCeilingTextureTransform();
+                }
+
+                for (int y = segment.yTop; y < segment.yBottom; y++)
+                {
+                    if (y - horizon == 0)
+                        continue;
+
+                    float rowDistance =
+                        (cameraHeight - zPlane) * scale / FLT(y - horizon);
+                    if (rowDistance <= 0.f)
+                        continue;
+
+                    float tRay = rowDistance / (rayDir * forward);
+                    auto world = camPos + rayDir * tRay;
+
+                    float u =
+                        world.x * texTransform.scaleX + texTransform.offsetX;
+                    u -= std::floor(u);
+                    float v =
+                        world.y * texTransform.scaleY + texTransform.offsetY;
+                    v -= std::floor(v);
+
+                    Math::Point2 texCoord(u * texDesc.textureWidth,
+                                          v * texDesc.textureHeight);
+
+                    texCoord.x =
+                        std::clamp(texCoord.x, 0.f, texDesc.textureWidth - 1.f);
+                    texCoord.y = std::clamp(texCoord.y, 0.f,
+                                            texDesc.textureHeight - 1.f);
+
+                    image(x, y) =
+                        material->getSample(Game::HitRecord(), texCoord).color;
                 }
             }
         }
@@ -223,12 +267,11 @@ namespace Engine
                 const std::size_t index =
                     (static_cast<std::size_t>(y) * screenWidth + x) * 4;
 
-                pixelBuffer[index] =
-                    static_cast<std::uint8_t>(color.r * 255.0f);
+                pixelBuffer[index] = static_cast<std::uint8_t>(color.r * 255.f);
                 pixelBuffer[index + 1] =
-                    static_cast<std::uint8_t>(color.g * 255.0f);
+                    static_cast<std::uint8_t>(color.g * 255.f);
                 pixelBuffer[index + 2] =
-                    static_cast<std::uint8_t>(color.b * 255.0f);
+                    static_cast<std::uint8_t>(color.b * 255.f);
                 pixelBuffer[index + 3] = 255;
             }
         }
@@ -238,14 +281,6 @@ namespace Engine
 
         window.draw(sprite);
         window.display();
-    }
-
-    float Renderer::correctDist(float distance,
-                                const Math::Vector2 &rayDirection,
-                                const Math::Vector2 &cameraForward) const
-    {
-        float cosAngle = rayDirection * cameraForward;
-        return distance * cosAngle;
     }
 
     float Renderer::getVerticalFov(float horizontalFov, float aspectRatio) const
@@ -260,11 +295,11 @@ namespace Engine
         return static_cast<int>(p);
     }
 
-    void Renderer::drawWallVertical(int yTop, int yBottom, int top, int bottom,
-                                    int x, const Game::HitRecord &record,
-                                    const Game::IMaterial *material,
-                                    float scaleX, float offsetX, float scaleY,
-                                    float offsetY)
+    void
+    Renderer::drawWallVertical(int yTop, int yBottom, int top, int bottom,
+                               int x, const Game::HitRecord &record,
+                               const Game::IMaterial *material,
+                               const Game::TextureTransform &textureTransform)
     {
         /* Texture mapping */
         if (material == nullptr)
@@ -274,8 +309,8 @@ namespace Engine
 
         /* Calculate texture X (u) coordinate */
         float u = record.u;
-        u = u * scaleX + offsetX;
-        u = std::fmod(u, 1.f);
+        u = u * textureTransform.scaleX + textureTransform.offsetX;
+        u -= std::floor(u);
         texCoord.x = u * texProperties.textureWidth;
 
         /* Calculate texture Y (v) coordinate */
@@ -283,9 +318,10 @@ namespace Engine
         if (lineHeight <= 0)
             return;
 
-        float step = (texProperties.textureHeight * scaleY) / lineHeight;
+        float step = (texProperties.textureHeight * textureTransform.scaleY)
+            / lineHeight;
         float v = (top - yTop) * step;
-        v += offsetY * texProperties.textureHeight;
+        v += textureTransform.offsetY * texProperties.textureHeight;
 
         for (int y = top; y < bottom; y++)
         {

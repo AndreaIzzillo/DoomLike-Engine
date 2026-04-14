@@ -6,10 +6,34 @@
 #include "game/interfaces/imaterial.hpp"
 #include "game/scene/scene.hpp"
 #include "game/world/wall.hpp"
-#include "math/vector2.hpp"
 
 namespace Engine
 {
+    /**
+     * @brief Enumerate the types of planes that can be rendered.
+     */
+    enum class PlaneType
+    {
+        Floor,
+        Ceiling
+    };
+
+    /**
+     * @brief Represents a segment of a plane in the rendered image.
+     *
+     * Used for floor and ceiling rendering, it stores the vertical span.
+     */
+    struct PlaneSegment
+    {
+        int yTop = 0;
+        int yBottom = 0;
+
+        int x = 0;
+
+        PlaneType type = PlaneType::Floor;
+        const Game::Sector *sector = nullptr;
+    };
+
     /**
      * @brief Owns the window and renders the scene with a column raycaster.
      *
@@ -43,9 +67,6 @@ namespace Engine
         std::vector<std::uint8_t> pixelBuffer;
 
     private:
-        float correctDist(float distance, const Math::Vector2 &rayDirection,
-                          const Math::Vector2 &cameraForward) const;
-
         float getVerticalFov(float horizontalFov, float aspectRatio) const;
 
         int projectScreen(float horizon, float cameraHeight, float z,
@@ -53,7 +74,7 @@ namespace Engine
 
         void drawWallVertical(int yTop, int yBottom, int top, int bottom, int x,
                               const Game::HitRecord &record,
-                              const Game::IMaterial *material, float scaleX,
-                              float offsetX, float scaleY, float offsetY);
+                              const Game::IMaterial *material,
+                              const Game::TextureTransform &textureTransform);
     };
 } // namespace Engine

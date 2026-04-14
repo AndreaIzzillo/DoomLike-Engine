@@ -30,6 +30,11 @@ namespace Game
         std::shared_ptr<IMaterial> getFloorMaterial() const;
         std::shared_ptr<IMaterial> getCeilingMaterial() const;
         const std::vector<Wall *> &getWalls() const;
+        TextureTransform getFloorTextureTransform() const;
+        TextureTransform getCeilingTextureTransform() const;
+
+        void setFloorTextureTransform(const TextureTransform &transform);
+        void setCeilingTextureTransform(const TextureTransform &transform);
 
         void addWall(Wall *wall);
 
@@ -41,5 +46,8 @@ namespace Game
 
         std::shared_ptr<IMaterial> floorMaterial;
         std::shared_ptr<IMaterial> ceilingMaterial;
+        
+        TextureTransform floorTextureTransform;
+        TextureTransform ceilingTextureTransform;
     };
 } // namespace Game

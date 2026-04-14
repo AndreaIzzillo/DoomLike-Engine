@@ -9,9 +9,14 @@ M Texture "diamond" "./resources/textures/diamond.ppm"
 M Texture "romain"  "./resources/textures/rom.ppm"
 M Texture "brick"   "./resources/textures/brick.ppm"
 
+<<<<<<< Updated upstream
 S 0 0.0 3.0 "brick" "brick"
 S 1 0.3 1.2 "brick" "brick"
 
+=======
+S 0 0.0 2.0 "brick" "diamond"
+S 1 -0.5 1.5 "romain" "brick"
+>>>>>>> Stashed changes
 
 # Salle centrale (sens horaire → normales vers intérieur)
 W (4,-4) (-4,-4) "romain" 0 -1 "" ""
