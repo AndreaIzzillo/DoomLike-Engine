@@ -102,6 +102,12 @@ namespace Game
         /* Closest point on the wall segment to a given point (for push-out) */
         Math::Point2 closestPoint(const Math::Point2 &p) const;
 
+        /* return if a wall is a Portal*/
+        bool isPortal() const;
+
+        /* return the height of the step if its a Portal */
+        float stepHeight() const;
+
     protected:
         Sector *frontSector;
         Sector *backSector = nullptr;

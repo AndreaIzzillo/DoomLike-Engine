@@ -56,6 +56,11 @@ namespace Game
         return end;
     }
 
+    bool Wall::isPortal() const
+    {
+        return backSector != nullptr;
+    }
+
     void Wall::setTextureTransform(float scaleX, float offsetX, float scaleY,
                                    float offsetY)
     {
@@ -72,6 +77,14 @@ namespace Game
                                         float scaleY, float offsetY)
     {
         lowerTextureTransform = { scaleX, offsetX, scaleY, offsetY };
+    }
+
+    float Wall::stepHeight() const
+    {
+        if (!isPortal())
+            return 0.f;
+        return std::abs(frontSector->getFloorHeight()
+                        - backSector->getFloorHeight());
     }
 
     HitRecord Wall::hit(const Math::Ray &ray, float tMin, float tMax) const

@@ -76,15 +76,16 @@ namespace Game
         this->offsetHeight = offsetHeight;
     }
 
-    void Camera::setCurrentSector(const Sector *sector)
+    void Camera::setCurrentSector(const Sector *sector, const float playerSize,
+                                  const float upperHitBox)
     {
         auto floorHeight = sector->getFloorHeight();
         auto ceilingHeight = sector->getCeilingHeight();
-        if (ceilingHeight - floorHeight < 1.0f)
+        if (ceilingHeight - floorHeight < playerSize + upperHitBox)
             throw std::runtime_error("Camera cannot fit in the current sector");
 
         currentSector = sector;
-        cameraHeight = sector->getFloorHeight() + 0.5f;
+        cameraHeight = sector->getFloorHeight() + playerSize;
     }
 
     void Camera::move(const Math::Vector2 &delta)
@@ -93,12 +94,6 @@ namespace Game
         position += movement;
         viewportPosition += movement;
     };
-
-    void Camera::moveWorld(const Math::Vector2 &delta)
-    {
-        position += delta;
-        viewportPosition += delta;
-    }
 
     void Camera::rotate(float angle)
     {

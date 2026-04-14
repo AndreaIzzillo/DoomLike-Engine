@@ -27,18 +27,18 @@ namespace Game
         const Math::Vector2 &getVelocity() const;
         const Game::Camera &getCamera() const;
         const Sector *getCurrentSector() const;
+        const float getSize() const;
+        const float getJumpHeight() const;
+        const float getUpperHitBox() const;
 
         /* Setters */
         void setCurrentSector(const Sector *sector);
 
         void update(float dt);
-        void fixedUpdate(Math::Vector2 resolvedIntent,
-                         const std::vector<Math::Vector2> &hitNormals,
-                         float dt);
+        void fixedUpdate(Math::Vector2 resolvedIntent, float dt);
 
         /* Player physics */
         void setAngularVelocity(float angularVelocity);
-        void nudge(const Math::Vector2 &delta);
         void BobCamera(float speed, float dt);
         Math::Vector2 computeVelocity(Engine::InputState inputState, float dt);
 
@@ -59,9 +59,13 @@ namespace Game
         /* Spatial properties */
         static constexpr float maxSpeed = 5.f;
         static constexpr float accelerationRate = 30.f;
-        static constexpr float friction = 1.f;
+        static constexpr float friction = 10.f;
 
         /* Angular properties */
         static constexpr float rotationSpeed = 2.f;
+
+        static constexpr float jumpHeight = 0.25f;
+        static constexpr float size = 0.5f;
+        static constexpr float upperHitbox = 0.5f;
     };
 } // namespace Game

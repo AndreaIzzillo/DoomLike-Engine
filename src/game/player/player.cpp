@@ -36,44 +36,39 @@ namespace Game
         return camera.getCurrentSector();
     }
 
+    const float Player::getSize() const
+    {
+        return size;
+    }
+
+    const float Player::getJumpHeight() const
+    {
+        return jumpHeight;
+    }
+
+    const float Player::getUpperHitBox() const
+    {
+        return upperHitbox;
+    }
+
     void Player::setCurrentSector(const Sector *sector)
     {
-        camera.setCurrentSector(sector);
+        camera.setCurrentSector(sector, size, upperHitbox);
     }
 
     void Player::update(float dt)
     {}
 
-    void Player::fixedUpdate(Math::Vector2 resolvedVelocity,
-                             const std::vector<Math::Vector2> &hitNormals,
-                             float dt)
+    void Player::fixedUpdate(Math::Vector2 resolvedVelocity, float dt)
     {
         /* Player fixed update is responsible for updating the player's position
          * and rotation based on the resolved velocity */
         velocity = resolvedVelocity;
 
-        const auto &right = camera.getRight();
-        const auto &forward = camera.getForward();
-
-        for (const auto &normal : hitNormals)
-        {
-            /* Convert stored velocity to world space */
-            Math::Vector2 worldVel = right * velocity.x + forward * velocity.y;
-            float penetration = worldVel * normal;
-            if (penetration < 0.f)
-            {
-                worldVel = worldVel - normal * penetration;
-                /* Back to camera space */
-                velocity = Math::Vector2(worldVel * right, worldVel * forward);
-            }
-        }
-
         camera.move(velocity * dt);
         camera.rotate(angularVelocity * rotationSpeed * dt);
-    }
 
-    void Player::BobCamera(float speed, float dt)
-    {
+        float speed = (resolvedVelocity).norm();
         if (speed > FLT_EPSILON)
         {
             cameraShakingTime += speed * cameraShakingFrequency * dt;
@@ -89,6 +84,7 @@ namespace Game
                                    * std::pow(0.99f, dt));
         }
     }
+
 
     Math::Vector2 Player::computeVelocity(Engine::InputState inputState,
                                           float dt)
@@ -120,10 +116,4 @@ namespace Game
     {
         this->angularVelocity = angularVelocity;
     }
-
-    void Player::nudge(const Math::Vector2 &delta)
-    {
-        camera.moveWorld(delta); // world space direct, pas de transform caméra
-    }
-
 } // namespace Game

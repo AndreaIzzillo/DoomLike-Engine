@@ -64,17 +64,21 @@ namespace Game
          * movement intent with collision detection and updating the player and
          * walls accordingly */
         Math::Vector2 velocity = player.computeVelocity(inputState, dt);
-        auto [resolvedIntent, hitNormals] =
-            collisionManager.resolveVelocity(velocity * dt, player, *this);
+        auto [resolvedIntent, newSector] =
+            collisionManager.computeCollision(velocity * dt, player, *this, dt);
+
+        if (newSector)
+        {
+            setCurrentSector(newSector);
+        }
 
         /* Update the player's angular velocity based on the input state */
         player.setAngularVelocity(inputState.rotationDirection);
 
         /* Scene fixed update routine: update player and walls based on the
          * resolved intent */
-        player.fixedUpdate(resolvedIntent / dt, hitNormals, dt);
-        collisionManager.pushOut(player, *this);
-        player.BobCamera(resolvedIntent.norm() / dt, dt);
+        player.fixedUpdate(resolvedIntent / dt, dt);
+
     }
 
     void Scene::addWall(std::unique_ptr<Wall> wall)

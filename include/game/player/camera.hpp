@@ -34,11 +34,11 @@ namespace Game
 
         /* Setters */
         void setOffsetHeight(float offsetHeight);
-        void setCurrentSector(const Sector *sector);
+        void setCurrentSector(const Sector *sector, const float playerSize,
+                              const float upperHitBox);
 
         /* Camera physics */
         void move(const Math::Vector2 &delta);
-        void moveWorld(const Math::Vector2 &delta);
 
         void rotate(float angle);
 

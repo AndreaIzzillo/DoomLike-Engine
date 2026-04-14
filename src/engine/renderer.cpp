@@ -9,7 +9,7 @@
 #include "game/settings.hpp"
 #include "math/point2.hpp"
 
-#define T_MIN 1e-5f
+#define T_MIN 0.f
 #define T_MAX std::numeric_limits<float>::infinity()
 
 #define CEILING Utils::Color(0.5f, 0.5f, 0.5f)
@@ -108,7 +108,7 @@ namespace Engine
 
                 /* Corrected distance to avoid fish-eye effect */
                 float distance = correctDist(record.t, rayDirection, forward);
-                distance = std::max(distance, T_MIN);
+                distance = std::max(distance, 1e-5f);
 
                 /* Apply the perspective projection formula */
                 /* horizon - (z - cameraHeight) * scale / distance */
