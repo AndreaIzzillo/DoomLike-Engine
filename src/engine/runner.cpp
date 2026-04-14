@@ -26,6 +26,8 @@ namespace Engine
         const sf::Time fixedDt =
             sf::seconds(1.0f / static_cast<float>(::Game::Settings::get().targetFramerate));
 
+        int fpsCounter = 0;
+        float fps = 0.f;
         while (renderer.getWindow().isOpen())
         {
             /* First, handle events */
@@ -50,9 +52,16 @@ namespace Engine
             renderer.render(*scene);
 
             /* Display the current FPS */
-            const auto fps = 1.0f / dt.asSeconds();
-            renderer.getWindow().setTitle("Projet ISIM - FPS: "
-                                          + std::to_string(static_cast<int>(fps)));
+            fps += 1.0f / dt.asSeconds();
+            if (fpsCounter == 15)
+            {
+                float averageFps = fps / static_cast<float>(fpsCounter);
+                renderer.getWindow().setTitle("Projet ISIM - FPS: "
+                                              + std::to_string(static_cast<int>(averageFps)));
+                fpsCounter = 0;
+                fps = 0.f;
+            }
+            fpsCounter++;
         }
     }
 
