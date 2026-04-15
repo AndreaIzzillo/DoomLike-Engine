@@ -91,8 +91,8 @@ namespace Engine
                                const Math::Vector2 &rayDir, const Math::Vector2 &forward,
                                const Game::Scene &scene);
 
-        void drawWallVertical2(int yTop, int yBottom, int drawTop, int drawBottom, int x, float u,
-                               Utils::Image texture);
+        void drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x, float u,
+                                const Utils::Image &texture);
 
     private: /* Helper methods */
         float getVerticalFov(float horizontalFov, float aspectRatio) const;
@@ -101,6 +101,5 @@ namespace Engine
                           float distance) const;
 
         float getFogLevel(float distance) const;
-
     };
 } // namespace Engine

@@ -25,6 +25,12 @@ S 11  0.88 1.88 "diamond" "rom6432"
 S 12  0.16 2.30 "rom3264" "diamond"
 S 13 -0.24 2.00 "rom6432" "brick"
 
+# Sprites
+T (0,0) "resources/textures/rom.ppm" 1 1 0 0
+T (17,0) "resources/textures/rom.ppm" 1 1 0 11
+T (20,0) "resources/textures/J.ppm" 1 1 0.5 11
+
+
 # Salle centrale (secteur 0)
 W (6,5) (2,5) "romain" 0 -1 "" ""
 W (2,5) (-2,5) "" 0 12 "brick" "rom3264"

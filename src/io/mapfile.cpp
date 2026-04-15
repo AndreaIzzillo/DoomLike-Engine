@@ -108,16 +108,6 @@ namespace IO
 
                 sectors[sectorId] = std::make_unique<Sector>(floorH, ceilingH, materials[floorMat],
                                                              materials[ceilingMat]);
-                sprites.push_back(
-                    std::make_unique<Sprite>(Math::Point2(0, 0), "resources/textures/rom3264.ppm"));
-                sectors[0]->addSprite(sprites.back().get());
-                           sprites.push_back(
-                    std::make_unique<Sprite>(Math::Point2(2, 0), "resources/textures/rom3264.ppm"));
-                sectors[0]->addSprite(sprites.back().get());
-                                        sprites.push_back(
-                    std::make_unique<Sprite>(Math::Point2(-2, 0), "resources/textures/rom3264.ppm"));
-                sectors[0]->addSprite(sprites.back().get());
-
             }
             /* Wall definition */
             else if (type == 'W')
@@ -176,6 +166,25 @@ namespace IO
                     sectors[front]->addWall(wall);
                     sectors[back]->addWall(wall);
                 }
+            }
+            else if (type == 'T')
+            {
+                std::string posS, textureS;
+                float mulHeight, mulSize, vPos;
+                std::string sectorS;
+
+                iss >> posS >> textureS >> mulHeight >> mulSize >> vPos >> sectorS;
+
+                textureS = parseQuoted(textureS);
+                int sectorId = std::stoi(sectorS);
+
+                if (sectors.find(sectorId) == sectors.end())
+                    throw std::runtime_error("Undefined sector ID for sprite: " + sectorS);
+
+                sprites.push_back(
+                    std::make_unique<Sprite>(parsePoint(posS), textureS, mulHeight, mulSize, vPos));
+
+                sectors[sectorId]->addSprite(sprites.back().get());
             }
         }
 

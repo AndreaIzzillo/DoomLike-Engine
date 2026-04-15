@@ -1,7 +1,6 @@
 #include "engine/renderer.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
-#include <X11/Xlib.h>
 #include <algorithm>
 #include <cfloat>
 #include <cmath>
@@ -26,6 +25,23 @@
 
 namespace Engine
 {
+    void sortSprites(int *order, double *dist, int amount)
+    {
+        std::vector<std::pair<double, int>> sprites(amount);
+        for (int i = 0; i < amount; i++)
+        {
+            sprites[i].first = dist[i];
+            sprites[i].second = order[i];
+        }
+        std::sort(sprites.begin(), sprites.end());
+        // restore in reverse order to go from farthest to nearest
+        for (int i = 0; i < amount; i++)
+        {
+            dist[i] = sprites[amount - i - 1].first;
+            order[i] = sprites[amount - i - 1].second;
+        }
+    }
+
     Renderer::Renderer()
         : image(Game::Settings::get().windowWidth, Game::Settings::get().windowHeight)
         , sprite(texture)
@@ -204,26 +220,45 @@ namespace Engine
         }
 
         const auto &sectors = scene.getSectors();
+        const auto &sprites = scene.getSprites();
         int bottom = screenHeight;
         int top = 0;
         for (const auto &sector : sectors)
         {
             const auto &sprites = sector->getSprites();
-            for (const auto &sprite : sprites)
+            int numSprites = sprites.size();
+            int spriteOrder[numSprites];
+            double spriteDistance[numSprites];
+            for (int i = 0; i < numSprites; i++)
             {
+                spriteOrder[i] = i;
+                spriteDistance[i] =
+                    ((camPos.x - sprites[i]->getPos().x) * (camPos.x - sprites[i]->getPos().x)
+                     + (camPos.y - sprites[i]->getPos().y) * (camPos.y - sprites[i]->getPos().y));
+            }
+
+            sortSprites(spriteOrder, spriteDistance, numSprites);
+
+            for (int i = 0; i < numSprites; i++)
+            {
+                auto sprite = sprites[spriteOrder[i]];
                 Math::Vector2 rel = sprite->getPos() - camPos;
                 float depth = rel * cam.getForward();
-                if (depth < 0.3f) continue;
+                if (depth < 0.3f)
+                    continue;
                 float side = rel * cam.getRight();
+                float mulSize = sprite->getMulSize();
+                float mulHeight = sprite->getMulHeight();
+                float vPos = sprite->getVPos();
 
-                int yTop = projectScreen(horizon, cameraHeight, 1, scale, depth);
-                int yBottom =
-                    projectScreen(horizon, cameraHeight, sector->getFloorHeight(), scale, depth);
+                int yTop = projectScreen(horizon, cameraHeight,
+                                         sector->getFloorHeight() + vPos + mulHeight, scale, depth);
+                int yBottom = projectScreen(horizon, cameraHeight, sector->getFloorHeight() + vPos,
+                                            scale, depth);
                 int SpriteTop = std::clamp(yTop, top, bottom);
                 int SpriteBottom = std::clamp(yBottom, top, bottom);
                 float screenX = (screenWidth / 2.f) * (1.f + side / depth);
-                float size = scale / depth;
-                // size = std::min(size, (float)screenWidth);
+                float size = (scale / depth) * mulSize;
 
                 int startX = screenX - size / 2;
                 int endX = screenX + size / 2;
@@ -241,7 +276,7 @@ namespace Engine
 
                     float u = (x - startX) / FLT(endX - startX);
 
-                    drawWallVertical2(yTop, yBottom, SpriteTop, SpriteBottom, x, u, tex);
+                    drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, tex);
                 }
             }
         }
@@ -356,8 +391,8 @@ namespace Engine
         }
     }
 
-    void Renderer::drawWallVertical2(int yTop, int yBottom, int drawTop, int drawBottom, int x,
-                                     float u, const Utils::Image &texture)
+    void Renderer::drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
+                                      float u, const Utils::Image &texture)
     {
         /* Texture mapping */
         auto texCoord = Math::Point2(0.f, 0.f);
