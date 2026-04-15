@@ -206,7 +206,7 @@ namespace Engine
                     if (y - horizon == 0)
                         continue;
 
-                    float rowDistance = (cameraHeight - zPlane) * scale / FLT(y - horizon);
+                    float rowDistance = scale * (zPlane - cameraHeight) / FLT(horizon - y);
                     if (rowDistance <= 0.f)
                         continue;
 
@@ -263,7 +263,7 @@ namespace Engine
         return static_cast<int>(p);
     }
 
-    void Renderer::drawWallVertical(int yTop, int yBottom, int top, int bottom, int x,
+    void Renderer::drawWallVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
                                     const Game::HitRecord &record, const Game::IMaterial *material,
                                     const Game::TextureTransform &textureTransform)
     {
@@ -279,22 +279,14 @@ namespace Engine
         u -= std::floor(u);
         texCoord.x = u * texProperties.textureWidth;
 
-        /* Calculate texture Y (v) coordinate */
         float lineHeight = yBottom - yTop;
-        if (lineHeight <= 0)
-            return;
-
-        float step = (texProperties.textureHeight * textureTransform.scaleY) / lineHeight;
-        float v = (top - yTop) * step;
-        v += textureTransform.offsetY * texProperties.textureHeight;
-
-        for (int y = top; y < bottom; y++)
+        for (int y = drawTop; y < drawBottom; y++)
         {
-            float wrappedV = std::fmod(v, texProperties.textureHeight);
-            if (wrappedV < 0.f)
-                wrappedV += texProperties.textureHeight;
-            texCoord.y = wrappedV;
-            v += step;
+            /* Calculate texture Y (v) coordinate */
+            float v = FLT(y - yTop) / FLT(lineHeight);
+            v = v * textureTransform.scaleY + textureTransform.offsetY;
+            v -= std::floor(v);
+            texCoord.y = v * texProperties.textureHeight;
 
             image(x, y) = material->getSample(record, texCoord).color;
         }

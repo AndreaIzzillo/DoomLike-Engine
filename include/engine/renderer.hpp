@@ -72,7 +72,7 @@ namespace Engine
         int projectScreen(float horizon, float cameraHeight, float z, float scale,
                           float distance) const;
 
-        void drawWallVertical(int yTop, int yBottom, int top, int bottom, int x,
+        void drawWallVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
                               const Game::HitRecord &record, const Game::IMaterial *material,
                               const Game::TextureTransform &textureTransform);
     };
