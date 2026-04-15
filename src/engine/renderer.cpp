@@ -188,7 +188,8 @@ namespace Engine
 
             for (const auto &segment : planeSegments[x])
             {
-                drawPlaneVertical(segment, x, horizon, scale, cameraHeight, camPos, rayDir, forward);
+                drawPlaneVertical(segment, x, horizon, scale, cameraHeight, camPos, rayDir,
+                                  forward);
             }
         }
 
@@ -227,6 +228,16 @@ namespace Engine
         return static_cast<int>(p);
     }
 
+    float Renderer::getFogLevel(float distance) const
+    {
+        if (distance <= fogStart)
+            return 0.f;
+        else if (distance >= fogEnd)
+            return 1.f;
+        else
+            return (distance - fogStart) / (fogEnd - fogStart);
+    }
+
     void Renderer::drawWallVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
                                     const Game::HitRecord &record, const Game::IMaterial *material,
                                     const Game::TextureTransform &textureTransform)
@@ -252,7 +263,12 @@ namespace Engine
             v -= std::floor(v);
             texCoord.y = v * texProperties.textureHeight;
 
-            image(x, y) = material->getSample(record, texCoord).color;
+            auto color = material->getSample(record, texCoord).color;
+
+            auto fog = getFogLevel(record.t);
+            color = color * (1.f - fog) + Utils::Color(fogColor, fogColor, fogColor) * fog;
+
+            image(x, y) = color;
         }
     }
 
@@ -295,7 +311,12 @@ namespace Engine
             texCoord.x = std::clamp(texCoord.x, 0.f, texDesc.textureWidth - 1.f);
             texCoord.y = std::clamp(texCoord.y, 0.f, texDesc.textureHeight - 1.f);
 
-            image(x, y) = material->getSample(Game::HitRecord(), texCoord).color;
+            auto color = material->getSample(Game::HitRecord(), texCoord).color;
+
+            auto fog = getFogLevel(rowDistance);
+            color = color * (1.f - fog) + Utils::Color(fogColor, fogColor, fogColor) * fog;
+
+            image(x, y) = color;
         }
     }
 } // namespace Engine

@@ -66,12 +66,12 @@ namespace Engine
         sf::Sprite sprite;
         std::vector<std::uint8_t> pixelBuffer;
 
-    private:
-        float getVerticalFov(float horizontalFov, float aspectRatio) const;
+        /* Fog properties */
+        static constexpr float fogStart = 15.f;
+        static constexpr float fogEnd = 25.f;
+        static constexpr float fogColor = 0.05f;
 
-        int projectScreen(float horizon, float cameraHeight, float z, float scale,
-                          float distance) const;
-
+    private: /* Drawing methods */
         void drawWallVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
                               const Game::HitRecord &record, const Game::IMaterial *material,
                               const Game::TextureTransform &textureTransform);
@@ -79,5 +79,13 @@ namespace Engine
         void drawPlaneVertical(const PlaneSegment &segment, int x, int horizon, float scale,
                                float cameraHeight, const Math::Point2 &camPos,
                                const Math::Vector2 &rayDir, const Math::Vector2 &forward);
+
+    private: /* Helper methods */
+        float getVerticalFov(float horizontalFov, float aspectRatio) const;
+
+        int projectScreen(float horizon, float cameraHeight, float z, float scale,
+                          float distance) const;
+
+        float getFogLevel(float distance) const;
     };
 } // namespace Engine
