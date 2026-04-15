@@ -2,12 +2,16 @@
 
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
 #include "game/materials/color_material.hpp"
 #include "game/materials/texture_material.hpp"
+#include "game/sprite/sprite.hpp"
 #include "game/world/wall.hpp"
+#include "math/point2.hpp"
 
 namespace IO
 {
@@ -104,6 +108,9 @@ namespace IO
 
                 sectors[sectorId] = std::make_unique<Sector>(floorH, ceilingH, materials[floorMat],
                                                              materials[ceilingMat]);
+                sprites.push_back(
+                    std::make_unique<Sprite>(Math::Point2(0, 0), "resources/textures/rom.ppm"));
+                sectors[0]->addSprite(sprites.back().get());
             }
             /* Wall definition */
             else if (type == 'W')
@@ -183,6 +190,11 @@ namespace IO
     std::vector<std::unique_ptr<Wall>> MapFile::getWalls()
     {
         return std::move(walls);
+    }
+
+    std::vector<std::unique_ptr<Sprite>> MapFile::getSprites()
+    {
+        return std::move(sprites);
     }
 
     std::vector<std::unique_ptr<Sector>> MapFile::getSectors()

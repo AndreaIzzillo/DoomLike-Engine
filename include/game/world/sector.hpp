@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "game/interfaces/imaterial.hpp"
+#include "game/sprite/sprite.hpp"
 #include "game/world/wall.hpp"
 
 namespace Game
@@ -31,14 +32,17 @@ namespace Game
         const std::vector<Wall *> &getWalls() const;
         TextureTransform getFloorTextureTransform() const;
         TextureTransform getCeilingTextureTransform() const;
+        const std::vector<Sprite *> getSprites() const;
 
         void setFloorTextureTransform(const TextureTransform &transform);
         void setCeilingTextureTransform(const TextureTransform &transform);
 
         void addWall(Wall *wall);
+        void addSprite(Sprite *sprite);
 
     private:
         std::vector<Wall *> walls;
+        std::vector<Sprite *> sprites;
 
         float floorHeight;
         float ceilingHeight;

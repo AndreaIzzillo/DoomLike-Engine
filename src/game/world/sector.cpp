@@ -1,5 +1,7 @@
 #include "game/world/sector.hpp"
 
+#include "game/sprite/sprite.hpp"
+
 namespace Game
 {
     Sector::Sector(float floorHeight, float ceilingHeight, std::shared_ptr<IMaterial> floorMaterial,
@@ -45,6 +47,11 @@ namespace Game
         return ceilingTextureTransform;
     }
 
+    const std::vector<Sprite *> Sector::getSprites() const
+    {
+        return sprites;
+    }
+
     void Sector::setFloorTextureTransform(const TextureTransform &transform)
     {
         floorTextureTransform = transform;
@@ -58,5 +65,10 @@ namespace Game
     void Sector::addWall(Wall *wall)
     {
         walls.push_back(wall);
+    }
+
+    void Sector::addSprite(Sprite *sprite)
+    {
+        sprites.push_back(sprite);
     }
 } // namespace Game

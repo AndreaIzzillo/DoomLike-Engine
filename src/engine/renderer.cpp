@@ -8,6 +8,7 @@
 
 #include "game/scene/scene.hpp"
 #include "game/settings.hpp"
+#include "game/sprite/sprite.hpp"
 #include "game/world/wall.hpp"
 #include "math/point2.hpp"
 #include "math/ray.hpp"
@@ -26,6 +27,7 @@ namespace Engine
     Renderer::Renderer()
         : image(Game::Settings::get().windowWidth, Game::Settings::get().windowHeight)
         , sprite(texture)
+        , zBuffer(image.getWidth())
     {
         const auto windowWidth = Game::Settings::get().windowWidth;
         const auto windowHeight = Game::Settings::get().windowHeight;
@@ -110,6 +112,9 @@ namespace Engine
                 auto rayDir = ray.direction;
                 float distance = record.t * (rayDir * forward);
 
+                // Set the zbuffer with the distance to the wall
+                zBuffer[x] = distance;
+
                 /* Apply the perspective projection formula */
                 int yTop = projectScreen(horizon, cameraHeight, frontSector->getCeilingHeight(),
                                          scale, distance);
@@ -193,6 +198,54 @@ namespace Engine
             {
                 drawPlaneVertical(segment, x, horizon, scale, cameraHeight, camPos, rayDir, forward,
                                   scene);
+            }
+        }
+
+#pragma omp parallel for schedule(dynamic, 8)
+        for (int x = 0; x < screenWidth; x++)
+        {
+            int bottom = screenHeight;
+            int top = 0;
+            const auto &sectors = scene.getSectors();
+            for (const auto& sector : sectors)
+            {
+                const auto &sprites = sector->getSprites();
+                for (const auto &sprite : sprites)
+                {
+                    float d = (cam.getPosition() - sprite->getPos()).norm();
+                    if (d > zBuffer[x])
+                        continue;
+
+                    int yTop = projectScreen(horizon, cameraHeight, 1, scale,
+                                             (camPos - sprite->getPos()).norm());
+                    int yBottom = projectScreen(horizon, cameraHeight,
+                                                sector->getFloorHeight(), scale,
+                                                (camPos - sprite->getPos()).norm());
+
+                    int SpriteTop = std::clamp(yTop, top, bottom);
+                    int SpriteBottom = std::clamp(yBottom, top, bottom);
+
+                    Math::Vector2 F = cam.getForward();
+
+                    F = F * d;
+                    Math::Vector2 spritePlan = cam.getRight();
+                    Math::Point2 spritePointA = sprite->getPos() + spritePlan;
+                    Math::Point2 spritePointB = sprite->getPos() - spritePlan;
+
+                    Math::Vector2 r = cam.getRay(x).direction;
+                    Math::Vector2 s = spritePointB - spritePointA;
+                    Math::Vector2 diff = spritePointA - cam.getRay(x).origin;
+                    float denom = r ^ s;
+
+                    float t = (diff ^ s);
+                    float u = (diff ^ r) / denom;
+
+                    if (u < 0 || u > 1 || t < 0)
+                        continue;
+
+                    drawWallVertical2(yTop, yBottom, SpriteTop, SpriteBottom, x, u,
+                                      sprite->getTexture());
+                }
             }
         }
 
@@ -303,6 +356,33 @@ namespace Engine
             }
 
             image(x, y) = color;
+        }
+    }
+
+    void Renderer::drawWallVertical2(int yTop, int yBottom, int drawTop, int drawBottom, int x,
+                                     float u, Utils::Image texture)
+    {
+        /* Texture mapping */
+        auto texCoord = Math::Point2(0.f, 0.f);
+
+        /* Calculate texture X (u) coordinate */
+        u -= std::floor(u);
+        texCoord.x = u * texture.getWidth();
+
+        float lineHeight = yBottom - yTop;
+        for (int y = drawTop; y < drawBottom; y++)
+        {
+            /* Calculate texture Y (v) coordinate */
+            float v = FLT(y - yTop) / FLT(lineHeight);
+            v -= std::floor(v);
+            texCoord.y = v * texture.getHeight();
+
+            auto pixelSprite = texture(texCoord.x, texCoord.y);
+
+            // if (pixelSprite.r < FLT_EPSILON && pixelSprite.g < FLT_EPSILON && pixelSprite.b <
+            // FLT_EPSILON)
+            //     continue;
+            image(x, y) = texture(texCoord.x, texCoord.y);
         }
     }
 

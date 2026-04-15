@@ -1,8 +1,10 @@
 #include "game/scene/scene.hpp"
 
 #include <cfloat>
+#include <memory>
 
 #include "engine/collision_manager.hpp"
+#include "game/sprite/sprite.hpp"
 #include "io/mapfile.hpp"
 
 namespace Game
@@ -16,6 +18,7 @@ namespace Game
         , walls(mapFile.getWalls())
         , sectors(mapFile.getSectors())
         , currentSector(mapFile.getStartingSector())
+        , sprites(mapFile.getSprites())
     {
         player.setCurrentSector(currentSector);
     }
@@ -48,6 +51,11 @@ namespace Game
     const Sector *Scene::getCurrentSector() const
     {
         return currentSector;
+    }
+
+    const std::vector<std::unique_ptr<Sprite>> &Scene::getSprites() const
+    {
+        return sprites;
     }
 
     void Scene::setInputState(Engine::InputState inputState)
@@ -97,6 +105,11 @@ namespace Game
     void Scene::addLight(std::unique_ptr<Light> light)
     {
         lights.push_back(std::move(light));
+    }
+    
+    void Scene::addSprite(std::unique_ptr<Sprite> sprite)
+    {
+        sprites.push_back(std::move(sprite));
     }
 
     void Scene::setCurrentSector(const Sector *sector)

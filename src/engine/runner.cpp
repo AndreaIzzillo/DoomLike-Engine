@@ -3,6 +3,7 @@
 #include <optional>
 
 #include "game/settings.hpp"
+#include "game/sprite/sprite.hpp"
 
 namespace Engine
 {
@@ -19,6 +20,11 @@ namespace Engine
     void Runner::addWall(std::unique_ptr<::Game::Wall> wall)
     {
         scene->addWall(std::move(wall));
+    }
+
+    void Runner::addSprite(std::unique_ptr<::Game::Sprite> sprite)
+    {
+        scene->addSprite(std::move(sprite));
     }
 
     void Runner::run()

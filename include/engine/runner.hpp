@@ -21,6 +21,7 @@ namespace Engine
         ~Runner() = default;
 
         void addWall(std::unique_ptr<Game::Wall> wall);
+        void addSprite(std::unique_ptr<::Game::Sprite> sprite);
 
         void run();
 

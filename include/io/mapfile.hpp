@@ -7,6 +7,7 @@
 
 #include "game/interfaces/imaterial.hpp"
 #include "game/player/player.hpp"
+#include "game/sprite/sprite.hpp"
 #include "game/world/sector.hpp"
 #include "game/world/wall.hpp"
 #include "math/point2.hpp"
@@ -32,12 +33,14 @@ namespace IO
         Player getPlayer() const;
         std::vector<std::unique_ptr<Wall>> getWalls();
         std::vector<std::unique_ptr<Sector>> getSectors();
+        std::vector<std::unique_ptr<Sprite>> getSprites();
         const Sector *getStartingSector() const;
 
     private:
         Point2 playerPosition;
         Point2 playerLookAt;
         std::vector<std::unique_ptr<Wall>> walls;
+        std::vector<std::unique_ptr<Sprite>> sprites;
         std::map<std::string, std::shared_ptr<IMaterial>> materials;
         std::map<int, std::unique_ptr<Sector>> sectors;
     };
