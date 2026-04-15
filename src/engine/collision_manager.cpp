@@ -67,7 +67,7 @@ namespace Engine
         {
             if (wall->canTraverse(requiredHeight, player.getJumpHeight(), currentSector))
             {
-                const auto hit = wall->hit(intentRay, 0.f, res.velocity.norm());
+                const auto hit = wall->hit(intentRay, 0.f,  norm);
                 if (hit.isHit)
                 {
                     auto frontSector = scene.getCurrentSector();
