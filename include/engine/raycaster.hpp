@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "game/scene/scene.hpp"
-#include "game/world/sector.hpp"
 #include "game/world/wall.hpp"
 #include "math/ray.hpp"
 

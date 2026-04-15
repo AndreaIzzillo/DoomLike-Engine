@@ -5,6 +5,7 @@
 
 #include "engine/input_manager.hpp"
 #include "game/player/player.hpp"
+#include "game/world/light.hpp"
 #include "game/world/sector.hpp"
 #include "game/world/wall.hpp"
 
@@ -35,6 +36,7 @@ namespace Game
 
         std::vector<std::unique_ptr<Sector>> sectors;
         std::vector<std::unique_ptr<Wall>> walls;
+        std::vector<std::unique_ptr<Light>> lights;
 
         Engine::InputState inputState;
 
@@ -50,7 +52,7 @@ namespace Game
 
         const std::vector<std::unique_ptr<Wall>> &getWalls() const;
         const std::vector<std::unique_ptr<Sector>> &getSectors() const;
-
+        const std::vector<std::unique_ptr<Light>> &getLights() const;
         const Sector *getCurrentSector() const;
 
         void update(float dt);
@@ -59,6 +61,7 @@ namespace Game
         /* World management */
         void addSector(std::unique_ptr<Sector> sector);
         void addWall(std::unique_ptr<Wall> wall);
+        void addLight(std::unique_ptr<Light> light);
         void setCurrentSector(const Sector *sector);
 
         /* Input state management */

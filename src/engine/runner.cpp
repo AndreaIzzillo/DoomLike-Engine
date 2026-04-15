@@ -23,8 +23,8 @@ namespace Engine
 
     void Runner::run()
     {
-        const sf::Time fixedDt =
-            sf::seconds(1.0f / static_cast<float>(::Game::Settings::get().targetFramerate));
+        int fixedUpdateFrequency = std::max(60, Game::Settings::get().targetFramerate);
+        const sf::Time fixedDt = sf::seconds(1.f / fixedUpdateFrequency);
 
         int fpsCounter = 0;
         float fps = 0.f;
@@ -79,6 +79,12 @@ namespace Engine
                 if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
                 {
                     renderer.getWindow().close();
+                }
+
+                if (keyPressed->scancode == sf::Keyboard::Scancode::P)
+                {
+                    std::cout << scene->getPlayer().getPosition().x << ", "
+                              << scene->getPlayer().getPosition().y << std::endl;
                 }
             }
         }

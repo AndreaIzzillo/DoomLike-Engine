@@ -3,6 +3,15 @@
 #include <iosfwd>
 #include <vector>
 
+#define RED Utils::Color(1.f, 0.f, 0.f)
+#define GREEN Utils::Color(0.f, 1.f, 0.f)
+#define BLUE Utils::Color(0.f, 0.f, 1.f)
+#define CYAN Utils::Color(0.f, 1.f, 1.f)
+#define MAGENTA Utils::Color(1.f, 0.f, 1.f)
+#define YELLOW Utils::Color(1.f, 1.f, 0.f)
+#define WHITE Utils::Color(1.f, 1.f, 1.f)
+#define BLACK Utils::Color(0.f, 0.f, 0.f)
+
 namespace Utils
 {
     /**
@@ -24,6 +33,8 @@ namespace Utils
 
         Color operator+(const Color &other) const;
         Color operator-(const Color &other) const;
+        Color operator*(const Color &other) const;
+        Color operator/(const Color &other) const;
         Color operator*(float scalar) const;
         Color operator/(float scalar) const;
 
@@ -32,10 +43,13 @@ namespace Utils
 
         void operator+=(const Color &other);
         void operator-=(const Color &other);
+        void operator*=(const Color &other);
+        void operator/=(const Color &other);
         void operator*=(float scalar);
         void operator/=(float scalar);
 
         Color clamp() const;
+        Color clamp(float min, float max) const;
 
         friend std::ostream &operator<<(std::ostream &out, Color &color);
     };

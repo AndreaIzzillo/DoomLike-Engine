@@ -18,6 +18,12 @@ namespace Game
         /* Window settings */
         int windowWidth = 1600;
         int windowHeight = 900;
+        // int windowWidth = 3000;
+        // int windowHeight = 1500;
+        // int windowWidth = 1920;
+        // int windowHeight = 1080;
+        // int windowWidth = 320;
+        // int windowHeight = 200;
         int targetFramerate = 60;
 
         /* Camera settings */

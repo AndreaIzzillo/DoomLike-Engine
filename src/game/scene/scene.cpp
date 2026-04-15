@@ -35,6 +35,11 @@ namespace Game
         return walls;
     }
 
+    const std::vector<std::unique_ptr<Light>> &Scene::getLights() const
+    {
+        return lights;
+    }
+
     const Engine::InputState &Scene::getInputState() const
     {
         return inputState;
@@ -87,6 +92,11 @@ namespace Game
     void Scene::addSector(std::unique_ptr<Sector> sector)
     {
         sectors.push_back(std::move(sector));
+    }
+
+    void Scene::addLight(std::unique_ptr<Light> light)
+    {
+        lights.push_back(std::move(light));
     }
 
     void Scene::setCurrentSector(const Sector *sector)

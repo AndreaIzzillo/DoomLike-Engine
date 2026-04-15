@@ -5,6 +5,7 @@ M Texture "romain"  "./resources/textures/rom.ppm"
 M Texture "brick"   "./resources/textures/brick.ppm"
 M Texture "rom3264" "./resources/textures/rom3264.ppm"
 M Texture "rom6432" "./resources/textures/rom6432.ppm"
+M Texture "glow"    "./resources/textures/glow.ppm"
 
 # Secteurs
 # Escalier dense: 0 -> 1 -> ... -> 11 avec marches de +0.08
@@ -20,7 +21,7 @@ S 7   0.56 2.20 "romain"  "diamond"
 S 8   0.64 2.20 "brick"   "diamond"
 S 9   0.72 2.20 "romain"  "diamond"
 S 10  0.80 2.20 "brick"   "diamond"
-S 11  0.88 2.35 "diamond" "rom6432"
+S 11  0.88 1.88 "diamond" "rom6432"
 S 12  0.16 2.30 "rom3264" "diamond"
 S 13 -0.24 2.00 "rom6432" "brick"
 
@@ -85,10 +86,10 @@ W (22,-3) (22,3) "rom6432" 11 -1 "" ""
 W (22,3) (16,3) "rom6432" 11 -1 "" ""
 
 # Petit pilier decoratif sur le plateau (secteur 11)
-W (18.4,-0.6) (19.2,-0.6) "diamond" 11 -1 "" ""
-W (19.2,-0.6) (19.2,0.6) "diamond" 11 -1 "" ""
-W (19.2,0.6) (18.4,0.6) "diamond" 11 -1 "" ""
-W (18.4,0.6) (18.4,-0.6) "diamond" 11 -1 "" ""
+W (18.4,-0.6) (19.2,-0.6) "glow" 11 -1 "" ""
+W (19.2,-0.6) (19.2,0.6) "glow" 11 -1 "" ""
+W (19.2,0.6) (18.4,0.6) "glow" 11 -1 "" ""
+W (18.4,0.6) (18.4,-0.6) "glow" 11 -1 "" ""
 
 # Alcove nord (secteur 12)
 W (-2,5) (-2,8) "rom3264" 12 -1 "" ""

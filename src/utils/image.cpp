@@ -34,6 +34,16 @@ namespace Utils
         return Color(r - other.r, g - other.g, b - other.b);
     }
 
+    Color Color::operator*(const Color &other) const
+    {
+        return Color(r * other.r, g * other.g, b * other.b);
+    }
+
+    Color Color::operator/(const Color &other) const
+    {
+        return Color(r / other.r, g / other.g, b / other.b);
+    }
+
     Color Color::operator*(float scalar) const
     {
         return Color(r * scalar, g * scalar, b * scalar);
@@ -69,6 +79,20 @@ namespace Utils
         b -= other.b;
     }
 
+    void Color::operator*=(const Color &other)
+    {
+        r *= other.r;
+        g *= other.g;
+        b *= other.b;
+    }
+
+    void Color::operator/=(const Color &other)
+    {
+        r /= other.r;
+        g /= other.g;
+        b /= other.b;
+    }
+
     void Color::operator*=(float scalar)
     {
         r *= scalar;
@@ -87,6 +111,11 @@ namespace Utils
     {
         return Color(std::clamp(r, 0.0f, 1.0f), std::clamp(g, 0.0f, 1.0f),
                      std::clamp(b, 0.0f, 1.0f));
+    }
+
+    Color Color::clamp(float min, float max) const
+    {
+        return Color(std::clamp(r, min, max), std::clamp(g, min, max), std::clamp(b, min, max));
     }
 
     std::ostream &operator<<(std::ostream &out, Color &color)

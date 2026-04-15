@@ -6,9 +6,11 @@
 #include <cmath>
 #include <stdexcept>
 
+#include "game/scene/scene.hpp"
 #include "game/settings.hpp"
 #include "game/world/wall.hpp"
 #include "math/point2.hpp"
+#include "math/ray.hpp"
 #include "math/vector2.hpp"
 #include "utils/image.hpp"
 
@@ -74,7 +76,8 @@ namespace Engine
         float cameraHeight = cam.getCameraHeight() + cam.getOffsetHeight();
         int horizon = screenHeight / 2;
 
-        std::vector<std::vector<PlaneSegment>> planeSegments(screenWidth);
+        planeSegments.clear();
+        planeSegments.resize(screenWidth);
 
 #pragma omp parallel for schedule(dynamic, 8)
         /* RAYCASTING & WALL RENDERING */
@@ -125,7 +128,7 @@ namespace Engine
                     int wallTop = std::clamp(yTop, top, bottom);
                     int wallBottom = std::clamp(yBottom, top, bottom);
                     drawWallVertical(yTop, yBottom, wallTop, wallBottom, x, record, record.material,
-                                     record.textureTransform);
+                                     record.textureTransform, scene);
 
                     /* Keep the floor */
                     int floorTop = std::clamp(yBottom, top, bottom);
@@ -156,13 +159,13 @@ namespace Engine
                     int upperWallTop = std::max(top, yTop);
                     int upperWallBottom = std::min(bottom, nextTop);
                     drawWallVertical(yTop, nextTop, upperWallTop, upperWallBottom, x, record,
-                                     record.upperMaterial, record.upperTextureTransform);
+                                     record.upperMaterial, record.upperTextureTransform, scene);
 
                     /* Lower wall rendering */
                     int lowerWallTop = std::max(top, nextBottom);
                     int lowerWallBottom = std::min(bottom, yBottom);
                     drawWallVertical(nextBottom, yBottom, lowerWallTop, lowerWallBottom, x, record,
-                                     record.lowerMaterial, record.lowerTextureTransform);
+                                     record.lowerMaterial, record.lowerTextureTransform, scene);
 
                     /* Keep the floor */
                     int floorTop = std::clamp(yBottom, top, bottom);
@@ -188,8 +191,8 @@ namespace Engine
 
             for (const auto &segment : planeSegments[x])
             {
-                drawPlaneVertical(segment, x, horizon, scale, cameraHeight, camPos, rayDir,
-                                  forward);
+                drawPlaneVertical(segment, x, horizon, scale, cameraHeight, camPos, rayDir, forward,
+                                  scene);
             }
         }
 
@@ -240,7 +243,8 @@ namespace Engine
 
     void Renderer::drawWallVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
                                     const Game::HitRecord &record, const Game::IMaterial *material,
-                                    const Game::TextureTransform &textureTransform)
+                                    const Game::TextureTransform &textureTransform,
+                                    const Game::Scene &scene)
     {
         /* Texture mapping */
         if (material == nullptr)
@@ -254,6 +258,29 @@ namespace Engine
         u -= std::floor(u);
         texCoord.x = u * texProperties.textureWidth;
 
+        /* Compute lighting */
+        Utils::Color lightContribution(0.f, 0.f, 0.f);
+        if (enableLighting)
+        {
+            for (const auto &light : scene.getLights())
+            {
+                auto p = record.point;
+                auto intensity = light->getIntensityAt(p);
+                lightContribution += light->getColor() * intensity;
+            }
+            lightContribution = lightContribution.clamp(0.25f, 3.f);
+        }
+
+        /* Compute fog */
+        float fogOpposite = 1.f;
+        Utils::Color fogColorIntensity(0.f, 0.f, 0.f);
+        if (enableFog)
+        {
+            auto fog = getFogLevel(record.t);
+            fogOpposite = 1.f - fog;
+            fogColorIntensity = fogColorVec * fog;
+        }
+
         float lineHeight = yBottom - yTop;
         for (int y = drawTop; y < drawBottom; y++)
         {
@@ -265,8 +292,15 @@ namespace Engine
 
             auto color = material->getSample(record, texCoord).color;
 
-            auto fog = getFogLevel(record.t);
-            color = color * (1.f - fog) + Utils::Color(fogColor, fogColor, fogColor) * fog;
+            if (enableLighting)
+            {
+                color = color * lightContribution;
+            }
+
+            if (enableFog)
+            {
+                color = color * fogOpposite + fogColorIntensity;
+            }
 
             image(x, y) = color;
         }
@@ -274,7 +308,8 @@ namespace Engine
 
     void Renderer::drawPlaneVertical(const PlaneSegment &segment, int x, int horizon, float scale,
                                      float cameraHeight, const Math::Point2 &camPos,
-                                     const Math::Vector2 &rayDir, const Math::Vector2 &forward)
+                                     const Math::Vector2 &rayDir, const Math::Vector2 &forward,
+                                     const Game::Scene &scene)
     {
         auto zPlane = segment.sector->getFloorHeight();
         auto material = segment.sector->getFloorMaterial();
@@ -313,8 +348,24 @@ namespace Engine
 
             auto color = material->getSample(Game::HitRecord(), texCoord).color;
 
-            auto fog = getFogLevel(rowDistance);
-            color = color * (1.f - fog) + Utils::Color(fogColor, fogColor, fogColor) * fog;
+            if (enableLighting)
+            {
+                Utils::Color lightContribution(0.f, 0.f, 0.f);
+                for (const auto &light : scene.getLights())
+                {
+                    auto p = world;
+                    auto intensity = light->getIntensityAt(p);
+                    lightContribution += light->getColor() * intensity;
+                }
+                lightContribution = lightContribution.clamp(0.25f, 3.f);
+                color = color * lightContribution;
+            }
+
+            if (enableFog)
+            {
+                auto fog = getFogLevel(rowDistance);
+                color = color * (1.f - fog) + Utils::Color(fogColor, fogColor, fogColor) * fog;
+            }
 
             image(x, y) = color;
         }
