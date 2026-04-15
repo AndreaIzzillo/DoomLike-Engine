@@ -75,5 +75,9 @@ namespace Engine
         void drawWallVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
                               const Game::HitRecord &record, const Game::IMaterial *material,
                               const Game::TextureTransform &textureTransform);
+
+        void drawPlaneVertical(const PlaneSegment &segment, int x, int horizon, float scale,
+                               float cameraHeight, const Math::Point2 &camPos,
+                               const Math::Vector2 &rayDir, const Math::Vector2 &forward);
     };
 } // namespace Engine

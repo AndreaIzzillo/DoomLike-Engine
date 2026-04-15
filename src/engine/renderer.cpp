@@ -188,43 +188,7 @@ namespace Engine
 
             for (const auto &segment : planeSegments[x])
             {
-                auto zPlane = segment.sector->getFloorHeight();
-                auto material = segment.sector->getFloorMaterial();
-                auto texDesc = material->getDescriptor();
-                auto texTransform = segment.sector->getFloorTextureTransform();
-
-                if (segment.type == PlaneType::Ceiling)
-                {
-                    zPlane = segment.sector->getCeilingHeight();
-                    material = segment.sector->getCeilingMaterial();
-                    texDesc = material->getDescriptor();
-                    texTransform = segment.sector->getCeilingTextureTransform();
-                }
-
-                for (int y = segment.yTop; y < segment.yBottom; y++)
-                {
-                    if (y - horizon == 0)
-                        continue;
-
-                    float rowDistance = scale * (zPlane - cameraHeight) / FLT(horizon - y);
-                    if (rowDistance <= 0.f)
-                        continue;
-
-                    float tRay = rowDistance / (rayDir * forward);
-                    auto world = camPos + rayDir * tRay;
-
-                    float u = world.x * texTransform.scaleX + texTransform.offsetX;
-                    u -= std::floor(u);
-                    float v = world.y * texTransform.scaleY + texTransform.offsetY;
-                    v -= std::floor(v);
-
-                    Math::Point2 texCoord(u * texDesc.textureWidth, v * texDesc.textureHeight);
-
-                    texCoord.x = std::clamp(texCoord.x, 0.f, texDesc.textureWidth - 1.f);
-                    texCoord.y = std::clamp(texCoord.y, 0.f, texDesc.textureHeight - 1.f);
-
-                    image(x, y) = material->getSample(Game::HitRecord(), texCoord).color;
-                }
+                drawPlaneVertical(segment, x, horizon, scale, cameraHeight, camPos, rayDir, forward);
             }
         }
 
@@ -289,6 +253,49 @@ namespace Engine
             texCoord.y = v * texProperties.textureHeight;
 
             image(x, y) = material->getSample(record, texCoord).color;
+        }
+    }
+
+    void Renderer::drawPlaneVertical(const PlaneSegment &segment, int x, int horizon, float scale,
+                                     float cameraHeight, const Math::Point2 &camPos,
+                                     const Math::Vector2 &rayDir, const Math::Vector2 &forward)
+    {
+        auto zPlane = segment.sector->getFloorHeight();
+        auto material = segment.sector->getFloorMaterial();
+        auto texDesc = material->getDescriptor();
+        auto texTransform = segment.sector->getFloorTextureTransform();
+
+        if (segment.type == PlaneType::Ceiling)
+        {
+            zPlane = segment.sector->getCeilingHeight();
+            material = segment.sector->getCeilingMaterial();
+            texDesc = material->getDescriptor();
+            texTransform = segment.sector->getCeilingTextureTransform();
+        }
+
+        for (int y = segment.yTop; y < segment.yBottom; y++)
+        {
+            if (y - horizon == 0)
+                continue;
+
+            float rowDistance = scale * (zPlane - cameraHeight) / FLT(horizon - y);
+            if (rowDistance <= 0.f)
+                continue;
+
+            float tRay = rowDistance / (rayDir * forward);
+            auto world = camPos + rayDir * tRay;
+
+            float u = world.x * texTransform.scaleX + texTransform.offsetX;
+            u -= std::floor(u);
+            float v = world.y * texTransform.scaleY + texTransform.offsetY;
+            v -= std::floor(v);
+
+            Math::Point2 texCoord(u * texDesc.textureWidth, v * texDesc.textureHeight);
+
+            texCoord.x = std::clamp(texCoord.x, 0.f, texDesc.textureWidth - 1.f);
+            texCoord.y = std::clamp(texCoord.y, 0.f, texDesc.textureHeight - 1.f);
+
+            image(x, y) = material->getSample(Game::HitRecord(), texCoord).color;
         }
     }
 } // namespace Engine
