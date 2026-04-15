@@ -1,9 +1,11 @@
 #include "engine/renderer.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
+#include <X11/Xlib.h>
 #include <algorithm>
 #include <cfloat>
 #include <cmath>
+#include <cstdlib>
 #include <stdexcept>
 
 #include "game/scene/scene.hpp"
@@ -201,50 +203,45 @@ namespace Engine
             }
         }
 
-#pragma omp parallel for schedule(dynamic, 8)
-        for (int x = 0; x < screenWidth; x++)
+        const auto &sectors = scene.getSectors();
+        int bottom = screenHeight;
+        int top = 0;
+        for (const auto &sector : sectors)
         {
-            int bottom = screenHeight;
-            int top = 0;
-            const auto &sectors = scene.getSectors();
-            for (const auto& sector : sectors)
+            const auto &sprites = sector->getSprites();
+            for (const auto &sprite : sprites)
             {
-                const auto &sprites = sector->getSprites();
-                for (const auto &sprite : sprites)
+                Math::Vector2 rel = sprite->getPos() - camPos;
+                float depth = rel * cam.getForward();
+                if (depth < 0.3f) continue;
+                float side = rel * cam.getRight();
+
+                int yTop = projectScreen(horizon, cameraHeight, 1, scale, depth);
+                int yBottom =
+                    projectScreen(horizon, cameraHeight, sector->getFloorHeight(), scale, depth);
+                int SpriteTop = std::clamp(yTop, top, bottom);
+                int SpriteBottom = std::clamp(yBottom, top, bottom);
+                float screenX = (screenWidth / 2.f) * (1.f + side / depth);
+                float size = scale / depth;
+                // size = std::min(size, (float)screenWidth);
+
+                int startX = screenX - size / 2;
+                int endX = screenX + size / 2;
+
+                int drawStartX = std::clamp(startX, 0, screenWidth);
+                int drawEndX = std::clamp(endX, 0, screenWidth);
+
+                auto tex = sprite->getTexture();
+
+#pragma omp parallel for schedule(static)
+                for (int x = drawStartX; x < drawEndX; x++)
                 {
-                    float d = (cam.getPosition() - sprite->getPos()).norm();
-                    if (d > zBuffer[x])
+                    if (depth > zBuffer[x])
                         continue;
 
-                    int yTop = projectScreen(horizon, cameraHeight, 1, scale,
-                                             (camPos - sprite->getPos()).norm());
-                    int yBottom = projectScreen(horizon, cameraHeight,
-                                                sector->getFloorHeight(), scale,
-                                                (camPos - sprite->getPos()).norm());
+                    float u = (x - startX) / FLT(endX - startX);
 
-                    int SpriteTop = std::clamp(yTop, top, bottom);
-                    int SpriteBottom = std::clamp(yBottom, top, bottom);
-
-                    Math::Vector2 F = cam.getForward();
-
-                    F = F * d;
-                    Math::Vector2 spritePlan = cam.getRight();
-                    Math::Point2 spritePointA = sprite->getPos() + spritePlan;
-                    Math::Point2 spritePointB = sprite->getPos() - spritePlan;
-
-                    Math::Vector2 r = cam.getRay(x).direction;
-                    Math::Vector2 s = spritePointB - spritePointA;
-                    Math::Vector2 diff = spritePointA - cam.getRay(x).origin;
-                    float denom = r ^ s;
-
-                    float t = (diff ^ s);
-                    float u = (diff ^ r) / denom;
-
-                    if (u < 0 || u > 1 || t < 0)
-                        continue;
-
-                    drawWallVertical2(yTop, yBottom, SpriteTop, SpriteBottom, x, u,
-                                      sprite->getTexture());
+                    drawWallVertical2(yTop, yBottom, SpriteTop, SpriteBottom, x, u, tex);
                 }
             }
         }
@@ -360,7 +357,7 @@ namespace Engine
     }
 
     void Renderer::drawWallVertical2(int yTop, int yBottom, int drawTop, int drawBottom, int x,
-                                     float u, Utils::Image texture)
+                                     float u, const Utils::Image &texture)
     {
         /* Texture mapping */
         auto texCoord = Math::Point2(0.f, 0.f);
@@ -370,6 +367,7 @@ namespace Engine
         texCoord.x = u * texture.getWidth();
 
         float lineHeight = yBottom - yTop;
+
         for (int y = drawTop; y < drawBottom; y++)
         {
             /* Calculate texture Y (v) coordinate */
@@ -379,10 +377,9 @@ namespace Engine
 
             auto pixelSprite = texture(texCoord.x, texCoord.y);
 
-            // if (pixelSprite.r < FLT_EPSILON && pixelSprite.g < FLT_EPSILON && pixelSprite.b <
-            // FLT_EPSILON)
-            //     continue;
-            image(x, y) = texture(texCoord.x, texCoord.y);
+            if (pixelSprite.r < 0.1 && pixelSprite.g < 0.1 && pixelSprite.b < 0.1)
+                continue;
+            image(x, y) = pixelSprite;
         }
     }
 

@@ -109,8 +109,15 @@ namespace IO
                 sectors[sectorId] = std::make_unique<Sector>(floorH, ceilingH, materials[floorMat],
                                                              materials[ceilingMat]);
                 sprites.push_back(
-                    std::make_unique<Sprite>(Math::Point2(0, 0), "resources/textures/rom.ppm"));
+                    std::make_unique<Sprite>(Math::Point2(0, 0), "resources/textures/rom3264.ppm"));
                 sectors[0]->addSprite(sprites.back().get());
+                           sprites.push_back(
+                    std::make_unique<Sprite>(Math::Point2(2, 0), "resources/textures/rom3264.ppm"));
+                sectors[0]->addSprite(sprites.back().get());
+                                        sprites.push_back(
+                    std::make_unique<Sprite>(Math::Point2(-2, 0), "resources/textures/rom3264.ppm"));
+                sectors[0]->addSprite(sprites.back().get());
+
             }
             /* Wall definition */
             else if (type == 'W')
