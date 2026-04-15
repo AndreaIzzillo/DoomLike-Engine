@@ -25,22 +25,6 @@
 
 namespace Engine
 {
-    void sortSprites(int *order, double *dist, int amount)
-    {
-        std::vector<std::pair<double, int>> sprites(amount);
-        for (int i = 0; i < amount; i++)
-        {
-            sprites[i].first = dist[i];
-            sprites[i].second = order[i];
-        }
-        std::sort(sprites.begin(), sprites.end());
-        // restore in reverse order to go from farthest to nearest
-        for (int i = 0; i < amount; i++)
-        {
-            dist[i] = sprites[amount - i - 1].first;
-            order[i] = sprites[amount - i - 1].second;
-        }
-    }
 
     Renderer::Renderer()
         : image(Game::Settings::get().windowWidth, Game::Settings::get().windowHeight)
@@ -220,101 +204,130 @@ namespace Engine
         }
 
         const auto &sectors = scene.getSectors();
-        const auto &sprites = scene.getSprites();
         int bottom = screenHeight;
         int top = 0;
+
+        std::vector<SpriteEntry> allSprites;
+
         for (const auto &sector : sectors)
         {
             const auto &sprites = sector->getSprites();
-            int numSprites = sprites.size();
-            int spriteOrder[numSprites];
-            double spriteDistance[numSprites];
-            for (int i = 0; i < numSprites; i++)
+            for (const auto &sprite : sprites)
             {
-                spriteOrder[i] = i;
-                spriteDistance[i] =
-                    ((camPos.x - sprites[i]->getPos().x) * (camPos.x - sprites[i]->getPos().x)
-                     + (camPos.y - sprites[i]->getPos().y) * (camPos.y - sprites[i]->getPos().y));
+                float dist = (camPos.x - sprite->getPos().x) * (camPos.x - sprite->getPos().x)
+                    + (camPos.y - sprite->getPos().y) * (camPos.y - sprite->getPos().y);
+                allSprites.push_back({ sprite, sector.get(), dist });
             }
+        }
 
-            sortSprites(spriteOrder, spriteDistance, numSprites);
+        std::sort(
+            allSprites.begin(), allSprites.end(),
+            [](const SpriteEntry &a, const SpriteEntry &b) { return a.distance > b.distance; });
 
-            for (int i = 0; i < numSprites; i++)
-            {
-                auto sprite = sprites[spriteOrder[i]];
-                Math::Vector2 rel = sprite->getPos() - camPos;
-                float depth = rel * cam.getForward();
-                if (depth < 0.3f)
-                    continue;
-                float side = rel * cam.getRight();
-                float mulSize = sprite->getMulSize();
-                float mulHeight = sprite->getMulHeight();
-                float vPos = sprite->getVPos();
+        for (const auto &entry : allSprites)
+        {
+            auto sprite = entry.sprite;
+            auto sector = entry.sector;
+            Math::Vector2 rel = sprite->getPos() - camPos;
+            float depth = rel * cam.getForward();
+            if (depth < 0.1f)
+                continue;
+            float side = rel * cam.getRight();
+            float mulSize = sprite->getMulSize();
+            float mulHeight = sprite->getMulHeight();
+            float vPos = sprite->getVPos();
 
-                int yTop = projectScreen(horizon, cameraHeight,
-                                         sector->getFloorHeight() + vPos + mulHeight, scale, depth);
-                int yBottom = projectScreen(horizon, cameraHeight, sector->getFloorHeight() + vPos,
-                                            scale, depth);
-                int SpriteTop = std::clamp(yTop, top, bottom);
-                int SpriteBottom = std::clamp(yBottom, top, bottom);
-                float screenX = (screenWidth / 2.f) * (1.f + side / depth);
-                float size = (scale / depth) * mulSize;
+            int yTop = projectScreen(horizon, cameraHeight,
+                                     sector->getFloorHeight() + vPos + mulHeight, scale, depth);
+            int yBottom =
+                projectScreen(horizon, cameraHeight, sector->getFloorHeight() + vPos, scale, depth);
+            int SpriteTop = std::clamp(yTop, top, bottom);
+            int SpriteBottom = std::clamp(yBottom, top, bottom);
+            float screenX = (screenWidth / 2.f) * (1.f + side / depth);
+            float size = (scale / depth) * mulSize;
 
-                int startX = screenX - size / 2;
-                int endX = screenX + size / 2;
+            int startX = screenX - size / 2;
+            int endX = screenX + size / 2;
 
-                int drawStartX = std::clamp(startX, 0, screenWidth);
-                int drawEndX = std::clamp(endX, 0, screenWidth);
+            int drawStartX = std::clamp(startX, 0, screenWidth);
+            int drawEndX = std::clamp(endX, 0, screenWidth);
 
-                auto tex = sprite->getTexture();
+            auto tex = sprite->getTexture();
 
 #pragma omp parallel for schedule(static)
-                for (int x = drawStartX; x < drawEndX; x++)
-                {
-                    if (depth > zBuffer[x])
-                        continue;
+            for (int x = drawStartX; x < drawEndX; x++)
+            {
+                if (depth > zBuffer[x])
+                    continue;
 
-                    float u = (x - startX) / FLT(endX - startX);
+                float u = (x - startX) / FLT(endX - startX);
 
-                    drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, tex);
-                }
+                drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, tex);
             }
         }
 
 #pragma omp parallel for collapse(2)
-        for (int y = 0; y < screenHeight; y++)
+    for (int y = 0; y < screenHeight; y++)
+    {
+        for (int x = 0; x < screenWidth; x++)
         {
-            for (int x = 0; x < screenWidth; x++)
-            {
-                const Utils::Color color = image(x, y).clamp();
+            const Utils::Color color = image(x, y).clamp();
 
-                const std::size_t index = (static_cast<std::size_t>(y) * screenWidth + x) * 4;
+            const std::size_t index = (static_cast<std::size_t>(y) * screenWidth + x) * 4;
 
-                pixelBuffer[index] = static_cast<std::uint8_t>(color.r * 255.f);
-                pixelBuffer[index + 1] = static_cast<std::uint8_t>(color.g * 255.f);
-                pixelBuffer[index + 2] = static_cast<std::uint8_t>(color.b * 255.f);
-                pixelBuffer[index + 3] = 255;
-            }
+            pixelBuffer[index] = static_cast<std::uint8_t>(color.r * 255.f);
+            pixelBuffer[index + 1] = static_cast<std::uint8_t>(color.g * 255.f);
+            pixelBuffer[index + 2] = static_cast<std::uint8_t>(color.b * 255.f);
+            pixelBuffer[index + 3] = 255;
         }
-
-        texture.update(pixelBuffer.data());
-        // image.clear({ 1.f, 0.f, 0.f });
-
-        window.draw(sprite);
-        window.display();
     }
 
-    float Renderer::getVerticalFov(float horizontalFov, float aspectRatio) const
+    texture.update(pixelBuffer.data());
+    // image.clear({ 1.f, 0.f, 0.f });
+
+    window.draw(sprite);
+    window.display();
+}
+
+float Renderer::getVerticalFov(float horizontalFov, float aspectRatio) const
+{
+    return 2.f * std::atan(std::tan(horizontalFov / 2.f) * aspectRatio);
+}
+
+int Renderer::projectScreen(float horizon, float cameraHeight, float z, float scale,
+                            float distance) const
+{
+    float p = horizon - (z - cameraHeight) * scale / distance;
+    return static_cast<int>(p);
+}
+
+void Renderer::drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
+                                  float u, const Utils::Image &texture)
+{
+    /* Texture mapping */
+    auto texCoord = Math::Point2(0.f, 0.f);
+
+    /* Calculate texture X (u) coordinate */
+    u -= std::floor(u);
+    texCoord.x = u * texture.getWidth();
+
+    float lineHeight = yBottom - yTop;
+
+    for (int y = drawTop; y < drawBottom; y++)
     {
-        return 2.f * std::atan(std::tan(horizontalFov / 2.f) * aspectRatio);
-    }
+        /* Calculate texture Y (v) coordinate */
+        float v = FLT(y - yTop) / FLT(lineHeight);
+        v -= std::floor(v);
+        texCoord.y = v * texture.getHeight();
 
-    int Renderer::projectScreen(float horizon, float cameraHeight, float z, float scale,
-                                float distance) const
-    {
-        float p = horizon - (z - cameraHeight) * scale / distance;
-        return static_cast<int>(p);
+        auto pixelSprite = texture(texCoord.x, texCoord.y);
+
+        if (pixelSprite.r < 0.1 && pixelSprite.g < 0.1 && pixelSprite.b < 0.1)
+            continue;
+        image(x, y) = pixelSprite;
     }
+}
+
 
     float Renderer::getFogLevel(float distance) const
     {
@@ -391,33 +404,6 @@ namespace Engine
         }
     }
 
-    void Renderer::drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
-                                      float u, const Utils::Image &texture)
-    {
-        /* Texture mapping */
-        auto texCoord = Math::Point2(0.f, 0.f);
-
-        /* Calculate texture X (u) coordinate */
-        u -= std::floor(u);
-        texCoord.x = u * texture.getWidth();
-
-        float lineHeight = yBottom - yTop;
-
-        for (int y = drawTop; y < drawBottom; y++)
-        {
-            /* Calculate texture Y (v) coordinate */
-            float v = FLT(y - yTop) / FLT(lineHeight);
-            v -= std::floor(v);
-            texCoord.y = v * texture.getHeight();
-
-            auto pixelSprite = texture(texCoord.x, texCoord.y);
-
-            if (pixelSprite.r < 0.1 && pixelSprite.g < 0.1 && pixelSprite.b < 0.1)
-                continue;
-            image(x, y) = pixelSprite;
-        }
-    }
-
     void Renderer::drawPlaneVertical(const PlaneSegment &segment, int x, int horizon, float scale,
                                      float cameraHeight, const Math::Point2 &camPos,
                                      const Math::Vector2 &rayDir, const Math::Vector2 &forward,
@@ -482,4 +468,4 @@ namespace Engine
             image(x, y) = color;
         }
     }
-} // namespace Engine
+}// namespace Engine

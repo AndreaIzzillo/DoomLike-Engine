@@ -9,6 +9,15 @@
 
 namespace Engine
 {
+
+        struct SpriteEntry
+        {
+            Game::Sprite *sprite = nullptr;
+            Game::Sector *sector = nullptr;
+            float distance = 0.f;
+        };
+
+
     /**
      * @brief Enumerate the types of planes that can be rendered.
      */
