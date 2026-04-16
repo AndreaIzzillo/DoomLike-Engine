@@ -1,9 +1,10 @@
 #pragma once
 
-#include <string>
+#include <memory>
 
+#include "game/interfaces/imaterial.hpp"
 #include "math/point2.hpp"
-#include "utils/image.hpp"
+
 namespace Game
 {
     /**
@@ -12,18 +13,18 @@ namespace Game
     class Sprite
     {
     public:
-        Sprite(Math::Point2 pos, const std::string &filename, float mulHeight = 1,
+        Sprite(Math::Point2 pos, std::shared_ptr<IMaterial> material, float mulHeight = 1,
                float mulSize = 1, float vPos = 0);
         ~Sprite() = default;
         const Math::Point2 &getPos();
-        const Utils::Image &getTexture();
+        const std::shared_ptr<IMaterial> &getMaterial();
         float getMulSize() const;
         float getMulHeight() const;
         float getVPos() const;
 
     private:
         Math::Point2 pos;
-        Utils::Image texture;
+        std::shared_ptr<Game::IMaterial> material;
         float mulSize;
         float mulHeight;
         float vPos;

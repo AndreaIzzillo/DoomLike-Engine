@@ -1,5 +1,7 @@
 P (0,0) (1,0)
 
+M Color "red" (1,0,0)
+
 M Texture "diamond" "./resources/textures/diamond.ppm"
 M Texture "romain"  "./resources/textures/rom.ppm"
 M Texture "brick"   "./resources/textures/brick.ppm"
@@ -31,14 +33,14 @@ S 12  0.16 2.30 "rom3264" "diamond"
 S 13 -0.24 2.00 "rom6432" "brick"
 
 # Sprites
-T (0,0) "resources/textures/rom.ppm" 1 1 0 0
-T (1,0) "resources/textures/rom.ppm" 1 1 0 0
-T (-1,0) "resources/textures/rom.ppm" 1 1 0 0
-T (0,1) "resources/textures/rom.ppm" 1 1 0 0
-T (0,-1) "resources/textures/rom.ppm" 1 1 0 0
+T (0,0) gem 1 1 0 0
+T (1,0) romain 1 1 0 0
+T (-1,0) romain 1 1 0 0
+T (0,1) romain 1 1 0 0
+T (0,-1) romain 1 1 0 0
 
-T (17,0) "resources/textures/rom.ppm" 1 1 0 11
-T (20,0) "resources/textures/J.ppm" 1 1 0.1 11
+T (17,0) romain 1 1 0 11
+T (20,0) romain 1 1 0.1 11
 
 # Salle centrale (secteur 0)
 W (6,5) (2,5) "romain" 0 -1 "" ""

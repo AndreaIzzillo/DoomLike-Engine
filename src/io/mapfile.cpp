@@ -189,20 +189,23 @@ namespace IO
             }
             else if (type == 'T')
             {
-                std::string posS, textureS;
+                std::string posS, materialS;
                 float mulHeight, mulSize, vPos;
                 std::string sectorS;
 
-                iss >> posS >> textureS >> mulHeight >> mulSize >> vPos >> sectorS;
+                iss >> posS >> materialS >> mulHeight >> mulSize >> vPos >> sectorS;
 
-                textureS = parseQuoted(textureS);
+                materialS = parseQuoted(materialS);
                 int sectorId = std::stoi(sectorS);
 
                 if (sectors.find(sectorId) == sectors.end())
                     throw std::runtime_error("Undefined sector ID for sprite: " + sectorS);
 
-                sprites.push_back(
-                    std::make_unique<Sprite>(parsePoint(posS), textureS, mulHeight, mulSize, vPos));
+                if (materials.find(materialS) == materials.end())
+                    throw std::runtime_error("Undefined material for sprite: " + materialS);
+
+                sprites.push_back(std::make_unique<Sprite>(parsePoint(posS), materials[materialS],
+                                                           mulHeight, mulSize, vPos));
 
                 sectors[sectorId]->addSprite(sprites.back().get());
             }

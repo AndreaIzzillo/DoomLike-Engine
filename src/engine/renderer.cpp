@@ -251,7 +251,7 @@ namespace Engine
             int drawStartX = std::clamp(startX, 0, screenWidth);
             int drawEndX = std::clamp(endX, 0, screenWidth);
 
-            const auto &tex = sprite->getTexture();
+            auto material = sprite->getMaterial().get();
 
             /* Compute lighting */
             Utils::Color lightContribution(0.f, 0.f, 0.f);
@@ -273,7 +273,8 @@ namespace Engine
                     continue;
                 float u = (x - startX) / FLT(endX - startX);
 
-                drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, tex, lightContribution);
+                drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, material,
+                                   lightContribution);
             }
         }
 
@@ -313,14 +314,15 @@ namespace Engine
     }
 
     void Renderer::drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
-                                      float u, const Utils::Image &texture,const Utils::Color& lightContribution)
+                                      float u, const Game::IMaterial *material,
+                                      const Utils::Color &lightContribution)
     {
         /* Texture mapping */
         auto texCoord = Math::Point2(0.f, 0.f);
 
         /* Calculate texture X (u) coordinate */
         u -= std::floor(u);
-        texCoord.x = u * texture.getWidth();
+        texCoord.x = u * material->getDescriptor().textureWidth;
 
         float lineHeight = yBottom - yTop;
 
@@ -329,11 +331,14 @@ namespace Engine
             /* Calculate texture Y (v) coordinate */
             float v = FLT(y - yTop) / FLT(lineHeight);
             v -= std::floor(v);
-            texCoord.y = v * texture.getHeight();
+            texCoord.y = v * material->getDescriptor().textureHeight;
 
-            auto pixelSprite = texture(texCoord.x, texCoord.y);
+            auto pixelSprite = material->getSample(texCoord).color;
 
             if (pixelSprite.r < 0.1 && pixelSprite.g < 0.1 && pixelSprite.b < 0.1)
+                continue;
+
+            if (pixelSprite.r > 0.9999f && pixelSprite.g > 0.9999f && pixelSprite.b > 0.9999f)
                 continue;
 
             if (enableLighting)

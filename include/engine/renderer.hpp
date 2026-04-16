@@ -109,7 +109,8 @@ namespace Engine
                                const Game::Scene &scene);
 
         void drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x, float u,
-                                const Utils::Image &texture, const Utils::Color& lightContribution);
+                                const Game::IMaterial *material,
+                                const Utils::Color &lightContribution);
 
     private: /* Helper methods */
         float getVerticalFov(float horizontalFov, float aspectRatio) const;

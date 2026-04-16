@@ -74,7 +74,7 @@ T (x,y) "<TexturePath>" <HeightScale> <WidthScale> <VerticalOffset> <SectorID>
 Where:
 - T indicates a sprite definition.
 - (x,y) is the position of the sprite in world coordinates.
-- <TexturePath> is the file path to the sprite texture, enclosed in double quotes.
+- <MaterialName> is the name of the material applied to the sprite, which must match a previously defined material. For textures, this should be the name of a material of type Texture. For colored sprites, this should be the name of a material of type Color.
 - <HeightScale> is a multiplier applied to the sprite height.
 - <WidthScale> is a multiplier applied to the sprite width.
 - <VerticalOffset> is the vertical offset of the sprite relative to the floor of the sector.

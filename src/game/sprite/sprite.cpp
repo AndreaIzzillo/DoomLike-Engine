@@ -5,10 +5,10 @@
 
 namespace Game
 {
-    Sprite::Sprite(Math::Point2 pos, const std::string &filename, float mulHeight, float mulSize,
-                   float vPos)
+    Sprite::Sprite(Math::Point2 pos, std::shared_ptr<IMaterial> material, float mulHeight,
+                   float mulSize, float vPos)
         : pos(pos)
-        , texture(Utils::Image(filename))
+        , material(material)
         , mulHeight(mulHeight)
         , mulSize(mulSize)
         , vPos(vPos)
@@ -17,11 +17,6 @@ namespace Game
     const Math::Point2 &Sprite::getPos()
     {
         return pos;
-    }
-
-    const Utils::Image &Sprite::getTexture()
-    {
-        return texture;
     }
 
     float Sprite::getMulSize() const
@@ -35,6 +30,11 @@ namespace Game
     float Sprite::getVPos() const
     {
         return vPos;
+    }
+
+    const std::shared_ptr<IMaterial> &Sprite::getMaterial()
+    {
+        return material;
     }
 
 }; // namespace Game
