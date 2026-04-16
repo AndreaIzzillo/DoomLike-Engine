@@ -99,7 +99,8 @@ namespace Engine
 
     private: /* Drawing methods */
         void drawWallVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
-                              const Game::HitRecord &record, const Game::IMaterial *material,
+                              float distance, const Game::HitRecord &record,
+                              const Game::IMaterial *material,
                               const Game::TextureTransform &textureTransform,
                               const Game::Scene &scene);
 
@@ -109,7 +110,7 @@ namespace Engine
                                const Game::Scene &scene);
 
         void drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x, float u,
-                                const Game::IMaterial *material,
+                                float depth, const Game::IMaterial *material,
                                 const Utils::Color &lightContribution);
 
     private: /* Helper methods */
@@ -119,5 +120,7 @@ namespace Engine
                           float distance) const;
 
         float getFogLevel(float distance) const;
+
+        inline int idx(int x, int y);
     };
 } // namespace Engine

@@ -29,7 +29,7 @@ namespace Engine
 
     void Runner::run()
     {
-        int fixedUpdateFrequency = std::max(60, Game::Settings::get().targetFramerate);
+        int fixedUpdateFrequency = std::max(60, Game::Settings::get().targetFramerate * 10);
         const sf::Time fixedDt = sf::seconds(1.f / fixedUpdateFrequency);
 
         int fpsCounter = 0;

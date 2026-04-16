@@ -29,7 +29,7 @@ namespace Engine
     Renderer::Renderer()
         : image(Game::Settings::get().windowWidth, Game::Settings::get().windowHeight)
         , sprite(texture)
-        , zBuffer(image.getWidth())
+        , zBuffer(image.getWidth() * image.getHeight())
     {
         const auto windowWidth = Game::Settings::get().windowWidth;
         const auto windowHeight = Game::Settings::get().windowHeight;
@@ -79,6 +79,7 @@ namespace Engine
         float scale = (screenHeight / 2.f) / std::tan(fovV / 2.f);
         float cameraHeight = cam.getCameraHeight() + cam.getOffsetHeight();
         int horizon = screenHeight / 2;
+        std::fill(zBuffer.begin(), zBuffer.end(), std::numeric_limits<float>::infinity());
 
         planeSegments.clear();
         planeSegments.resize(screenWidth);
@@ -114,9 +115,6 @@ namespace Engine
                 auto rayDir = ray.direction;
                 float distance = record.t * (rayDir * forward);
 
-                // Set the zbuffer with the distance to the wall
-                zBuffer[x] = distance;
-
                 /* Apply the perspective projection formula */
                 int yTop = projectScreen(horizon, cameraHeight, frontSector->getCeilingHeight(),
                                          scale, distance);
@@ -134,8 +132,8 @@ namespace Engine
                     /* Wall rendering */
                     int wallTop = std::clamp(yTop, top, bottom);
                     int wallBottom = std::clamp(yBottom, top, bottom);
-                    drawWallVertical(yTop, yBottom, wallTop, wallBottom, x, record, record.material,
-                                     record.textureTransform, scene);
+                    drawWallVertical(yTop, yBottom, wallTop, wallBottom, x, distance, record,
+                                     record.material, record.textureTransform, scene);
 
                     /* Keep the floor */
                     int floorTop = std::clamp(yBottom, top, bottom);
@@ -165,14 +163,16 @@ namespace Engine
                     /* Upper wall rendering */
                     int upperWallTop = std::max(top, yTop);
                     int upperWallBottom = std::min(bottom, nextTop);
-                    drawWallVertical(yTop, nextTop, upperWallTop, upperWallBottom, x, record,
-                                     record.upperMaterial, record.upperTextureTransform, scene);
+                    drawWallVertical(yTop, nextTop, upperWallTop, upperWallBottom, x, distance,
+                                     record, record.upperMaterial, record.upperTextureTransform,
+                                     scene);
 
                     /* Lower wall rendering */
                     int lowerWallTop = std::max(top, nextBottom);
                     int lowerWallBottom = std::min(bottom, yBottom);
-                    drawWallVertical(nextBottom, yBottom, lowerWallTop, lowerWallBottom, x, record,
-                                     record.lowerMaterial, record.lowerTextureTransform, scene);
+                    drawWallVertical(nextBottom, yBottom, lowerWallTop, lowerWallBottom, x,
+                                     distance, record, record.lowerMaterial,
+                                     record.lowerTextureTransform, scene);
 
                     /* Keep the floor */
                     int floorTop = std::clamp(yBottom, top, bottom);
@@ -269,12 +269,9 @@ namespace Engine
 #pragma omp parallel for schedule(static)
             for (int x = drawStartX; x < drawEndX; x++)
             {
-                if (depth > zBuffer[x])
-                    continue;
-
                 float u = (x - startX) / FLT(endX - startX);
 
-                drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, material,
+                drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, depth, material,
                                    lightContribution);
             }
         }
@@ -315,7 +312,7 @@ namespace Engine
     }
 
     void Renderer::drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
-                                      float u, const Game::IMaterial *material,
+                                      float u, float depth, const Game::IMaterial *material,
                                       const Utils::Color &lightContribution)
     {
         /* Texture mapping */
@@ -329,6 +326,10 @@ namespace Engine
 
         for (int y = drawTop; y < drawBottom; y++)
         {
+            if (depth >= zBuffer[idx(x, y)])
+            {
+                continue;
+            }
             /* Calculate texture Y (v) coordinate */
             float v = FLT(y - yTop) / FLT(lineHeight);
             v -= std::floor(v);
@@ -344,6 +345,7 @@ namespace Engine
             {
                 pixelSprite = pixelSprite * lightContribution;
             }
+            zBuffer[idx(x, y)] = depth;
             image(x, y) = pixelSprite;
         }
     }
@@ -359,7 +361,8 @@ namespace Engine
     }
 
     void Renderer::drawWallVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
-                                    const Game::HitRecord &record, const Game::IMaterial *material,
+                                    float distance, const Game::HitRecord &record,
+                                    const Game::IMaterial *material,
                                     const Game::TextureTransform &textureTransform,
                                     const Game::Scene &scene)
     {
@@ -401,6 +404,10 @@ namespace Engine
         float lineHeight = yBottom - yTop;
         for (int y = drawTop; y < drawBottom; y++)
         {
+            if (distance >= zBuffer[idx(x, y)])
+            {
+                continue;
+            }
             /* Calculate texture Y (v) coordinate */
             float v = FLT(y - yTop) / FLT(lineHeight);
             v = v * textureTransform.scaleY + textureTransform.offsetY;
@@ -418,7 +425,7 @@ namespace Engine
             {
                 color = color * fogOpposite + fogColorIntensity;
             }
-
+            zBuffer[idx(x, y)] = distance;
             image(x, y) = color;
         }
     }
@@ -447,7 +454,7 @@ namespace Engine
                 continue;
 
             float rowDistance = scale * (zPlane - cameraHeight) / FLT(horizon - y);
-            if (rowDistance <= 0.f)
+            if (rowDistance <= 0.f || rowDistance >= zBuffer[idx(x, y)])
                 continue;
 
             float tRay = rowDistance / (rayDir * forward);
@@ -483,8 +490,13 @@ namespace Engine
                 auto fog = getFogLevel(rowDistance);
                 color = color * (1.f - fog) + Utils::Color(fogColor, fogColor, fogColor) * fog;
             }
-
+            zBuffer[idx(x, y)] = rowDistance;
             image(x, y) = color;
         }
+    }
+
+    inline int Renderer::idx(int x, int y)
+    {
+        return y * image.getWidth() + x;
     }
 } // namespace Engine
