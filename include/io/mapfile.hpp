@@ -9,6 +9,7 @@
 #include "game/materials/animated_material.hpp"
 #include "game/player/player.hpp"
 #include "game/sprite/sprite.hpp"
+#include "game/world/light.hpp"
 #include "game/world/sector.hpp"
 #include "game/world/wall.hpp"
 #include "math/point2.hpp"
@@ -35,6 +36,7 @@ namespace IO
         std::vector<std::unique_ptr<Wall>> getWalls();
         std::vector<std::unique_ptr<Sector>> getSectors();
         std::vector<std::unique_ptr<Sprite>> getSprites();
+        std::vector<std::unique_ptr<Light>> getLights();
         const Sector *getStartingSector() const;
         std::vector<AnimatedMaterial *> &getAnimatedMaterials();
 
@@ -43,6 +45,7 @@ namespace IO
         Point2 playerLookAt;
         std::vector<std::unique_ptr<Wall>> walls;
         std::vector<std::unique_ptr<Sprite>> sprites;
+        std::vector<std::unique_ptr<Light>> lights;
         std::map<std::string, std::shared_ptr<IMaterial>> materials;
         std::map<int, std::unique_ptr<Sector>> sectors;
         std::map<std::string, std::shared_ptr<AnimatedMaterial>> animations;

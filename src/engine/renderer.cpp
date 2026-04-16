@@ -271,6 +271,7 @@ namespace Engine
             {
                 if (depth > zBuffer[x])
                     continue;
+
                 float u = (x - startX) / FLT(endX - startX);
 
                 drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, material,
@@ -335,10 +336,8 @@ namespace Engine
 
             auto pixelSprite = material->getSample(texCoord).color;
 
-            if (pixelSprite.r < 0.1 && pixelSprite.g < 0.1 && pixelSprite.b < 0.1)
-                continue;
-
-            if (pixelSprite.r > 0.9999f && pixelSprite.g > 0.9999f && pixelSprite.b > 0.9999f)
+            if (std::abs(pixelSprite.r) < EPS && std::abs(pixelSprite.g) < EPS
+                && std::abs(pixelSprite.b) < EPS)
                 continue;
 
             if (enableLighting)

@@ -34,7 +34,7 @@ To make an `Animated` material, properties must be one image frame followed by t
 Sectors are defined using the following format:
 
 ```
-S <SectorID> <FloorHeight> <CeilingHeight> "<FloorMaterial>" "<CeilingMaterial>"
+S <SectorID> <FloorHeight> <CeilingHeight> "<FloorMaterial>" "<CeilingMaterial>" <FloorMatScaleX> <FloorMatScaleY> <FloorMatOffsetX> <FloorMatOffsetY> <CeilingMatScaleX> <CeilingMatScaleY> <CeilingMatOffsetX> <CeilingMatOffsetY>
 ```
 
 Where:
@@ -44,12 +44,13 @@ Where:
 - `<CeilingHeight>` is the height of the ceiling within the sector.
 - `<FloorMaterial>` is the name of the material applied to the floor, which must match a previously defined material.
 - `<CeilingMaterial>` is the name of the material applied to the ceiling, which must match a previously defined material.
+- Rest of the parameters are the texture scaling and offset parameters for the floor and ceiling materials respectively.
 
 ## Wall Definitions [OPTIONAL]
 Walls are defined using the following format:
 
 ```
-W (x1,y1) (x2,y2) "<MaterialName>" <Front> <Back> "<UpperMaterial>" "<LowerMaterial>"
+W (x1,y1) (x2,y2) "<MaterialName>" <Front> <Back> "<UpperMaterial>" "<LowerMaterial>" <MatScaleX> <MatScaleY> <MatOffsetX> <MatOffsetY> <UpperMatScaleX> <UpperMatScaleY> <UpperMatOffsetX> <UpperMatOffsetY> <LowerMatScaleX> <LowerMatScaleY> <LowerMatOffsetX> <LowerMatOffsetY>
 ```
 
 Where:
@@ -61,6 +62,7 @@ Where:
 - `<UpperMaterial>` is the name of the material applied to the upper part of the wall, which must match a previously defined material.
 If the wall is one-sided, this should be set to `""` (empty string). Otherwise, it should reference a valid material name.
 - `<LowerMaterial>` is the name of the material applied to the lower part of the wall, which must match a previously defined material. If the wall is one-sided, this should be set to `""` (empty string). Otherwise, it should reference a valid material name.
+- Rest of the parameters are the texture scaling and offset parameters for the main, upper and lower materials respectively.
 
 
 ## Sprite Definitions [OPTIONAL]
@@ -68,7 +70,7 @@ If the wall is one-sided, this should be set to `""` (empty string). Otherwise, 
 Sprites are defined using the following format:
 
 ```
-T (x,y) "<TexturePath>" <HeightScale> <WidthScale> <VerticalOffset> <SectorID>
+T (x,y) "<MaterialName>" <HeightScale> <WidthScale> <VerticalOffset> <SectorID>
 ```
 
 Where:
@@ -79,3 +81,18 @@ Where:
 - <WidthScale> is a multiplier applied to the sprite width.
 - <VerticalOffset> is the vertical offset of the sprite relative to the floor of the sector.
 - <SectorID> is the ID of the sector the sprite belongs to. This must reference an existing sector.
+
+## Light Definitions [OPTIONAL]
+
+Lights are defined using the following format:
+
+```
+L (x,y) <Radius> <Intensity> <Color>
+```
+
+Where:
+- `L` indicates a light definition.
+- `(x,y)` is the position of the light in world coordinates.
+- `<Radius>` is the radius of the light's effect.
+- `<Intensity>` is the intensity of the light, where 1.0 represents full brightness and values less than 1.0 represent dimmer light.
+- `<Color>` is the color of the light, represented as a RGB triplet in the format (R,G,B).

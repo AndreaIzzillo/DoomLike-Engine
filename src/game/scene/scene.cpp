@@ -19,6 +19,7 @@ namespace Game
         , sectors(mapFile.getSectors())
         , currentSector(mapFile.getStartingSector())
         , sprites(mapFile.getSprites())
+        , lights(mapFile.getLights())
     {
         player.setCurrentSector(currentSector);
 

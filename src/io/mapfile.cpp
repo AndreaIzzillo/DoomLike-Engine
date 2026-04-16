@@ -126,8 +126,31 @@ namespace IO
                 if (materials.find(ceilingMat) == materials.end())
                     throw std::runtime_error("Undefined material: " + ceilingMat);
 
+                std::string floorMatScaleX, floorMatScaleY, floorMatOffsetX, floorMatOffsetY;
+                std::string ceilingMatScaleX, ceilingMatScaleY, ceilingMatOffsetX,
+                    ceilingMatOffsetY;
+                iss >> floorMatScaleX >> floorMatScaleY >> floorMatOffsetX >> floorMatOffsetY
+                    >> ceilingMatScaleX >> ceilingMatScaleY >> ceilingMatOffsetX
+                    >> ceilingMatOffsetY;
+
+                float floorMatScaleXVal = std::stof(floorMatScaleX);
+                float floorMatScaleYVal = std::stof(floorMatScaleY);
+                float floorMatOffsetXVal = std::stof(floorMatOffsetX);
+                float floorMatOffsetYVal = std::stof(floorMatOffsetY);
+                float ceilingMatScaleXVal = std::stof(ceilingMatScaleX);
+                float ceilingMatScaleYVal = std::stof(ceilingMatScaleY);
+                float ceilingMatOffsetXVal = std::stof(ceilingMatOffsetX);
+                float ceilingMatOffsetYVal = std::stof(ceilingMatOffsetY);
+
                 sectors[sectorId] = std::make_unique<Sector>(floorH, ceilingH, materials[floorMat],
                                                              materials[ceilingMat]);
+
+                sectors[sectorId]->setFloorTextureTransform({ floorMatScaleXVal, floorMatOffsetXVal,
+                                                              floorMatScaleYVal,
+                                                              floorMatOffsetYVal });
+                sectors[sectorId]->setCeilingTextureTransform(
+                    { ceilingMatScaleXVal, ceilingMatOffsetXVal, ceilingMatScaleYVal,
+                      ceilingMatOffsetYVal });
             }
             /* Wall definition */
             else if (type == 'W')
@@ -157,6 +180,26 @@ namespace IO
                 if (!lowerMatS.empty() && materials.find(lowerMatS) == materials.end())
                     throw std::runtime_error("Undefined material: " + lowerMatS);
 
+                std::string matScaleX, matScaleY, matOffsetX, matOffsetY;
+                std::string upperMatScaleX, upperMatScaleY, upperMatOffsetX, upperMatOffsetY;
+                std::string lowerMatScaleX, lowerMatScaleY, lowerMatOffsetX, lowerMatOffsetY;
+                iss >> matScaleX >> matScaleY >> matOffsetX >> matOffsetY >> upperMatScaleX
+                    >> upperMatScaleY >> upperMatOffsetX >> upperMatOffsetY >> lowerMatScaleX
+                    >> lowerMatScaleY >> lowerMatOffsetX >> lowerMatOffsetY;
+
+                float matScaleXVal = std::stof(matScaleX);
+                float matScaleYVal = std::stof(matScaleY);
+                float matOffsetXVal = std::stof(matOffsetX);
+                float matOffsetYVal = std::stof(matOffsetY);
+                float upperMatScaleXVal = std::stof(upperMatScaleX);
+                float upperMatScaleYVal = std::stof(upperMatScaleY);
+                float upperMatOffsetXVal = std::stof(upperMatOffsetX);
+                float upperMatOffsetYVal = std::stof(upperMatOffsetY);
+                float lowerMatScaleXVal = std::stof(lowerMatScaleX);
+                float lowerMatScaleYVal = std::stof(lowerMatScaleY);
+                float lowerMatOffsetXVal = std::stof(lowerMatOffsetX);
+                float lowerMatOffsetYVal = std::stof(lowerMatOffsetY);
+
                 Wall *wall = nullptr;
 
                 /* Plain wall*/
@@ -170,6 +213,13 @@ namespace IO
 
                     wall = walls.back().get();
                     sectors[front]->addWall(wall);
+
+                    wall->setTextureTransform(matScaleXVal, matOffsetXVal, matScaleYVal,
+                                              matOffsetYVal);
+                    wall->setUpperTextureTransform(upperMatScaleXVal, upperMatOffsetXVal,
+                                                   upperMatScaleYVal, upperMatOffsetYVal);
+                    wall->setLowerTextureTransform(lowerMatScaleXVal, lowerMatOffsetXVal,
+                                                   lowerMatScaleYVal, lowerMatOffsetYVal);
                 }
                 /* Portal */
                 else
@@ -185,6 +235,13 @@ namespace IO
                     wall = walls.back().get();
                     sectors[front]->addWall(wall);
                     sectors[back]->addWall(wall);
+
+                    wall->setTextureTransform(matScaleXVal, matOffsetXVal, matScaleYVal,
+                                              matOffsetYVal);
+                    wall->setUpperTextureTransform(upperMatScaleXVal, upperMatOffsetXVal,
+                                                   upperMatScaleYVal, upperMatOffsetYVal);
+                    wall->setLowerTextureTransform(lowerMatScaleXVal, lowerMatOffsetXVal,
+                                                   lowerMatScaleYVal, lowerMatOffsetYVal);
                 }
             }
             else if (type == 'T')
@@ -208,6 +265,22 @@ namespace IO
                                                            mulHeight, mulSize, vPos));
 
                 sectors[sectorId]->addSprite(sprites.back().get());
+            }
+            else if (type == 'L')
+            {
+                std::string posS, radiusS, intensityS, colorS;
+                iss >> posS >> radiusS >> intensityS >> colorS;
+
+                float radius = std::stof(radiusS);
+                float intensity = std::stof(intensityS);
+                Utils::Color color = parseColor(colorS);
+
+                lights.push_back(
+                    std::make_unique<Light>(parsePoint(posS), radius, intensity, color));
+            }
+            else
+            {
+                throw std::runtime_error("Unknown line type: " + std::string(1, type));
             }
         }
 
@@ -234,6 +307,11 @@ namespace IO
     std::vector<std::unique_ptr<Sprite>> MapFile::getSprites()
     {
         return std::move(sprites);
+    }
+
+    std::vector<std::unique_ptr<Light>> MapFile::getLights()
+    {
+        return std::move(lights);
     }
 
     std::vector<std::unique_ptr<Sector>> MapFile::getSectors()
