@@ -253,6 +253,19 @@ namespace Engine
 
             const auto &tex = sprite->getTexture();
 
+            /* Compute lighting */
+            Utils::Color lightContribution(0.f, 0.f, 0.f);
+            if (enableLighting)
+            {
+                for (const auto &light : scene.getLights())
+                {
+                    auto p = sprite->getPos();
+                    auto intensity = light->getIntensityAt(p);
+                    lightContribution += light->getColor() * intensity;
+                }
+                lightContribution = lightContribution.clamp(0.25f, 3.f);
+            }
+
 #pragma omp parallel for schedule(static)
             for (int x = drawStartX; x < drawEndX; x++)
             {
@@ -260,7 +273,7 @@ namespace Engine
                     continue;
                 float u = (x - startX) / FLT(endX - startX);
 
-                drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, tex);
+                drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, tex, lightContribution);
             }
         }
 
@@ -287,45 +300,49 @@ namespace Engine
         window.display();
     }
 
-float Renderer::getVerticalFov(float horizontalFov, float aspectRatio) const
-{
-    return 2.f * std::atan(std::tan(horizontalFov / 2.f) * aspectRatio);
-}
-
-int Renderer::projectScreen(float horizon, float cameraHeight, float z, float scale,
-                            float distance) const
-{
-    float p = horizon - (z - cameraHeight) * scale / distance;
-    return static_cast<int>(p);
-}
-
-void Renderer::drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
-                                  float u, const Utils::Image &texture)
-{
-    /* Texture mapping */
-    auto texCoord = Math::Point2(0.f, 0.f);
-
-    /* Calculate texture X (u) coordinate */
-    u -= std::floor(u);
-    texCoord.x = u * texture.getWidth();
-
-    float lineHeight = yBottom - yTop;
-
-    for (int y = drawTop; y < drawBottom; y++)
+    float Renderer::getVerticalFov(float horizontalFov, float aspectRatio) const
     {
-        /* Calculate texture Y (v) coordinate */
-        float v = FLT(y - yTop) / FLT(lineHeight);
-        v -= std::floor(v);
-        texCoord.y = v * texture.getHeight();
-
-        auto pixelSprite = texture(texCoord.x, texCoord.y);
-
-        if (pixelSprite.r < 0.1 && pixelSprite.g < 0.1 && pixelSprite.b < 0.1)
-            continue;
-        image(x, y) = pixelSprite;
+        return 2.f * std::atan(std::tan(horizontalFov / 2.f) * aspectRatio);
     }
-}
 
+    int Renderer::projectScreen(float horizon, float cameraHeight, float z, float scale,
+                                float distance) const
+    {
+        float p = horizon - (z - cameraHeight) * scale / distance;
+        return static_cast<int>(p);
+    }
+
+    void Renderer::drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBottom, int x,
+                                      float u, const Utils::Image &texture,const Utils::Color& lightContribution)
+    {
+        /* Texture mapping */
+        auto texCoord = Math::Point2(0.f, 0.f);
+
+        /* Calculate texture X (u) coordinate */
+        u -= std::floor(u);
+        texCoord.x = u * texture.getWidth();
+
+        float lineHeight = yBottom - yTop;
+
+        for (int y = drawTop; y < drawBottom; y++)
+        {
+            /* Calculate texture Y (v) coordinate */
+            float v = FLT(y - yTop) / FLT(lineHeight);
+            v -= std::floor(v);
+            texCoord.y = v * texture.getHeight();
+
+            auto pixelSprite = texture(texCoord.x, texCoord.y);
+
+            if (pixelSprite.r < 0.1 && pixelSprite.g < 0.1 && pixelSprite.b < 0.1)
+                continue;
+
+            if (enableLighting)
+            {
+                pixelSprite = pixelSprite * lightContribution;
+            }
+            image(x, y) = pixelSprite;
+        }
+    }
 
     float Renderer::getFogLevel(float distance) const
     {
@@ -466,4 +483,4 @@ void Renderer::drawSpriteVertical(int yTop, int yBottom, int drawTop, int drawBo
             image(x, y) = color;
         }
     }
-}// namespace Engine
+} // namespace Engine

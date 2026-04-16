@@ -33,7 +33,7 @@ T (0,1) "resources/textures/rom.ppm" 1 1 0 0
 T (0,-1) "resources/textures/rom.ppm" 1 1 0 0
 
 T (17,0) "resources/textures/rom.ppm" 1 1 0 11
-T (20,0) "resources/textures/J.ppm" 1 1 0.5 11
+T (20,0) "resources/textures/J.ppm" 1 1 0.1 11
 
 # Salle centrale (secteur 0)
 W (6,5) (2,5) "romain" 0 -1 "" ""

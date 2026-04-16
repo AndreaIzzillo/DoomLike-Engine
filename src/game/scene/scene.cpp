@@ -106,7 +106,7 @@ namespace Game
     {
         lights.push_back(std::move(light));
     }
-    
+
     void Scene::addSprite(std::unique_ptr<Sprite> sprite)
     {
         sprites.push_back(std::move(sprite));
