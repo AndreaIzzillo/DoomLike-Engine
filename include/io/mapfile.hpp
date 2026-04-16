@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "game/interfaces/imaterial.hpp"
+#include "game/materials/animated_material.hpp"
 #include "game/player/player.hpp"
 #include "game/sprite/sprite.hpp"
 #include "game/world/sector.hpp"
@@ -35,6 +36,7 @@ namespace IO
         std::vector<std::unique_ptr<Sector>> getSectors();
         std::vector<std::unique_ptr<Sprite>> getSprites();
         const Sector *getStartingSector() const;
+        std::vector<AnimatedMaterial *> &getAnimatedMaterials();
 
     private:
         Point2 playerPosition;
@@ -43,5 +45,7 @@ namespace IO
         std::vector<std::unique_ptr<Sprite>> sprites;
         std::map<std::string, std::shared_ptr<IMaterial>> materials;
         std::map<int, std::unique_ptr<Sector>> sectors;
+        std::map<std::string, std::shared_ptr<AnimatedMaterial>> animations;
+        std::vector<AnimatedMaterial *> animatedMaterials;
     };
 } // namespace IO

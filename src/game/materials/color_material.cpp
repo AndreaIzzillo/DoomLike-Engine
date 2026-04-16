@@ -13,8 +13,7 @@ namespace Game
         return descriptor;
     }
 
-    MaterialSample ColorMaterial::getSample(const HitRecord &record,
-                                            const Math::Point2 &texCoord) const
+    MaterialSample ColorMaterial::getSample(const Math::Point2 &texCoord) const
     {
         MaterialSample properties;
         properties.color = color;

@@ -188,4 +188,69 @@ namespace Utils
     {
         std::fill(pixels.begin(), pixels.end(), color);
     }
+
+    AnimatedImage::AnimatedImage(int width, int height)
+        : width(width)
+        , height(height)
+    {}
+
+    int AnimatedImage::getWidth() const
+    {
+        return width;
+    }
+
+    int AnimatedImage::getHeight() const
+    {
+        return height;
+    }
+
+    Color AnimatedImage::operator()(int x, int y) const
+    {
+        if (scheduler.imageFrames.empty())
+        {
+            throw std::runtime_error("AnimatedImage has no frames");
+        }
+
+        const auto &currentImage = images[scheduler.imageFrames[scheduler.currentIndex].imageIndex];
+        return currentImage(x, y);
+    }
+
+    Color &AnimatedImage::operator()(int x, int y)
+    {
+        if (scheduler.imageFrames.empty())
+        {
+            throw std::runtime_error("AnimatedImage has no frames");
+        }
+
+        auto &currentImage = images[scheduler.imageFrames[scheduler.currentIndex].imageIndex];
+        return currentImage(x, y);
+    }
+
+    void AnimatedImage::addImageFrame(const Image &image, float durationMs)
+    {
+        if (image.getWidth() != width || image.getHeight() != height)
+        {
+            throw std::invalid_argument("Bad frame dimensions");
+        }
+
+        images.push_back(image);
+        scheduler.imageFrames.push_back({ static_cast<int>(images.size() - 1), durationMs });
+    }
+
+    void AnimatedImage::updateScheduler(float dt)
+    {
+        if (scheduler.imageFrames.empty())
+        {
+            return;
+        }
+
+        auto &imageFrame = scheduler.imageFrames[scheduler.currentIndex];
+        scheduler.currentDurationMs += (dt * 1000.f);
+
+        while (scheduler.currentDurationMs >= imageFrame.durationMs)
+        {
+            scheduler.currentDurationMs -= imageFrame.durationMs;
+            scheduler.currentIndex = (scheduler.currentIndex + 1) % scheduler.imageFrames.size();
+        }
+    }
 } // namespace Utils

@@ -45,7 +45,6 @@ namespace Game
         virtual MaterialDescriptor getDescriptor() const = 0;
 
         virtual MaterialSample
-        getSample(const HitRecord &record,
-                  const Math::Point2 &texCoord = Math::Point2(0.0f, 0.0f)) const = 0;
+        getSample(const Math::Point2 &texCoord = Math::Point2(0.0f, 0.0f)) const = 0;
     };
 } // namespace Game

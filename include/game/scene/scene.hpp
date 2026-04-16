@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "engine/animation_manager.hpp"
 #include "engine/input_manager.hpp"
 #include "game/player/player.hpp"
 #include "game/sprite/sprite.hpp"
@@ -36,11 +37,12 @@ namespace Game
         const Sector *currentSector;
 
         std::vector<std::unique_ptr<Sector>> sectors;
-        std::vector<std::unique_ptr<Wall>> walls;
         std::vector<std::unique_ptr<Light>> lights;
         std::vector<std::unique_ptr<Sprite>> sprites;
 
         Engine::InputState inputState;
+        Engine::AnimationManager animationManager;
+        std::vector<std::unique_ptr<Wall>> walls;
 
     public:
         Scene(const Player &player);
@@ -51,6 +53,7 @@ namespace Game
         /* Getters */
         const Player &getPlayer() const;
         const Engine::InputState &getInputState() const;
+        const Engine::AnimationManager &getAnimationManager() const;
 
         const std::vector<std::unique_ptr<Wall>> &getWalls() const;
         const std::vector<std::unique_ptr<Sector>> &getSectors() const;

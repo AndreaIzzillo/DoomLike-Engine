@@ -27,7 +27,8 @@ Where:
 - `M` indicates a material definition.
 - `<Type>` is the type of material. Supported types are `Color` and `Texture`.
 - `<Name>` is the name of the material, enclosed in double quotes.
-- `<Properties>` are the properties of the material, which depend on the type. For `Color`, the properties are the RGB values in the format `(R,G,B)`. For `Texture`, the properties are the file path to the texture image, enclosed in double quotes.
+- `<Properties>` are the properties of the material, which depend on the type. For `Color`, the properties are the RGB values in the format (R,G,B). For `Texture`, the properties are the file path to the texture image, enclosed in double quotes.
+To make an `Animated` material, properties must be one image frame followed by the frame duration in milliseconds. To add more frames, rewrite the line with the same material name and add more frames.
 
 ## Sector Definitions [MANDATORY: 1+]
 Sectors are defined using the following format:

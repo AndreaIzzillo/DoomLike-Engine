@@ -56,9 +56,6 @@ namespace Utils
 
     /**
      * @brief CPU-side 2D pixel buffer used by rendering and texture loading.
-     *
-     * Renderer writes into this buffer before uploading to SFML, while texture
-     * materials read from file-backed images.
      */
     class Image
     {
@@ -79,5 +76,49 @@ namespace Utils
         int height;
 
         std::vector<Color> pixels;
+    };
+
+    /**
+     * @brief Represents a single frame in an animated image.
+     */
+    struct ImageFrame
+    {
+        int imageIndex = 0;
+        float durationMs = 0;
+    };
+
+    /**
+     * @brief Manages the timeline of an animated image.
+     */
+    struct Scheduler
+    {
+        int currentIndex = 0;
+        float currentDurationMs = 0;
+        std::vector<ImageFrame> imageFrames = {};
+    };
+
+    /**
+     * @brief A sequence of images played in succession.
+     */
+    class AnimatedImage
+    {
+    public:
+        AnimatedImage(int width, int height);
+
+        int getWidth() const;
+        int getHeight() const;
+
+        Color operator()(int x, int y) const;
+        Color &operator()(int x, int y);
+
+        void addImageFrame(const Image &image, float durationMs);
+        void updateScheduler(float dt);
+
+    private:
+        int width;
+        int height;
+
+        std::vector<Image> images;
+        Scheduler scheduler;
     };
 } // namespace Utils

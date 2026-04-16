@@ -7,10 +7,15 @@ M Texture "rom3264" "./resources/textures/rom3264.ppm"
 M Texture "rom6432" "./resources/textures/rom6432.ppm"
 M Texture "glow"    "./resources/textures/glow.ppm"
 
+M Animated "gem" "./resources/textures/gem/1.ppm" 500
+M Animated "gem" "./resources/textures/gem/2.ppm" 500
+M Animated "gem" "./resources/textures/gem/3.ppm" 500
+M Animated "gem" "./resources/textures/gem/4.ppm" 500
+
 # Secteurs
 # Escalier dense: 0 -> 1 -> ... -> 11 avec marches de +0.08
 # Annexes: alcove nord (12) et fosse sud (13)
-S 0   0.00 2.20 "brick"   "rom3264"
+S 0   0.00 2.20 "gem"   "rom3264"
 S 1   0.08 2.20 "romain"  "diamond"
 S 2   0.16 2.20 "brick"   "diamond"
 S 3   0.24 2.20 "romain"  "diamond"

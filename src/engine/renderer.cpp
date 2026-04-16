@@ -21,7 +21,7 @@
 #define EPS 1e-5f
 
 #define T_MIN 0.f
-#define T_MAX std::numeric_limits<float>::infinity()
+#define T_MAX std::numeric_limits<float>::max()
 
 namespace Engine
 {
@@ -403,7 +403,7 @@ namespace Engine
             v -= std::floor(v);
             texCoord.y = v * texProperties.textureHeight;
 
-            auto color = material->getSample(record, texCoord).color;
+            auto color = material->getSample(texCoord).color;
 
             if (enableLighting)
             {
@@ -459,7 +459,7 @@ namespace Engine
             texCoord.x = std::clamp(texCoord.x, 0.f, texDesc.textureWidth - 1.f);
             texCoord.y = std::clamp(texCoord.y, 0.f, texDesc.textureHeight - 1.f);
 
-            auto color = material->getSample(Game::HitRecord(), texCoord).color;
+            auto color = material->getSample(texCoord).color;
 
             if (enableLighting)
             {

@@ -21,6 +21,11 @@ namespace Game
         , sprites(mapFile.getSprites())
     {
         player.setCurrentSector(currentSector);
+
+        for (auto &animMat : mapFile.getAnimatedMaterials())
+        {
+            animationManager.addAnimatedMaterial(animMat);
+        }
     }
 
     const Player &Scene::getPlayer() const
@@ -48,6 +53,11 @@ namespace Game
         return inputState;
     }
 
+    const Engine::AnimationManager &Scene::getAnimationManager() const
+    {
+        return animationManager;
+    }
+
     const Sector *Scene::getCurrentSector() const
     {
         return currentSector;
@@ -65,6 +75,8 @@ namespace Game
 
     void Scene::update(float dt)
     {
+        animationManager.update(dt);
+
         /* Scene update routine: update player and walls based on the current
          * input state and other logic */
         player.update(dt);

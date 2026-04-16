@@ -12,6 +12,7 @@
 #include "game/sprite/sprite.hpp"
 #include "game/world/wall.hpp"
 #include "math/point2.hpp"
+#include "utils/image.hpp"
 
 namespace IO
 {
@@ -83,9 +84,28 @@ namespace IO
                     pathS = parseQuoted(pathS);
                     materials[name] = std::make_shared<TextureMaterial>(pathS);
                 }
+                else if (type == "Animated")
+                {
+                    std::string imageFrame, durationMs;
+                    iss >> imageFrame >> durationMs;
+                    imageFrame = parseQuoted(imageFrame);
+                    float duration = std::stof(durationMs);
+
+                    auto image = Utils::Image(imageFrame);
+
+                    if (animations.find(name) == animations.end())
+                    {
+                        animations[name] =
+                            std::make_shared<AnimatedMaterial>(image.getWidth(), image.getHeight());
+                        animatedMaterials.push_back(animations[name].get());
+                        materials[name] = animations[name];
+                    }
+
+                    animations[name]->addImageFrame(image, duration);
+                }
                 else
                 {
-                    std::runtime_error("Unsupported material type: " + type);
+                    throw std::runtime_error("Unsupported material type: " + type);
                 }
             }
             /* Sector definition */
@@ -229,5 +249,10 @@ namespace IO
                 return entry.second.get();
         }
         return nullptr;
+    }
+
+    std::vector<AnimatedMaterial *> &MapFile::getAnimatedMaterials()
+    {
+        return animatedMaterials;
     }
 } // namespace IO
