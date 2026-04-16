@@ -57,15 +57,15 @@ namespace Game
         static constexpr float cameraShakingAmplitude = 0.01f;
 
         /* Spatial properties */
-        static constexpr float maxSpeed = 5.f;
+        static constexpr float maxSpeed = 4.f;
         static constexpr float accelerationRate = 30.f;
         static constexpr float friction = 8.f;
 
         /* Angular properties */
-        static constexpr float rotationSpeed = 2.f;
+        static constexpr float rotationSpeed = 2.5f;
 
         static constexpr float jumpHeight = 0.25f;
-        static constexpr float size = 0.5f;
+        static constexpr float size = 0.65f;
         static constexpr float upperHitbox = 0.5f;
     };
 } // namespace Game
