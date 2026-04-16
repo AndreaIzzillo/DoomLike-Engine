@@ -35,12 +35,5 @@ target_link_libraries(isim
 )
 
 target_compile_options(isim PRIVATE
-    $<$<CONFIG:Release>:
-        -O3
-        -march=native          # instructions CPU spécifiques à ta machine (AVX, SSE4, etc.)
-        -ffast-math            # flottants moins stricts mais BEAUCOUP plus rapides
-        -funroll-loops         # déroulage de boucles automatique
-        -fomit-frame-pointer   # libère un registre supplémentaire
-        -DNDEBUG               # désactive les assert() en release
-    >
+    $<$<CONFIG:Release>:-O3>
 )

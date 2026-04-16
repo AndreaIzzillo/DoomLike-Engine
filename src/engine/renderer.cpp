@@ -203,6 +203,7 @@ namespace Engine
             }
         }
 
+        /* SPRITES REDERING */
         const auto &sectors = scene.getSectors();
         int bottom = screenHeight;
         int top = 0;
@@ -220,14 +221,12 @@ namespace Engine
             }
         }
 
-        std::sort(
-            allSprites.begin(), allSprites.end(),
-            [](const SpriteEntry &a, const SpriteEntry &b) { return a.distance > b.distance; });
+        std::sort(allSprites.begin(), allSprites.end(), SpriteEntry::compareSpriteEntry);
 
         for (const auto &entry : allSprites)
         {
-            auto sprite = entry.sprite;
-            auto sector = entry.sector;
+            const auto sprite = entry.sprite;
+            const auto sector = entry.sector;
             Math::Vector2 rel = sprite->getPos() - camPos;
             float depth = rel * cam.getForward();
             if (depth < 0.1f)
@@ -252,14 +251,13 @@ namespace Engine
             int drawStartX = std::clamp(startX, 0, screenWidth);
             int drawEndX = std::clamp(endX, 0, screenWidth);
 
-            auto tex = sprite->getTexture();
+            const auto &tex = sprite->getTexture();
 
 #pragma omp parallel for schedule(static)
             for (int x = drawStartX; x < drawEndX; x++)
             {
                 if (depth > zBuffer[x])
                     continue;
-
                 float u = (x - startX) / FLT(endX - startX);
 
                 drawSpriteVertical(yTop, yBottom, SpriteTop, SpriteBottom, x, u, tex);
@@ -267,27 +265,27 @@ namespace Engine
         }
 
 #pragma omp parallel for collapse(2)
-    for (int y = 0; y < screenHeight; y++)
-    {
-        for (int x = 0; x < screenWidth; x++)
+        for (int y = 0; y < screenHeight; y++)
         {
-            const Utils::Color color = image(x, y).clamp();
+            for (int x = 0; x < screenWidth; x++)
+            {
+                const Utils::Color color = image(x, y).clamp();
 
-            const std::size_t index = (static_cast<std::size_t>(y) * screenWidth + x) * 4;
+                const std::size_t index = (static_cast<std::size_t>(y) * screenWidth + x) * 4;
 
-            pixelBuffer[index] = static_cast<std::uint8_t>(color.r * 255.f);
-            pixelBuffer[index + 1] = static_cast<std::uint8_t>(color.g * 255.f);
-            pixelBuffer[index + 2] = static_cast<std::uint8_t>(color.b * 255.f);
-            pixelBuffer[index + 3] = 255;
+                pixelBuffer[index] = static_cast<std::uint8_t>(color.r * 255.f);
+                pixelBuffer[index + 1] = static_cast<std::uint8_t>(color.g * 255.f);
+                pixelBuffer[index + 2] = static_cast<std::uint8_t>(color.b * 255.f);
+                pixelBuffer[index + 3] = 255;
+            }
         }
+
+        texture.update(pixelBuffer.data());
+        // image.clear({ 1.f, 0.f, 0.f });
+
+        window.draw(sprite);
+        window.display();
     }
-
-    texture.update(pixelBuffer.data());
-    // image.clear({ 1.f, 0.f, 0.f });
-
-    window.draw(sprite);
-    window.display();
-}
 
 float Renderer::getVerticalFov(float horizontalFov, float aspectRatio) const
 {

@@ -60,3 +60,21 @@ Where:
 - `<UpperMaterial>` is the name of the material applied to the upper part of the wall, which must match a previously defined material.
 If the wall is one-sided, this should be set to `""` (empty string). Otherwise, it should reference a valid material name.
 - `<LowerMaterial>` is the name of the material applied to the lower part of the wall, which must match a previously defined material. If the wall is one-sided, this should be set to `""` (empty string). Otherwise, it should reference a valid material name.
+
+
+## Sprite Definitions [OPTIONAL]
+
+Sprites are defined using the following format:
+
+```
+T (x,y) "<TexturePath>" <HeightScale> <WidthScale> <VerticalOffset> <SectorID>
+```
+
+Where:
+- T indicates a sprite definition.
+- (x,y) is the position of the sprite in world coordinates.
+- <TexturePath> is the file path to the sprite texture, enclosed in double quotes.
+- <HeightScale> is a multiplier applied to the sprite height.
+- <WidthScale> is a multiplier applied to the sprite width.
+- <VerticalOffset> is the vertical offset of the sprite relative to the floor of the sector.
+- <SectorID> is the ID of the sector the sprite belongs to. This must reference an existing sector.

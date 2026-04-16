@@ -9,15 +9,6 @@
 
 namespace Engine
 {
-
-        struct SpriteEntry
-        {
-            Game::Sprite *sprite = nullptr;
-            Game::Sector *sector = nullptr;
-            float distance = 0.f;
-        };
-
-
     /**
      * @brief Enumerate the types of planes that can be rendered.
      */
@@ -41,6 +32,23 @@ namespace Engine
 
         PlaneType type = PlaneType::Floor;
         const Game::Sector *sector = nullptr;
+    };
+
+    /**
+     * @brief Represents a pair of sprite and sector with the distance to the cam
+     *
+     * Used for sort sprite for the renderer
+     */
+    struct SpriteEntry
+    {
+        Game::Sprite *sprite = nullptr;
+        Game::Sector *sector = nullptr;
+        float distance = 0.f;
+
+        static bool compareSpriteEntry(const SpriteEntry &a, const SpriteEntry &b)
+        {
+            return a.distance > b.distance;
+        };
     };
 
     /**
