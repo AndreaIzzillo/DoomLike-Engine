@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "game/interfaces/imaterial.hpp"
-#include "game/sprite/sprite.hpp"
+#include "game/world/sprite.hpp"
 #include "game/world/wall.hpp"
 
 namespace Game

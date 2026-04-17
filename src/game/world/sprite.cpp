@@ -1,4 +1,4 @@
-#include "game/sprite/sprite.hpp"
+#include "game/world/sprite.hpp"
 
 #include "math/point2.hpp"
 #include "utils/image.hpp"

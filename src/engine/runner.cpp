@@ -3,7 +3,7 @@
 #include <optional>
 
 #include "game/settings.hpp"
-#include "game/sprite/sprite.hpp"
+#include "game/world/sprite.hpp"
 
 namespace Engine
 {

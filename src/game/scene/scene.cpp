@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "engine/collision_manager.hpp"
-#include "game/sprite/sprite.hpp"
+#include "game/world/sprite.hpp"
 #include "io/mapfile.hpp"
 
 namespace Game

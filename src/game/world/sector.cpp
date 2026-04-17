@@ -1,6 +1,6 @@
 #include "game/world/sector.hpp"
 
-#include "game/sprite/sprite.hpp"
+#include "game/world/sprite.hpp"
 
 namespace Game
 {

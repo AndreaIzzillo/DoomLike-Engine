@@ -6,7 +6,7 @@
 #include "engine/animation_manager.hpp"
 #include "engine/input_manager.hpp"
 #include "game/player/player.hpp"
-#include "game/sprite/sprite.hpp"
+#include "game/world/sprite.hpp"
 #include "game/world/light.hpp"
 #include "game/world/sector.hpp"
 #include "game/world/wall.hpp"

@@ -9,7 +9,7 @@
 
 #include "game/scene/scene.hpp"
 #include "game/settings.hpp"
-#include "game/sprite/sprite.hpp"
+#include "game/world/sprite.hpp"
 #include "game/world/wall.hpp"
 #include "math/point2.hpp"
 #include "math/ray.hpp"

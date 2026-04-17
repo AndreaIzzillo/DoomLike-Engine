@@ -8,7 +8,7 @@
 #include "game/interfaces/imaterial.hpp"
 #include "game/materials/animated_material.hpp"
 #include "game/player/player.hpp"
-#include "game/sprite/sprite.hpp"
+#include "game/world/sprite.hpp"
 #include "game/world/light.hpp"
 #include "game/world/sector.hpp"
 #include "game/world/wall.hpp"

@@ -9,7 +9,7 @@
 
 #include "game/materials/color_material.hpp"
 #include "game/materials/texture_material.hpp"
-#include "game/sprite/sprite.hpp"
+#include "game/world/sprite.hpp"
 #include "game/world/wall.hpp"
 #include "math/point2.hpp"
 #include "utils/image.hpp"
