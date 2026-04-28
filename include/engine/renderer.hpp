@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Window/Cursor.hpp>
 #include <cstdint>
 #include <vector>
 

@@ -1,5 +1,6 @@
 #include "engine/runner.hpp"
 
+#include <SFML/Audio.hpp>
 #include <optional>
 
 #include "game/settings.hpp"
@@ -29,6 +30,10 @@ namespace Engine
 
     void Runner::run()
     {
+        sf::Music music("resources/audio/E1M1.mp3");
+        music.setLooping(true);
+        music.play();
+
         int fixedUpdateFrequency = std::max(60, Game::Settings::get().targetFramerate * 12);
         const sf::Time fixedDt = sf::seconds(1.f / fixedUpdateFrequency);
 
@@ -41,15 +46,13 @@ namespace Engine
 
             sf::Time dt = clock.restart();
 
-            /* Then, update the scene with the current input state and other
-             * logic */
+            /* Then, update the scene with the current input state and other logic */
             update(dt);
 
             accumulatedTime += dt;
             while (accumulatedTime >= fixedDt)
             {
-                /* Fixed update for physics and other time-sensitive
-                 * calculations */
+                /* Fixed update for physics and other time-sensitive calculations */
                 fixedUpdate(fixedDt);
                 accumulatedTime -= fixedDt;
             }
@@ -59,7 +62,7 @@ namespace Engine
 
             /* Display the current FPS */
             fps += 1.0f / dt.asSeconds();
-            if (fpsCounter == 15)
+            if (fpsCounter == 10)
             {
                 float averageFps = fps / static_cast<float>(fpsCounter);
                 renderer.getWindow().setTitle("Projet ISIM - FPS: "

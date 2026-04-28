@@ -1,6 +1,8 @@
 #include "engine/renderer.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Window/Cursor.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include <algorithm>
 #include <cfloat>
 #include <cmath>
@@ -25,7 +27,6 @@
 
 namespace Engine
 {
-
     Renderer::Renderer()
         : image(Game::Settings::get().windowWidth, Game::Settings::get().windowHeight)
         , sprite(texture)
@@ -45,6 +46,9 @@ namespace Engine
 
         window.setFramerateLimit(Game::Settings::get().targetFramerate);
         window.setVerticalSyncEnabled(false);
+
+        window.setMouseCursorGrabbed(true);
+        window.setMouseCursorVisible(true);
 
         if (!texture.resize(sf::Vector2u(windowWidth, windowHeight)))
             throw std::runtime_error("Failed to allocate renderer texture");

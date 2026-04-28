@@ -4,11 +4,10 @@
 
 namespace Engine
 {
-
     struct InputState
     {
-        float rotationDirection = 0.0f;
-        Math::Vector2 inputDirection = { 0.0f, 0.0f };
+        float rotationDirection = 0.f;
+        Math::Vector2 inputDirection = { 0.f, 0.f };
     };
 
     class InputManager
@@ -19,6 +18,7 @@ namespace Engine
         InputState fetchInputState();
 
     private:
+        /* Input fetching methods */
         float playerRotation();
         Math::Vector2 playerMovement();
     };

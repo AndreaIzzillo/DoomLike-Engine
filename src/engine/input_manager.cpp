@@ -1,6 +1,7 @@
 #include "engine/input_manager.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
+#include <cfloat>
 
 #define W sf::Keyboard::Scancode::W
 #define A sf::Keyboard::Scancode::A
@@ -10,6 +11,8 @@
 #define LEFT sf::Keyboard::Scancode::Left
 #define RIGHT sf::Keyboard::Scancode::Right
 
+#define SHIFT sf::Keyboard::Scancode::LShift
+
 namespace Engine
 {
     InputManager::InputManager()
@@ -17,7 +20,8 @@ namespace Engine
 
     InputState InputManager::fetchInputState()
     {
-        return { playerRotation(), playerMovement() };
+        InputState result = { playerRotation(), playerMovement() };
+        return result;
     }
 
     Math::Vector2 InputManager::playerMovement()
@@ -48,12 +52,13 @@ namespace Engine
         float rotationDirection = 0.0f;
         if (sf::Keyboard::isKeyPressed(LEFT))
         {
-            rotationDirection += 1.0f;
+            rotationDirection += sf::Keyboard::isKeyPressed(SHIFT) ? 0.5f : 1.0f;
         }
         if (sf::Keyboard::isKeyPressed(RIGHT))
         {
-            rotationDirection -= 1.0f;
+            rotationDirection -= sf::Keyboard::isKeyPressed(SHIFT) ? 0.5f : 1.0f;
         }
+
         return rotationDirection;
     }
 } // namespace Engine

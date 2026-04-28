@@ -53,8 +53,9 @@ namespace Game
         static constexpr float friction = 8.f;
 
         /* Angular properties */
-        static constexpr float rotationSpeed = 2.5f;
+        static constexpr float rotationSpeed = 3.f;
 
+        /* Collision properties */
         static constexpr float jumpHeight = 0.25f;
         static constexpr float size = 0.65f;
         static constexpr float upperHitbox = 0.5f;
