@@ -2,19 +2,19 @@ P (0,0) (1,0)
 
 M Color "red" (1,0,0)
 
-M Texture "diamond" "./resources/textures/diamond.ppm"
-M Texture "romain"  "./resources/textures/rom.ppm"
-M Texture "brick"   "./resources/textures/brick.ppm"
-M Texture "rom3264" "./resources/textures/rom3264.ppm"
-M Texture "rom6432" "./resources/textures/rom6432.ppm"
-M Texture "glow"    "./resources/textures/glow.ppm"
+M Texture "diamond" "./resources/maps/test/textures/diamond.ppm"
+M Texture "romain"  "./resources/maps/test/textures/rom.ppm"
+M Texture "brick"   "./resources/maps/test/textures/brick.ppm"
+M Texture "rom3264" "./resources/maps/test/textures/rom3264.ppm"
+M Texture "rom6432" "./resources/maps/test/textures/rom6432.ppm"
+M Texture "glow"    "./resources/maps/test/textures/glow.ppm"
 
 L (0,0) 10 1 (1,1,1)
 
-M Animated "gem" "./resources/textures/gem/1.ppm" 500
-M Animated "gem" "./resources/textures/gem/2.ppm" 500
-M Animated "gem" "./resources/textures/gem/3.ppm" 500
-M Animated "gem" "./resources/textures/gem/4.ppm" 500
+M Animated "gem" "./resources/maps/test/textures/gem/1.ppm" 500
+M Animated "gem" "./resources/maps/test/textures/gem/2.ppm" 500
+M Animated "gem" "./resources/maps/test/textures/gem/3.ppm" 500
+M Animated "gem" "./resources/maps/test/textures/gem/4.ppm" 500
 
 # Secteurs
 # Escalier dense: 0 -> 1 -> ... -> 11 avec marches de +0.08

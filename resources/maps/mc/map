@@ -4,63 +4,63 @@ M Color "red" (1,0,0)
 M Color "green" (0,1,0)
 M Color "blue" (0,0,1)
 
-M Texture "stone" "resources/maps/mc/stone.ppm"
-M Texture "torch" "resources/maps/mc/torch.ppm"
-M Texture "plank" "resources/maps/mc/plank.ppm"
-M Texture "craft" "resources/maps/mc/craft.ppm"
-M Texture "crafttop" "resources/maps/mc/crafttop.ppm"
-M Texture "furnace" "resources/maps/mc/furnace.ppm"
-M Texture "furnacetop" "resources/maps/mc/furnacetop.ppm"
-M Texture "chicken" "resources/maps/mc/chicken.ppm"
-M Texture "tnt" "resources/maps/mc/tnt.ppm"
-M Texture "tnttop" "resources/maps/mc/tnttop.ppm"
-M Texture "diamond" "resources/maps/mc/diamond.ppm"
-M Texture "barrel" "resources/maps/mc/barrel.ppm"
-M Texture "pickaxe" "resources/maps/mc/pickaxe.ppm"
-M Texture "drip" "resources/maps/mc/drip.ppm"
-M Texture "roots" "resources/maps/mc/roots.ppm"
-M Texture "emerald" "resources/maps/mc/emerald.ppm"
-M Texture "amethyst" "resources/maps/mc/amethyst.ppm"
-M Texture "amethystsmall" "resources/maps/mc/amethystsmall.ppm"
+M Texture "stone" "resources/maps/mc/textures/stone.ppm"
+M Texture "torch" "resources/maps/mc/textures/torch.ppm"
+M Texture "plank" "resources/maps/mc/textures/plank.ppm"
+M Texture "craft" "resources/maps/mc/textures/craft.ppm"
+M Texture "crafttop" "resources/maps/mc/textures/crafttop.ppm"
+M Texture "furnace" "resources/maps/mc/textures/furnace.ppm"
+M Texture "furnacetop" "resources/maps/mc/textures/furnacetop.ppm"
+M Texture "chicken" "resources/maps/mc/textures/chicken.ppm"
+M Texture "tnt" "resources/maps/mc/textures/tnt.ppm"
+M Texture "tnttop" "resources/maps/mc/textures/tnttop.ppm"
+M Texture "diamond" "resources/maps/mc/textures/diamond.ppm"
+M Texture "barrel" "resources/maps/mc/textures/barrel.ppm"
+M Texture "pickaxe" "resources/maps/mc/textures/pickaxe.ppm"
+M Texture "drip" "resources/maps/mc/textures/drip.ppm"
+M Texture "roots" "resources/maps/mc/textures/roots.ppm"
+M Texture "emerald" "resources/maps/mc/textures/emerald.ppm"
+M Texture "amethyst" "resources/maps/mc/textures/amethyst.ppm"
+M Texture "amethystsmall" "resources/maps/mc/textures/amethystsmall.ppm"
 
-M Animated "lava" "resources/maps/mc/lava/00.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/01.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/02.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/03.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/04.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/05.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/06.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/07.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/08.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/09.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/010.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/011.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/012.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/013.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/014.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/015.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/016.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/017.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/018.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/019.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/018.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/017.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/016.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/015.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/014.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/013.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/012.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/011.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/010.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/09.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/08.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/07.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/06.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/05.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/04.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/03.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/02.ppm" 100
-M Animated "lava" "resources/maps/mc/lava/01.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/00.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/01.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/02.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/03.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/04.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/05.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/06.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/07.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/08.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/09.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/010.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/011.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/012.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/013.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/014.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/015.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/016.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/017.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/018.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/019.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/018.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/017.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/016.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/015.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/014.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/013.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/012.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/011.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/010.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/09.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/08.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/07.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/06.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/05.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/04.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/03.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/02.ppm" 100
+M Animated "lava" "resources/maps/mc/textures/lava/01.ppm" 100
 
 S 0 0.0 2.0 "stone" "stone" 2 2 0 0 2 2 0 0
 
