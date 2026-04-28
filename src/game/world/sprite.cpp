@@ -1,7 +1,6 @@
 #include "game/world/sprite.hpp"
 
 #include "math/point2.hpp"
-#include "utils/image.hpp"
 
 namespace Game
 {

@@ -277,6 +277,7 @@ namespace Engine
         }
 
 #pragma omp parallel for collapse(2)
+        /* FINALIZE IMAGE */
         for (int y = 0; y < screenHeight; y++)
         {
             for (int x = 0; x < screenWidth; x++)
