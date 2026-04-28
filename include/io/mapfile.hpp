@@ -19,12 +19,6 @@ namespace IO
     using namespace Game;
     using namespace Math;
 
-    /**
-     * @brief Loads a map description and builds the initial scene content.
-     *
-     * It parses player spawn, material declarations, and wall definitions so
-     * Scene can be constructed from file data at startup.
-     */
     class MapFile
     {
     public:

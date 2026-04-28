@@ -24,12 +24,6 @@ namespace IO
 
 namespace Game
 {
-    /**
-     * @brief Runtime container for player, walls, and last input state.
-     *
-     * Scene applies per-frame updates, then fixed-step simulation where player
-     * velocity is resolved through CollisionManager before physics are applied.
-     */
     class Scene
     {
     private:

@@ -77,21 +77,17 @@ namespace Game
     void Scene::update(float dt)
     {
         animationManager.update(dt);
-
-        /* Scene update routine: update player and walls based on the current
-         * input state and other logic */
         player.update(dt);
     }
 
     void Scene::fixedUpdate(const Engine::CollisionManager &collisionManager, float dt)
     {
-        /* The scene fixed update is responsible for resolving the player's
-         * movement intent with collision detection and updating the player and
-         * walls accordingly */
+        /* Compute the player's velocity based on the input state */
         Math::Vector2 velocity = player.computeVelocity(inputState, dt);
         auto [resolvedIntent, newSector] =
             collisionManager.computeCollision(velocity * dt, player, *this);
 
+        /* If the player has entered a new sector, update the current sector */
         if (newSector)
         {
             setCurrentSector(newSector);
@@ -99,9 +95,6 @@ namespace Game
 
         /* Update the player's angular velocity based on the input state */
         player.setAngularVelocity(inputState.rotationDirection);
-
-        /* Scene fixed update routine: update player and walls based on the
-         * resolved intent */
         player.fixedUpdate(resolvedIntent / dt, dt);
     }
 

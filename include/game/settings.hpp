@@ -4,12 +4,6 @@
 
 namespace Game
 {
-    /**
-     * @brief Global runtime configuration shared by engine and gameplay code.
-     *
-     * Exposes window, camera, and world constants through a singleton accessed
-     * by renderer, player camera setup, and hit defaults.
-     */
     class Settings : public Utils::Singleton<Settings>
     {
         friend class Utils::Singleton<Settings>;

@@ -6,12 +6,6 @@
 
 namespace Math
 {
-    /**
-     * @brief 2D point primitive representing positions in world space.
-     *
-     * It interoperates with Vector2 to express translations and geometric
-     * offsets used by camera, walls, and ray hits.
-     */
     class Point2
     {
     public:

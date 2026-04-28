@@ -14,12 +14,6 @@
 
 namespace Utils
 {
-    /**
-     * @brief RGB color in normalized float space.
-     *
-     * Supports basic arithmetic and clamping for material sampling and final
-     * framebuffer conversion.
-     */
     class Color
     {
     public:
@@ -54,9 +48,6 @@ namespace Utils
         friend std::ostream &operator<<(std::ostream &out, Color &color);
     };
 
-    /**
-     * @brief CPU-side 2D pixel buffer used by rendering and texture loading.
-     */
     class Image
     {
     public:
@@ -78,18 +69,12 @@ namespace Utils
         std::vector<Color> pixels;
     };
 
-    /**
-     * @brief Represents a single frame in an animated image.
-     */
     struct ImageFrame
     {
         int imageIndex = 0;
         float durationMs = 0;
     };
 
-    /**
-     * @brief Manages the timeline of an animated image.
-     */
     struct Scheduler
     {
         int currentIndex = 0;
@@ -97,9 +82,6 @@ namespace Utils
         std::vector<ImageFrame> imageFrames = {};
     };
 
-    /**
-     * @brief A sequence of images played in succession.
-     */
     class AnimatedImage
     {
     public:

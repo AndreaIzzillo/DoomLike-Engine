@@ -7,9 +7,6 @@
 
 namespace Game
 {
-    /**
-     * @brief Sprites
-     */
     class Sprite
     {
     public:

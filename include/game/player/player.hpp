@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 #include "engine/input_manager.hpp"
 #include "game/player/camera.hpp"
 #include "game/world/sector.hpp"
@@ -9,13 +7,6 @@
 
 namespace Game
 {
-    /**
-     * @brief Encapsulates controllable actor movement and camera state.
-     *
-     * It derives velocity intent from input, then applies collision-resolved
-     * velocity and angular speed during fixed updates, including camera
-     * bobbing.
-     */
     class Player
     {
     public:

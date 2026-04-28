@@ -7,12 +7,6 @@
 
 namespace Game
 {
-    /**
-     * @brief First-person camera bound to player spatial state.
-     *
-     * It maintains orientation vectors and projection parameters, and exposes
-     * per-column rays consumed by the renderer raycasting pass.
-     */
     class Camera
     {
     public:

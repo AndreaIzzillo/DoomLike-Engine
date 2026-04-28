@@ -60,8 +60,7 @@ namespace Game
 
     void Player::fixedUpdate(Math::Vector2 resolvedVelocity, float dt)
     {
-        /* Player fixed update is responsible for updating the player's position
-         * and rotation based on the resolved velocity */
+        /* Update velocity */
         velocity = resolvedVelocity;
 
         camera.move(velocity * dt);

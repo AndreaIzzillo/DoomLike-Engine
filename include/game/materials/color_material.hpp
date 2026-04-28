@@ -4,12 +4,6 @@
 
 namespace Game
 {
-    /**
-     * @brief Flat-color material used for untextured walls.
-     *
-     * Sampling always returns the same RGB value, independently of texture
-     * coordinates.
-     */
     class ColorMaterial : public IMaterial
     {
     public:

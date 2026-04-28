@@ -5,12 +5,6 @@
 
 namespace Math
 {
-    /**
-     * @brief Normalized 2D ray used for visibility and collision queries.
-     *
-     * A ray carries an origin and direction and can evaluate points along its
-     * parametric distance for wall intersection tests.
-     */
     class Ray
     {
     public:

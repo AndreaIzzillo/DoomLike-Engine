@@ -7,13 +7,6 @@
 
 namespace Engine
 {
-    /**
-     * @brief Drives the main loop and orchestrates engine subsystems.
-     *
-     * Per frame it handles window events, fetches input, updates the scene,
-     * runs fixed-step simulation with collision resolution, then renders the
-     * resulting state.
-     */
     class Runner
     {
     public:

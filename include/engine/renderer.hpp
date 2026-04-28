@@ -9,20 +9,12 @@
 
 namespace Engine
 {
-    /**
-     * @brief Enumerate the types of planes that can be rendered.
-     */
     enum class PlaneType
     {
         Floor,
         Ceiling
     };
 
-    /**
-     * @brief Represents a segment of a plane in the rendered image.
-     *
-     * Used for floor and ceiling rendering, it stores the vertical span.
-     */
     struct PlaneSegment
     {
         int yTop = 0;
@@ -34,11 +26,6 @@ namespace Engine
         const Game::Sector *sector = nullptr;
     };
 
-    /**
-     * @brief Represents a pair of sprite and sector with the distance to the cam
-     *
-     * Used for sort sprite for the renderer
-     */
     struct SpriteEntry
     {
         Game::Sprite *sprite = nullptr;
@@ -51,13 +38,6 @@ namespace Engine
         };
     };
 
-    /**
-     * @brief Owns the window and renders the scene with a column raycaster.
-     *
-     * It casts camera rays through RayCaster, projects wall slices with
-     * floor/ceiling filling into a software buffer, then uploads the buffer to
-     * an SFML texture for display.
-     */
     class Renderer
     {
     public:

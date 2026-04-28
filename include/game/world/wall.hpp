@@ -12,13 +12,6 @@ namespace Game
     class Wall;
     class Sector;
 
-    /**
-     * @brief Ray-wall intersection result with hit data and material context.
-     *
-     * It contains geometric hit information (hit point, normal, distance) and
-     * wall/material context (texture coordinates, sector pointers) used for
-     * rendering and collision response.
-     */
     struct TextureTransform
     {
         float scaleX = 1.f;
@@ -27,12 +20,6 @@ namespace Game
         float offsetY = 0.f;
     };
 
-    /**
-     * @brief Ray-wall intersection payload shared by rendering and collisions.
-     *
-     * Carries geometric hit data plus wall/material context used for texture
-     * sampling and wall projection.
-     */
     struct HitRecord
     {
         /* Intersection properties */
@@ -58,12 +45,6 @@ namespace Game
         const Sector *backSector = nullptr;
     };
 
-    /**
-     * @brief Concrete line-segment wall with material and ray intersection.
-     *
-     * It provides hit information (distance, normal, material context) used by
-     * rendering and collision checks.
-     */
     class Wall
     {
     public:

@@ -8,12 +8,6 @@
 
 namespace Engine
 {
-    /**
-     * @brief Performs nearest-hit ray queries against scene walls.
-     *
-     * Renderer uses this class for each screen column to find the closest wall
-     * intersection that will feed wall shading and projection.
-     */
     class RayCaster
     {
     public:
