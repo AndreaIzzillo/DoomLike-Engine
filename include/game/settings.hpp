@@ -22,6 +22,10 @@ namespace Game
         float worldFloor = 0.f;
         float worldCeiling = 1.f;
 
+        /* Rendering settings */
+        bool enableLighting = true;
+        bool enableFog = true;
+
     public:
         static Settings &get()
         {
