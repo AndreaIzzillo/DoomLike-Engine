@@ -3,8 +3,8 @@
 
 #include "engine/runner.hpp"
 #include "game/scene/scene.hpp"
-#include "io/mapfile.hpp"
 #include "game/settings.hpp"
+#include "io/mapfile.hpp"
 
 int main(int argc, char *argv[])
 {

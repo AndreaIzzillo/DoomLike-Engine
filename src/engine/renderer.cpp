@@ -324,8 +324,11 @@ namespace Engine
         auto texCoord = Math::Point2(0.f, 0.f);
 
         /* Calculate texture X (u) coordinate */
-        u -= std::floor(u);
-        texCoord.x = u * material->getDescriptor().textureWidth;
+        if (material->getDescriptor().isTextured)
+        {
+            u -= std::floor(u);
+            texCoord.x = u * material->getDescriptor().textureWidth;
+        }
 
         float lineHeight = yBottom - yTop;
 
@@ -335,13 +338,18 @@ namespace Engine
             {
                 continue;
             }
-            /* Calculate texture Y (v) coordinate */
-            float v = FLT(y - yTop) / FLT(lineHeight);
-            v -= std::floor(v);
-            texCoord.y = v * material->getDescriptor().textureHeight;
+
+            if (material->getDescriptor().isTextured)
+            {
+                /* Calculate texture Y (v) coordinate */
+                float v = FLT(y - yTop) / FLT(lineHeight);
+                v -= std::floor(v);
+                texCoord.y = v * material->getDescriptor().textureHeight;
+            }
 
             auto pixelSprite = material->getSample(texCoord).color;
 
+            /* Check if the pixel is transparent */
             if (std::abs(pixelSprite.r) < EPS && std::abs(pixelSprite.g) < EPS
                 && std::abs(pixelSprite.b) < EPS)
                 continue;
@@ -350,6 +358,7 @@ namespace Engine
             {
                 pixelSprite = pixelSprite * lightContribution;
             }
+
             zBuffer[idx(x, y)] = depth;
             image(x, y) = pixelSprite;
         }
@@ -378,10 +387,13 @@ namespace Engine
         auto texCoord = Math::Point2(0.f, 0.f);
 
         /* Calculate texture X (u) coordinate */
-        float u = record.u;
-        u = u * textureTransform.scaleX + textureTransform.offsetX;
-        u -= std::floor(u);
-        texCoord.x = u * texProperties.textureWidth;
+        if (texProperties.isTextured)
+        {
+            float u = record.u;
+            u = u * textureTransform.scaleX + textureTransform.offsetX;
+            u -= std::floor(u);
+            texCoord.x = u * texProperties.textureWidth;
+        }
 
         /* Compute lighting */
         Utils::Color lightContribution(0.f, 0.f, 0.f);
@@ -413,11 +425,15 @@ namespace Engine
             {
                 continue;
             }
-            /* Calculate texture Y (v) coordinate */
-            float v = FLT(y - yTop) / FLT(lineHeight);
-            v = v * textureTransform.scaleY + textureTransform.offsetY;
-            v -= std::floor(v);
-            texCoord.y = v * texProperties.textureHeight;
+
+            if (texProperties.isTextured)
+            {
+                /* Calculate texture Y (v) coordinate */
+                float v = FLT(y - yTop) / FLT(lineHeight);
+                v = v * textureTransform.scaleY + textureTransform.offsetY;
+                v -= std::floor(v);
+                texCoord.y = v * texProperties.textureHeight;
+            }
 
             auto color = material->getSample(texCoord).color;
 
@@ -430,6 +446,7 @@ namespace Engine
             {
                 color = color * fogOpposite + fogColorIntensity;
             }
+
             zBuffer[idx(x, y)] = distance;
             image(x, y) = color;
         }
@@ -465,15 +482,21 @@ namespace Engine
             float tRay = rowDistance / (rayDir * forward);
             auto world = camPos + rayDir * tRay;
 
-            float u = world.x * texTransform.scaleX + texTransform.offsetX;
-            u -= std::floor(u);
-            float v = world.y * texTransform.scaleY + texTransform.offsetY;
-            v -= std::floor(v);
+            Math::Point2 texCoord(0.f, 0.f);
 
-            Math::Point2 texCoord(u * texDesc.textureWidth, v * texDesc.textureHeight);
+            if (texDesc.isTextured)
+            {
+                float u = world.x * texTransform.scaleX + texTransform.offsetX;
+                u -= std::floor(u);
+                float v = world.y * texTransform.scaleY + texTransform.offsetY;
+                v -= std::floor(v);
 
-            texCoord.x = std::clamp(texCoord.x, 0.f, texDesc.textureWidth - 1.f);
-            texCoord.y = std::clamp(texCoord.y, 0.f, texDesc.textureHeight - 1.f);
+                texCoord.x = u * texDesc.textureWidth;
+                texCoord.y = v * texDesc.textureHeight;
+
+                texCoord.x = std::clamp(texCoord.x, 0.f, texDesc.textureWidth - 1.f);
+                texCoord.y = std::clamp(texCoord.y, 0.f, texDesc.textureHeight - 1.f);
+            }
 
             auto color = material->getSample(texCoord).color;
 
@@ -495,6 +518,7 @@ namespace Engine
                 auto fog = getFogLevel(rowDistance);
                 color = color * (1.f - fog) + Utils::Color(fogColor, fogColor, fogColor) * fog;
             }
+
             zBuffer[idx(x, y)] = rowDistance;
             image(x, y) = color;
         }
