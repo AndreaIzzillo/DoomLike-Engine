@@ -13,13 +13,14 @@ M Texture "carpet" "./resources/maps/shining/textures/carpet.ppm"
 M Texture "door" "./resources/maps/shining/textures/door.ppm"
 M Texture "plant" "./resources/maps/shining/textures/plant.ppm"
 M Texture "light" "./resources/maps/shining/textures/light.ppm"
+M Texture "girls" "./resources/maps/shining/textures/girls.ppm"
 
 # I-shaped hotel corridor.
 # Sector 0: lower transverse corridor, sector 1: long central corridor,
 # sector 2: upper transverse corridor.
-S 0 0 2.25 "carpet" "ceiling" 0.25 0.25 0 0 0.25 0.25 0 0
-S 1 0 2.25 "carpet" "ceiling" 0.25 0.25 0 0 0.25 0.25 0 0
-S 2 0 2.25 "carpet" "ceiling" 0.25 0.25 0 0 0.25 0.25 0 0
+S 0 0 2.25 "carpet" "ceiling" 0.25 0.25 0.25 0 0.25 0.25 0 0
+S 1 0 2.25 "carpet" "ceiling" 0.25 0.25 0.25 0 0.25 0.25 0 0
+S 2 0 2.25 "carpet" "ceiling" 0.25 0.25 0.25 0 0.25 0.25 0 0
 
 # Warm-white interior lighting.
 L (0,-10) 3.3 0.62 (1.0,0.90,0.78)
@@ -76,6 +77,8 @@ T (-1,4) plant 1 1 0 0
 T (1,4) plant 1 1 0 0
 T (1,12) plant 1 1 0 0
 T (1,-4) plant 1 1 0 0
+
+T (0,8) girls 1.1 1.1 0 0
 
 # Upper transverse corridor.
 W (-5.5,12) (-1.2,12) "hotel_wallpaper" 2 -1 "" "" 1 1 0 0 1 1 0 0 1 1 0 0
