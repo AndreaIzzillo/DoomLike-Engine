@@ -34,7 +34,7 @@ namespace Engine
         music.setLooping(true);
         music.play();
 
-        int fixedUpdateFrequency = std::max(60, Game::Settings::get().targetFramerate * 12);
+        int fixedUpdateFrequency = std::max(60, Game::Settings::get().targetFramerate * 16);
         const sf::Time fixedDt = sf::seconds(1.f / fixedUpdateFrequency);
 
         int fpsCounter = 0;

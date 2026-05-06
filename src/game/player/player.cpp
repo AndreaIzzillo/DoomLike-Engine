@@ -58,15 +58,15 @@ namespace Game
     void Player::update(float dt)
     {}
 
-    void Player::fixedUpdate(Math::Vector2 resolvedVelocity, float dt)
+    void Player::fixedUpdate(Math::Vector2 newVelocity, Math::Vector2 displacement, float dt)
     {
         /* Update velocity */
-        velocity = resolvedVelocity;
+        velocity = newVelocity;
 
-        camera.move(velocity * dt);
+        camera.move(displacement);
         camera.rotate(angularVelocity * rotationSpeed * dt);
 
-        float speed = (resolvedVelocity).norm();
+        float speed = (displacement / dt).norm();
         if (speed > FLT_EPSILON)
         {
             cameraShakingTime += speed * cameraShakingFrequency * dt;

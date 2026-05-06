@@ -322,12 +322,24 @@ namespace Engine
     {
         /* Texture mapping */
         auto texCoord = Math::Point2(0.f, 0.f);
+        auto texProperties = material->getDescriptor();
 
         /* Calculate texture X (u) coordinate */
-        if (material->getDescriptor().isTextured)
+        if (texProperties.isTextured)
         {
             u -= std::floor(u);
-            texCoord.x = u * material->getDescriptor().textureWidth;
+            texCoord.x = u * texProperties.textureWidth;
+            texCoord.x = std::clamp(texCoord.x, 0.f, texProperties.textureWidth - 1.f);
+        }
+
+        /* Compute fog */
+        float fogOpposite = 1.f;
+        Utils::Color fogColorIntensity(0.f, 0.f, 0.f);
+        if (enableFog)
+        {
+            auto fog = getFogLevel(depth);
+            fogOpposite = 1.f - fog;
+            fogColorIntensity = fogColorVec * fog;
         }
 
         float lineHeight = yBottom - yTop;
@@ -339,12 +351,13 @@ namespace Engine
                 continue;
             }
 
-            if (material->getDescriptor().isTextured)
+            if (texProperties.isTextured)
             {
                 /* Calculate texture Y (v) coordinate */
                 float v = FLT(y - yTop) / FLT(lineHeight);
                 v -= std::floor(v);
-                texCoord.y = v * material->getDescriptor().textureHeight;
+                texCoord.y = v * texProperties.textureHeight;
+                texCoord.y = std::clamp(texCoord.y, 0.f, texProperties.textureHeight - 1.f);
             }
 
             auto pixelSprite = material->getSample(texCoord).color;
@@ -357,6 +370,11 @@ namespace Engine
             if (enableLighting)
             {
                 pixelSprite = pixelSprite * lightContribution;
+            }
+
+            if (enableFog)
+            {
+                pixelSprite = pixelSprite * fogOpposite + fogColorIntensity;
             }
 
             zBuffer[idx(x, y)] = depth;
@@ -393,6 +411,7 @@ namespace Engine
             u = u * textureTransform.scaleX + textureTransform.offsetX;
             u -= std::floor(u);
             texCoord.x = u * texProperties.textureWidth;
+            texCoord.x = std::clamp(texCoord.x, 0.f, texProperties.textureWidth - 1.f);
         }
 
         /* Compute lighting */
@@ -433,6 +452,7 @@ namespace Engine
                 v = v * textureTransform.scaleY + textureTransform.offsetY;
                 v -= std::floor(v);
                 texCoord.y = v * texProperties.textureHeight;
+                texCoord.y = std::clamp(texCoord.y, 0.f, texProperties.textureHeight - 1.f);
             }
 
             auto color = material->getSample(texCoord).color;

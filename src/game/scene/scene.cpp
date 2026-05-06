@@ -84,7 +84,7 @@ namespace Game
     {
         /* Compute the player's velocity based on the input state */
         Math::Vector2 velocity = player.computeVelocity(inputState, dt);
-        auto [resolvedIntent, newSector] =
+        auto [resolvedDisplacement, newSector] =
             collisionManager.computeCollision(velocity * dt, player, *this);
 
         /* If the player has entered a new sector, update the current sector */
@@ -95,7 +95,7 @@ namespace Game
 
         /* Update the player's angular velocity based on the input state */
         player.setAngularVelocity(inputState.rotationDirection);
-        player.fixedUpdate(resolvedIntent / dt, dt);
+        player.fixedUpdate(velocity, resolvedDisplacement, dt);
     }
 
     void Scene::addWall(std::unique_ptr<Wall> wall)

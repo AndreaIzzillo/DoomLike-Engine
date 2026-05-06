@@ -7,7 +7,7 @@ namespace Engine
 
     struct CollisionInfo
     {
-        Math::Vector2 velocity = { 0.f, 0.f };
+        Math::Vector2 displacement = { 0.f, 0.f };
         const Game::Sector *newSector = nullptr;
     };
 

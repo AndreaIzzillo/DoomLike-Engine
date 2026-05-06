@@ -166,7 +166,7 @@ namespace Utils
 
     Color Image::operator()(int x, int y) const
     {
-        if (x >= width || y >= height)
+        if (x < 0 || y < 0 || x >= width || y >= height)
         {
             throw std::out_of_range("Pixel coordinates are out of bounds");
         }
@@ -176,7 +176,7 @@ namespace Utils
 
     Color &Image::operator()(int x, int y)
     {
-        if (x >= width || y >= height)
+        if (x < 0 || y < 0 || x >= width || y >= height)
         {
             throw std::out_of_range("Pixel coordinates are out of bounds");
         }

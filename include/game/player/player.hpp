@@ -26,7 +26,7 @@ namespace Game
         void setCurrentSector(const Sector *sector);
 
         void update(float dt);
-        void fixedUpdate(Math::Vector2 resolvedIntent, float dt);
+        void fixedUpdate(Math::Vector2 newVelocity, Math::Vector2 displacement, float dt);
 
         /* Player physics */
         void setAngularVelocity(float angularVelocity);

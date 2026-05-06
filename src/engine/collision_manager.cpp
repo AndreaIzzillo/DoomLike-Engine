@@ -61,7 +61,7 @@ namespace Engine
         }
 
         Math::Vector2 finalWorld = correctedPos - player.getPosition();
-        res.velocity = Math::Vector2(finalWorld * right, finalWorld * forward);
+        res.displacement = Math::Vector2(finalWorld * right, finalWorld * forward);
 
         for (const auto *wall : walls)
         {
