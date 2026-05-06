@@ -12,6 +12,7 @@ M Color "lamp_glow" (1.00,0.68,0.32)
 M Texture "carpet" "./resources/maps/shining/textures/carpet.ppm"
 M Texture "door" "./resources/maps/shining/textures/door.ppm"
 M Texture "plant" "./resources/maps/shining/textures/plant.ppm"
+M Texture "light" "./resources/maps/shining/textures/light.ppm"
 
 # I-shaped hotel corridor.
 # Sector 0: lower transverse corridor, sector 1: long central corridor,
@@ -22,17 +23,29 @@ S 2 0 2.25 "carpet" "ceiling" 0.25 0.25 0 0 0.25 0.25 0 0
 
 # Warm-white interior lighting.
 L (0,-10) 3.3 0.62 (1.0,0.90,0.78)
+T (0,-10) light 0.75 0.75 1.6 0
 L (0,-6) 3.3 0.62 (1.0,0.90,0.78)
+T (0,-6) light 0.75 0.75 1.6 0
 L (0,-2) 3.3 0.62 (1.0,0.90,0.78)
+T (0,-2) light 0.75 0.75 1.6 0
 L (0,2) 3.3 0.62 (1.0,0.90,0.78)
+T (0,2) light 0.75 0.75 1.6 0
 L (0,6) 3.3 0.62 (1.0,0.90,0.78)
+T (0,6) light 0.75 0.75 1.6 0
 L (0,10) 3.3 0.62 (1.0,0.90,0.78)
+T (0,10) light 0.75 0.75 1.6 0
 L (-4,-14) 3.3 0.62 (1.0,0.90,0.78)
+T (-4,-14) light 0.75 0.75 1.6 0
 L (0,-14) 3.3 0.62 (1.0,0.90,0.78)
+T (0,-14) light 0.75 0.75 1.6 0
 L (4,-14) 3.3 0.62 (1.0,0.90,0.78)
+T (4,-14) light 0.75 0.75 1.6 0
 L (-4,14) 3.3 0.62 (1.0,0.90,0.78)
+T (-4,14) light 0.75 0.75 1.6 0
 L (0,14) 3.3 0.62 (1.0,0.90,0.78)
+T (0,14) light 0.75 0.75 1.6 0
 L (4,14) 3.3 0.62 (1.0,0.90,0.78)
+T (4,14) light 0.75 0.75 1.6 0
 
 # Lower transverse corridor.
 W (-5.5,-15.5) (5.5,-15.5) "door" 0 -1 "" "" 3 1 0 0 1 1 0 0 1 1 0 0

@@ -47,7 +47,7 @@ namespace Engine
         window.setFramerateLimit(Game::Settings::get().targetFramerate);
         window.setVerticalSyncEnabled(false);
 
-        window.setMouseCursorGrabbed(true);
+        window.setMouseCursorGrabbed(false);
         window.setMouseCursorVisible(true);
 
         if (!texture.resize(sf::Vector2u(windowWidth, windowHeight)))
