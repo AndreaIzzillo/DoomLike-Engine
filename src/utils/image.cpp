@@ -132,25 +132,69 @@ namespace Utils
     Image::Image(const std::string &filename)
     {
         auto file = std::ifstream(filename);
-        std::string token;
+        if (!file.is_open())
+        {
+            throw std::runtime_error("Failed to open image file: " + filename);
+        }
 
-        file >> token; // PPM type
-        file >> token; // Width
-        width = std::stoi(token);
-        file >> token; // Height
-        height = std::stoi(token);
-        file >> token; // RGB
+        auto next_token = [&](std::istream &s) -> std::string {
+            std::string t;
+            while (s >> t)
+            {
+                if (!t.empty() && t[0] == '#')
+                {
+                    std::string rest;
+                    std::getline(s, rest);
+                    continue;
+                }
+                return t;
+            }
+            return std::string();
+        };
+
+        std::string magic = next_token(file);
+        if (magic != "P3")
+        {
+            throw std::runtime_error("Unsupported PPM format (only P3 supported): " + magic);
+        }
+
+        std::string wtok = next_token(file);
+        std::string htok = next_token(file);
+        std::string mvtok = next_token(file);
+        if (wtok.empty() || htok.empty() || mvtok.empty())
+        {
+            throw std::runtime_error("Invalid PPM header in file: " + filename);
+        }
+
+        width = std::stoi(wtok);
+        height = std::stoi(htok);
+        const int maxval = std::stoi(mvtok);
 
         pixels = std::vector<Color>(width * height);
 
         int i = 0;
-        std::string r, g, b;
-        while (file >> r && file >> g && file >> b)
+        while (i < width * height)
         {
-            pixels[i].r = std::stof(r) / 255.f;
-            pixels[i].g = std::stof(g) / 255.f;
-            pixels[i].b = std::stof(b) / 255.f;
-            i++;
+            std::string rs = next_token(file);
+            std::string gs = next_token(file);
+            std::string bs = next_token(file);
+            if (rs.empty() || gs.empty() || bs.empty())
+            {
+                break;
+            }
+            int ri = std::stoi(rs);
+            int gi = std::stoi(gs);
+            int bi = std::stoi(bs);
+            float denom = maxval > 0 ? static_cast<float>(maxval) : 255.f;
+            pixels[i].r = ri / denom;
+            pixels[i].g = gi / denom;
+            pixels[i].b = bi / denom;
+            ++i;
+        }
+
+        if (i != width * height)
+        {
+            throw std::runtime_error("PPM pixel count does not match header in file: " + filename);
         }
     }
 

@@ -58,6 +58,6 @@ namespace Game
         /* Collision properties */
         static constexpr float jumpHeight = 0.25f;
         static constexpr float size = 0.65f;
-        static constexpr float upperHitbox = 0.5f;
+        static constexpr float upperHitbox = 0.2f;
     };
 } // namespace Game
