@@ -1,6 +1,7 @@
 #include "math/vector2.hpp"
 
 #include <cfloat>
+#include <cmath>
 #include <ostream>
 
 namespace Math
