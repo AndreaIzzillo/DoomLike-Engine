@@ -1,4 +1,4 @@
-# Projet ISIM
+# DoomLike-Engine : Projet ISIM
 
 Projet ISIM is a small 2.5D raycasting engine written in C++17. It renders sector-based maps
 with textured walls, floors, ceilings, portals, sprites, lighting, and fog using SFML.
