@@ -55,7 +55,7 @@ namespace Game
              std::shared_ptr<IMaterial> lowerMaterial = nullptr);
         ~Wall() = default;
 
-        /* Builders to make our lives easier */
+        /* Factory methods */
         static std::unique_ptr<Wall> createPlain(const Math::Point2 &start, const Math::Point2 &end,
                                                  Sector *frontSector,
                                                  std::shared_ptr<IMaterial> material);
@@ -83,7 +83,7 @@ namespace Game
         bool isPortal() const;
         bool canTraverse(float playerHeight, float jumpHeight, const Sector *from) const;
 
-        /* return the height of the step if its a Portal */
+        /* Return the portal step height */
         float stepHeight() const;
 
     protected:

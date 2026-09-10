@@ -88,8 +88,8 @@ namespace Engine
         planeSegments.clear();
         planeSegments.resize(screenWidth);
 
+        /* Raycasting and wall rendering */
 #pragma omp parallel for schedule(dynamic, 8)
-        /* RAYCASTING & WALL RENDERING */
         for (int x = 0; x < screenWidth; x++)
         {
             /* Raycasting */
@@ -110,8 +110,7 @@ namespace Engine
                 auto backSector =
                     record.frontSector == frontSector ? record.backSector : record.frontSector;
 
-                /* Naming variables */
-                /* Both vectors already normalized */
+                /* Both vectors are already normalized */
                 auto rayDirection = ray.direction;
                 auto forward = player.getCamera().getForward();
 
@@ -125,7 +124,7 @@ namespace Engine
                 int yBottom = projectScreen(horizon, cameraHeight, frontSector->getFloorHeight(),
                                             scale, distance);
 
-                /* Plain Wall */
+                /* Plain wall */
                 if (record.backSector == nullptr)
                 {
                     /* Keep the ceiling */
@@ -193,8 +192,8 @@ namespace Engine
             }
         }
 
+        /* Floor and ceiling rendering */
 #pragma omp parallel for schedule(dynamic, 8)
-        /* FLOOR & CEILING RENDERING */
         for (int x = 0; x < screenWidth; x++)
         {
             auto ray = cam.getRay(x);
@@ -207,7 +206,7 @@ namespace Engine
             }
         }
 
-        /* SPRITES REDERING */
+        /* Sprite rendering */
         const auto &sectors = scene.getSectors();
         int bottom = screenHeight;
         int top = 0;
@@ -280,8 +279,8 @@ namespace Engine
             }
         }
 
+        /* Finalize image */
 #pragma omp parallel for collapse(2)
-        /* FINALIZE IMAGE */
         for (int y = 0; y < screenHeight; y++)
         {
             for (int x = 0; x < screenWidth; x++)
@@ -298,7 +297,6 @@ namespace Engine
         }
 
         texture.update(pixelBuffer.data());
-        // image.clear({ 1.f, 0.f, 0.f });
 
         window.draw(sprite);
         window.display();

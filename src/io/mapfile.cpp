@@ -202,7 +202,7 @@ namespace IO
 
                 Wall *wall = nullptr;
 
-                /* Plain wall*/
+                /* Plain wall */
                 if (back == -1)
                 {
                     if (mat.empty())

@@ -41,26 +41,21 @@ namespace Engine
         float fps = 0.f;
         while (renderer.getWindow().isOpen())
         {
-            /* First, handle events */
             handleEvents();
 
             sf::Time dt = clock.restart();
 
-            /* Then, update the scene with the current input state and other logic */
             update(dt);
 
             accumulatedTime += dt;
             while (accumulatedTime >= fixedDt)
             {
-                /* Fixed update for physics and other time-sensitive calculations */
                 fixedUpdate(fixedDt);
                 accumulatedTime -= fixedDt;
             }
 
-            /* Finally, render the current state of the scene */
             renderer.render(*scene);
 
-            /* Display the current FPS */
             fps += 1.0f / dt.asSeconds();
             if (fpsCounter == 10)
             {
@@ -101,17 +96,14 @@ namespace Engine
 
     void Runner::update(sf::Time dt)
     {
-        /* Update the scene with the current input state */
         InputState inputState = inputManager.fetchInputState();
         scene->setInputState(inputState);
 
-        /* Update the scene (calculates physics, logic, etc.) */
         scene->update(dt.asSeconds());
     }
 
     void Runner::fixedUpdate(sf::Time dt)
     {
-        /* Fixed update for physics and other time-sensitive calculations */
         scene->fixedUpdate(collisionManager, dt.asSeconds());
     }
 } // namespace Engine
